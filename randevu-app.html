@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tırnak Stüdyo · Randevu</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream:#faf6f1;--blush:#e8d5c4;--rose:#c4826a;--deep:#3d2b1f;
+    --muted:#8a7060;--light:#f2ebe3;--success:#7aab8a;--danger:#c46a6a;
+    --white:#ffffff;--shadow:0 4px 24px rgba(61,43,31,0.08);--shadow-lg:0 8px 40px rgba(61,43,31,0.14);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--deep);min-height:100vh;}
+  #loading-screen{position:fixed;inset:0;background:var(--cream);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;}
+  .loading-logo{font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--deep);margin-bottom:1rem;}
+  .loading-logo span{color:var(--rose);font-style:italic;}
+  .spinner{width:32px;height:32px;border:2px solid var(--blush);border-top-color:var(--rose);border-radius:50%;animation:spin 0.8s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  header{background:var(--white);border-bottom:1px solid var(--blush);padding:0 2rem;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(61,43,31,0.06);}
+  .header-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:70px;}
+  .logo{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:600;color:var(--deep);}
+  .logo span{color:var(--rose);font-style:italic;}
+  .btn-nav{background:none;border:1.5px solid var(--blush);color:var(--muted);padding:0.4rem 1rem;border-radius:20px;cursor:pointer;font-size:0.82rem;font-family:'DM Sans',sans-serif;transition:all 0.2s;}
+  .btn-nav:hover,.btn-nav.active{background:var(--rose);border-color:var(--rose);color:white;}
+  main{max-width:1100px;margin:0 auto;padding:2rem;}
+  .hero{text-align:center;padding:3rem 1rem 2rem;}
+  .hero-tag{display:inline-block;background:var(--blush);color:var(--rose);font-size:0.75rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;padding:0.3rem 1rem;border-radius:20px;margin-bottom:1rem;}
+  .hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:300;line-height:1.2;margin-bottom:0.8rem;}
+  .hero h1 em{color:var(--rose);font-style:italic;}
+  .hero p{color:var(--muted);font-size:0.95rem;max-width:420px;margin:0 auto;line-height:1.7;}
+  .tabs{display:flex;background:var(--light);border-radius:12px;padding:4px;margin-bottom:1.5rem;width:fit-content;}
+  .tab{padding:0.5rem 1.3rem;border-radius:9px;cursor:pointer;font-size:0.85rem;color:var(--muted);transition:all 0.2s;border:none;background:none;font-family:'DM Sans',sans-serif;}
+  .tab.active{background:white;color:var(--deep);font-weight:500;box-shadow:0 2px 8px rgba(61,43,31,0.1);}
+  .panel{display:none;}.panel.active{display:block;}
+  .section-title{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:400;margin-bottom:1.2rem;display:flex;align-items:center;gap:0.5rem;}
+  .section-title::after{content:'';flex:1;height:1px;background:var(--blush);}
+  .specialists-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1.2rem;margin-bottom:2.5rem;}
+  .specialist-card{background:white;border:1.5px solid var(--blush);border-radius:16px;padding:1.4rem;cursor:pointer;transition:all 0.25s;position:relative;overflow:hidden;}
+  .specialist-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--blush);transition:background 0.25s;}
+  .specialist-card:hover,.specialist-card.selected{border-color:var(--rose);box-shadow:var(--shadow-lg);transform:translateY(-2px);}
+  .specialist-card:hover::before,.specialist-card.selected::before{background:var(--rose);}
+  .specialist-avatar{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:0.8rem;}
+  .specialist-name{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:600;margin-bottom:0.2rem;}
+  .specialist-title{font-size:0.75rem;color:var(--muted);margin-bottom:0.8rem;text-transform:uppercase;letter-spacing:0.06em;}
+  .services-list{display:flex;flex-wrap:wrap;gap:0.35rem;}
+  .service-tag{background:var(--light);color:var(--muted);font-size:0.7rem;padding:0.2rem 0.6rem;border-radius:10px;}
+  .selected-badge{position:absolute;top:0.8rem;right:0.8rem;width:22px;height:22px;background:var(--rose);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:0.7rem;opacity:0;transition:opacity 0.2s;}
+  .specialist-card.selected .selected-badge{opacity:1;}
+  .booking-panel{display:none;background:white;border:1.5px solid var(--blush);border-radius:20px;overflow:hidden;margin-bottom:2rem;box-shadow:var(--shadow);animation:slideIn 0.3s ease;}
+  .booking-panel.visible{display:block;}
+  @keyframes slideIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+  .booking-header{background:var(--deep);color:white;padding:1.2rem 1.8rem;display:flex;align-items:center;justify-content:space-between;}
+  .booking-header h3{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:400;}
+  .booking-body{padding:1.5rem 1.8rem;}
+  .form-group{margin-bottom:1.2rem;}
+  .form-label{display:block;font-size:0.78rem;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem;}
+  .service-options{display:flex;flex-wrap:wrap;gap:0.5rem;}
+  .service-option{background:var(--light);border:1.5px solid transparent;border-radius:10px;padding:0.5rem 0.9rem;cursor:pointer;font-size:0.82rem;color:var(--deep);transition:all 0.2s;font-family:'DM Sans',sans-serif;}
+  .service-option:hover{border-color:var(--rose);}
+  .service-option.selected{background:var(--rose);color:white;border-color:var(--rose);}
+  .service-duration{font-size:0.7rem;opacity:0.7;display:block;margin-top:1px;}
+  .week-nav{display:flex;align-items:center;justify-content:center;gap:1.5rem;margin:2rem 0 1.5rem;}
+  .week-btn{width:36px;height:36px;border-radius:50%;border:1.5px solid var(--blush);background:white;color:var(--muted);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
+  .week-btn:hover{background:var(--rose);border-color:var(--rose);color:white;}
+  .week-label{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:500;min-width:200px;text-align:center;}
+  .days-row{display:grid;grid-template-columns:repeat(7,1fr);gap:0.5rem;margin-bottom:1rem;}
+  .day-col{text-align:center;}
+  .day-name{font-size:0.7rem;font-weight:500;color:var(--muted);text-transform:uppercase;margin-bottom:0.3rem;}
+  .day-date{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:500;margin-bottom:0.5rem;}
+  .day-date.today{color:var(--rose);}
+  .time-slots{display:flex;flex-direction:column;gap:0.3rem;}
+  .time-slot{background:var(--light);border:1.5px solid transparent;border-radius:8px;padding:0.35rem 0.2rem;font-size:0.72rem;cursor:pointer;transition:all 0.18s;text-align:center;min-height:32px;display:flex;align-items:center;justify-content:center;}
+  .time-slot:hover:not(.booked):not(.past){border-color:var(--rose);background:#fff0eb;color:var(--rose);}
+  .time-slot.selected-slot{background:var(--rose);color:white;border-color:var(--rose);font-weight:500;}
+  .time-slot.booked{background:#f0ede9;color:#ccc;cursor:not-allowed;text-decoration:line-through;}
+  .time-slot.past{background:#f7f5f3;color:#d0c8c0;cursor:not-allowed;}
+  .customer-form{display:none;border-top:1px solid var(--blush);padding-top:1.2rem;margin-top:0.5rem;}
+  .customer-form.visible{display:block;}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;margin-bottom:0.8rem;}
+  .form-input{width:100%;border:1.5px solid var(--blush);border-radius:10px;padding:0.65rem 0.9rem;font-size:0.88rem;font-family:'DM Sans',sans-serif;color:var(--deep);background:var(--cream);outline:none;transition:border-color 0.2s;}
+  .form-input:focus{border-color:var(--rose);background:white;}
+  .form-input::placeholder{color:var(--muted);opacity:0.6;}
+  .btn-confirm{width:100%;background:var(--rose);color:white;border:none;border-radius:12px;padding:0.85rem;font-size:0.9rem;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all 0.2s;margin-top:0.5rem;}
+  .btn-confirm:hover{background:#b5705a;transform:translateY(-1px);}
+  .btn-confirm:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
+  .appointment-card{background:white;border:1.5px solid var(--blush);border-radius:14px;padding:1.1rem 1.4rem;margin-bottom:0.8rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;}
+  .appt-left{display:flex;align-items:center;gap:1rem;}
+  .appt-dot{width:10px;height:10px;border-radius:50%;background:var(--rose);flex-shrink:0;}
+  .appt-name{font-weight:500;font-size:0.9rem;}
+  .appt-details{font-size:0.78rem;color:var(--muted);margin-top:0.15rem;}
+  .appt-right{display:flex;align-items:center;gap:0.8rem;flex-shrink:0;}
+  .appt-time{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:500;text-align:right;}
+  .appt-date{font-size:0.72rem;color:var(--muted);}
+  .btn-cancel{background:none;border:1.5px solid var(--danger);color:var(--danger);border-radius:8px;padding:0.3rem 0.7rem;font-size:0.74rem;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;white-space:nowrap;}
+  .btn-cancel:hover{background:var(--danger);color:white;}
+  .btn-cancel:disabled{opacity:0.4;cursor:not-allowed;}
+  .cancel-note{font-size:0.68rem;color:#ccc;display:block;text-align:right;margin-top:2px;}
+  .empty-state{text-align:center;padding:3rem 1rem;color:var(--muted);}
+  .empty-state .emoji{font-size:2.5rem;margin-bottom:0.8rem;}
+  .toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(100px);background:var(--deep);color:white;padding:0.8rem 1.5rem;border-radius:12px;font-size:0.85rem;z-index:999;transition:transform 0.3s ease;white-space:nowrap;}
+  .toast.show{transform:translateX(-50%) translateY(0);}
+  .toast.success{background:var(--success);}
+  .toast.error{background:var(--danger);}
+  .lookup-row{display:flex;gap:0.6rem;margin-bottom:1.2rem;flex-wrap:wrap;}
+  .btn-lookup{background:var(--rose);color:white;border:none;border-radius:10px;padding:0.65rem 1.2rem;font-size:0.88rem;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+  .btn-lookup:hover{background:#b5705a;}
+  @media(max-width:640px){
+    main{padding:1rem;}
+    .days-row{gap:0.2rem;}
+    .form-row{grid-template-columns:1fr;}
+    .specialists-grid{grid-template-columns:1fr 1fr;}
+    .time-slot{font-size:0.62rem;padding:0.25rem 0.1rem;}
+    .appointment-card{flex-direction:column;align-items:flex-start;}
+  }
+</style>
+</head>
+<body>
+
+<div id="loading-screen">
+  <div class="loading-logo">Tırnak <span>Stüdyo</span></div>
+  <div class="spinner"></div>
+</div>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">Tırnak <span>Stüdyo</span></div>
+    <div style="display:flex;gap:1rem">
+      <button class="btn-nav active" onclick="showPanel('randevu')">Randevu Al</button>
+      <button class="btn-nav" onclick="showPanel('randevularim')">Randevularım</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="hero">
+    <div class="hero-tag">✦ Online Randevu Sistemi</div>
+    <h1>Uzmanınızı seçin,<br><em>anında randevu alın</em></h1>
+    <p>Profesyonel tırnak uzmanlarımızdan dilediğiniz hizmeti, dilediğiniz saatte rezerve edin.</p>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="showPanel('randevu')">📅 Randevu Al</button>
+    <button class="tab" onclick="showPanel('randevularim')">🗂 Randevularım</button>
+  </div>
+
+  <div id="panel-randevu" class="panel active">
+    <div class="section-title">Uzman Seçin</div>
+    <div class="specialists-grid" id="specialists-grid"></div>
+    <div class="booking-panel" id="booking-panel">
+      <div class="booking-header">
+        <h3 id="booking-specialist-name">Uzman Seçildi</h3>
+        <button onclick="clearSelection()" style="background:none;border:none;color:white;cursor:pointer;font-size:1.1rem">✕</button>
+      </div>
+      <div class="booking-body">
+        <div class="form-group">
+          <label class="form-label">Hizmet Seçin</label>
+          <div class="service-options" id="service-options"></div>
+        </div>
+        <div class="form-group" id="week-section" style="display:none">
+          <label class="form-label">Tarih & Saat Seçin</label>
+          <div class="week-nav">
+            <button class="week-btn" onclick="changeWeek(-1)">‹</button>
+            <div class="week-label" id="week-label"></div>
+            <button class="week-btn" onclick="changeWeek(1)">›</button>
+          </div>
+          <div class="days-row" id="days-row"></div>
+        </div>
+        <div class="customer-form" id="customer-form">
+          <label class="form-label">İletişim Bilgileri</label>
+          <div class="form-row">
+            <input type="text" class="form-input" id="input-name" placeholder="Adınız Soyadınız">
+            <input type="tel" class="form-input" id="input-phone" placeholder="Telefon Numaranız">
+          </div>
+          <button class="btn-confirm" id="btn-confirm" onclick="confirmBooking()">✓ Randevuyu Onayla</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="panel-randevularim" class="panel">
+    <div class="section-title">Randevularım</div>
+    <div class="lookup-row">
+      <input type="tel" class="form-input" id="lookup-phone" placeholder="Telefon numaranızı girin..." style="max-width:260px">
+      <button class="btn-lookup" onclick="lookupAppointments()">Randevularımı Göster</button>
+    </div>
+    <div id="appointments-list"></div>
+  </div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, doc, addDoc, getDocs, updateDoc, query, where, onSnapshot }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBL4bH5VBu2bxuT4QzCLhy8pdUM-s9ZfQ0",
+  authDomain: "tirnak-studyo.firebaseapp.com",
+  projectId: "tirnak-studyo",
+  storageBucket: "tirnak-studyo.firebasestorage.app",
+  messagingSenderId: "241007669140",
+  appId: "1:241007669140:web:a2d9f7b1249773c2a0e981"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+let SPECIALISTS = [];
+let bookedSlots = {};
+let selectedSpecialist = null;
+let selectedService = null;
+let selectedSlot = null;
+let currentWeekOffset = 0;
+let myAppointments = [];
+
+const DEFAULT_SPECIALISTS = [
+  { id:1, name:"Selin Arslan", title:"Kıdemli Tırnak Uzmanı", avatar:"💅", color:"#f9e0d8",
+    services:[{id:"manikur",name:"Klasik Manikür",duration:45,price:250},{id:"jel",name:"Jel Kaplama",duration:75,price:450},{id:"protez",name:"Protez Tırnak",duration:90,price:600},{id:"french",name:"French Manikür",duration:60,price:350}],
+    hours:{start:9,end:18}},
+  { id:2, name:"Melis Kaya", title:"Nail Art Uzmanı", avatar:"🎨", color:"#dde8f5",
+    services:[{id:"nailart",name:"Nail Art Tasarım",duration:90,price:700},{id:"ombre",name:"Ombré & Gradient",duration:75,price:550},{id:"jel",name:"Jel Kaplama",duration:75,price:450},{id:"manikur",name:"Klasik Manikür",duration:45,price:250}],
+    hours:{start:10,end:19}},
+  { id:3, name:"Ayşe Demir", title:"Pedikür Uzmanı", avatar:"🦶", color:"#e8f5e0",
+    services:[{id:"pedikur",name:"Klasik Pedikür",duration:60,price:300},{id:"spapedikur",name:"Spa Pedikür",duration:90,price:500},{id:"jelpedikur",name:"Jel Pedikür",duration:75,price:420},{id:"manikur",name:"Klasik Manikür",duration:45,price:250}],
+    hours:{start:9,end:17}},
+  { id:4, name:"Zeynep Şahin", title:"Tırnak Bakım Uzmanı", avatar:"✨", color:"#f5e8f0",
+    services:[{id:"kupa",name:"Kupa Akrilik",duration:90,price:650},{id:"biogel",name:"Bio Jel",duration:80,price:580},{id:"soak",name:"Soak Off & Yenileme",duration:60,price:380},{id:"bakim",name:"Tırnak Bakımı",duration:30,price:180}],
+    hours:{start:11,end:20}}
+];
+
+async function loadSpecialists() {
+  const snap = await getDocs(collection(db,'specialists'));
+  if (snap.empty) {
+    for (const sp of DEFAULT_SPECIALISTS) {
+      const ref = await addDoc(collection(db,'specialists'), sp);
+      SPECIALISTS.push({firestoreId:ref.id,...sp});
+    }
+  } else {
+    SPECIALISTS = snap.docs.map(d=>({firestoreId:d.id,...d.data()}));
+  }
+}
+
+function listenBookedSlots() {
+  onSnapshot(query(collection(db,'appointments'),where('cancelled','==',false)), snap => {
+    bookedSlots = {};
+    snap.docs.forEach(d=>{const a=d.data();bookedSlots[`${a.specialistId}_${a.date}_${a.time}`]=true;});
+    if (selectedSpecialist && selectedService) renderWeek();
+  });
+}
+
+function fd(d){return d.toISOString().split('T')[0];}
+function fdd(d){return d.toLocaleDateString('tr-TR',{day:'numeric',month:'short'});}
+function fdn(d){return d.toLocaleDateString('tr-TR',{weekday:'short'}).toUpperCase();}
+function isToday(d){const t=new Date();t.setHours(0,0,0,0);const dd=new Date(d);dd.setHours(0,0,0,0);return t.getTime()===dd.getTime();}
+function isPastDay(d){const t=new Date();t.setHours(0,0,0,0);const dd=new Date(d);dd.setHours(0,0,0,0);return dd<t;}
+function isPastSlot(date,time){const now=new Date();const[h,m]=time.split(':').map(Number);const s=new Date(date);s.setHours(h,m,0,0);return s<=now;}
+function canCancel(a){const t=new Date(a.date+'T'+a.time);const lim=new Date();lim.setHours(lim.getHours()+5);return t>lim;}
+function isBooked(spId,date,time){return !!bookedSlots[`${spId}_${date}_${time}`];}
+function getWeekDates(offset){
+  const today=new Date();today.setHours(0,0,0,0);
+  const day=today.getDay();const diff=day===0?-6:1-day;
+  const mon=new Date(today);mon.setDate(today.getDate()+diff+offset*7);
+  const days=[];for(let i=0;i<7;i++){const d=new Date(mon);d.setDate(mon.getDate()+i);days.push(d);}return days;
+}
+function timeSlots(sp){
+  const s=[];for(let h=sp.hours.start;h<sp.hours.end;h++){s.push(`${String(h).padStart(2,'0')}:00`);s.push(`${String(h).padStart(2,'0')}:30`);}return s;
+}
+function toast(msg,type=''){
+  const t=document.getElementById('toast');t.textContent=msg;t.className=`toast show ${type}`;
+  setTimeout(()=>t.className='toast',2800);
+}
+
+function renderSpecialists(){
+  document.getElementById('specialists-grid').innerHTML=SPECIALISTS.map(s=>`
+    <div class="specialist-card ${selectedSpecialist?.id===s.id?'selected':''}" onclick="selectSpecialist(${s.id})">
+      <div class="selected-badge">✓</div>
+      <div class="specialist-avatar" style="background:${s.color}">${s.avatar}</div>
+      <div class="specialist-name">${s.name}</div>
+      <div class="specialist-title">${s.title}</div>
+      <div class="services-list">${s.services.map(sv=>`<span class="service-tag">${sv.name}</span>`).join('')}</div>
+    </div>`).join('');
+}
+
+function renderServices(){
+  document.getElementById('service-options').innerHTML=selectedSpecialist.services.map(s=>`
+    <button class="service-option ${selectedService?.id===s.id?'selected':''}" onclick="selectService('${s.id}')">
+      ${s.name}<span class="service-duration">${s.duration} dk · ${s.price}₺</span>
+    </button>`).join('');
+}
+
+function renderWeek(){
+  const days=getWeekDates(currentWeekOffset);
+  document.getElementById('week-label').textContent=`${fdd(days[0])} – ${fdd(days[6])}`;
+  const slots=timeSlots(selectedSpecialist);
+  document.getElementById('days-row').innerHTML=days.map(d=>{
+    const ds=fd(d);const past=isPastDay(d);
+    return `<div class="day-col">
+      <div class="day-name">${fdn(d)}</div>
+      <div class="day-date ${isToday(d)?'today':''}">${d.getDate()}</div>
+      <div class="time-slots">${slots.map(t=>{
+        const booked=isBooked(selectedSpecialist.id,ds,t);
+        const slotPast=past||isPastSlot(d,t);
+        const isSel=selectedSlot?.date===ds&&selectedSlot?.time===t;
+        let cls='time-slot';
+        if(isSel)cls+=' selected-slot';else if(booked)cls+=' booked';else if(slotPast)cls+=' past';
+        const oc=(!booked&&!slotPast)?`onclick="selectSlot('${ds}','${t}')"`:'';
+        return `<div class="${cls}" ${oc}>${t}</div>`;
+      }).join('')}</div></div>`;
+  }).join('');
+}
+
+function renderAppointments(){
+  const list=document.getElementById('appointments-list');
+  const now=new Date();
+  const upcoming=myAppointments.filter(a=>!a.cancelled&&new Date(a.date+'T'+a.time)>=now).sort((a,b)=>new Date(a.date+'T'+a.time)-new Date(b.date+'T'+b.time));
+  const past=myAppointments.filter(a=>!a.cancelled&&new Date(a.date+'T'+a.time)<now).sort((a,b)=>new Date(b.date+'T'+b.time)-new Date(a.date+'T'+a.time)).slice(0,5);
+  if(!upcoming.length&&!past.length){list.innerHTML=`<div class="empty-state"><div class="emoji">📅</div><p>Bu numaraya ait randevu bulunamadı.</p></div>`;return;}
+  let html='';
+  if(upcoming.length){html+=`<div class="section-title">Yaklaşan Randevular</div>`;html+=upcoming.map(a=>apptCard(a)).join('');}
+  if(past.length){html+=`<div class="section-title" style="margin-top:1.5rem">Geçmiş Randevular</div>`;html+=past.map(a=>apptCard(a,true)).join('');}
+  list.innerHTML=html;
+}
+
+function apptCard(a,isPast=false){
+  const sp=SPECIALISTS.find(s=>s.id===a.specialistId);
+  const cancelable=canCancel(a);
+  const d=new Date(a.date+'T'+a.time);
+  const disp=d.toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric'});
+  return `<div class="appointment-card">
+    <div class="appt-left">
+      <div class="appt-dot" style="background:${isPast?'#ccc':'var(--rose)'}"></div>
+      <div><div class="appt-name">${a.customerName}</div><div class="appt-details">${sp?.name||''} · ${a.serviceName}</div></div>
+    </div>
+    <div class="appt-right">
+      <div><div class="appt-time">${a.time}</div><div class="appt-date">${disp}</div></div>
+      ${!isPast?`<div>
+        <button class="btn-cancel" onclick="cancelAppointment('${a.firestoreId}')" ${!cancelable?'disabled':''}>İptal Et</button>
+        ${!cancelable?`<span class="cancel-note">İptal süresi doldu</span>`:''}
+      </div>`:''}
+    </div>
+  </div>`;
+}
+
+window.selectSpecialist=function(id){
+  selectedSpecialist=SPECIALISTS.find(s=>s.id===id);selectedService=null;selectedSlot=null;
+  renderSpecialists();
+  document.getElementById('booking-panel').classList.add('visible');
+  document.getElementById('booking-specialist-name').textContent=`${selectedSpecialist.avatar} ${selectedSpecialist.name}`;
+  renderServices();
+  document.getElementById('week-section').style.display='none';
+  document.getElementById('customer-form').classList.remove('visible');
+  document.getElementById('booking-panel').scrollIntoView({behavior:'smooth',block:'nearest'});
+};
+window.selectService=function(id){
+  selectedService=selectedSpecialist.services.find(s=>s.id===id);selectedSlot=null;renderServices();
+  document.getElementById('week-section').style.display='block';
+  document.getElementById('customer-form').classList.remove('visible');renderWeek();
+};
+window.selectSlot=function(date,time){
+  selectedSlot={date,time};renderWeek();document.getElementById('customer-form').classList.add('visible');
+};
+window.changeWeek=function(dir){
+  const days=getWeekDates(currentWeekOffset+dir);
+  const today=new Date();today.setHours(0,0,0,0);
+  if(dir===-1&&days[6]<today)return;
+  currentWeekOffset+=dir;selectedSlot=null;
+  document.getElementById('customer-form').classList.remove('visible');renderWeek();
+};
+window.clearSelection=function(){
+  selectedSpecialist=null;selectedService=null;selectedSlot=null;
+  document.getElementById('booking-panel').classList.remove('visible');renderSpecialists();
+};
+window.confirmBooking=async function(){
+  const name=document.getElementById('input-name').value.trim();
+  const phone=document.getElementById('input-phone').value.trim();
+  if(!name){toast('⚠️ Lütfen adınızı girin.','error');return;}
+  if(!phone){toast('⚠️ Lütfen telefon numaranızı girin.','error');return;}
+  if(!selectedSlot){toast('⚠️ Lütfen bir saat seçin.','error');return;}
+  const btn=document.getElementById('btn-confirm');
+  btn.disabled=true;btn.textContent='Kaydediliyor...';
+  try{
+    await addDoc(collection(db,'appointments'),{
+      specialistId:selectedSpecialist.id,specialistName:selectedSpecialist.name,
+      serviceId:selectedService.id,serviceName:selectedService.name,
+      servicePrice:selectedService.price,serviceDuration:selectedService.duration,
+      date:selectedSlot.date,time:selectedSlot.time,
+      customerName:name,customerPhone:phone,
+      bookedAt:new Date().toISOString(),cancelled:false
+    });
+    toast(`✓ Randevunuz alındı! ${selectedSlot.time} · ${selectedService.name}`,'success');
+    document.getElementById('input-name').value='';document.getElementById('input-phone').value='';
+    selectedSlot=null;selectedService=null;
+    document.getElementById('customer-form').classList.remove('visible');
+    document.getElementById('week-section').style.display='none';renderServices();
+  }catch(e){toast('Hata oluştu, tekrar deneyin.','error');}
+  btn.disabled=false;btn.textContent='✓ Randevuyu Onayla';
+};
+window.lookupAppointments=async function(){
+  const phone=document.getElementById('lookup-phone').value.trim();
+  if(!phone){toast('⚠️ Telefon numaranızı girin.','error');return;}
+  const snap=await getDocs(query(collection(db,'appointments'),where('customerPhone','==',phone)));
+  myAppointments=snap.docs.map(d=>({firestoreId:d.id,...d.data()}));
+  renderAppointments();
+};
+window.cancelAppointment=async function(fid){
+  const a=myAppointments.find(x=>x.firestoreId===fid);if(!a)return;
+  if(!canCancel(a)){toast('⚠️ 5 saatten az kaldığı için iptal edilemez.','error');return;}
+  if(!confirm('Randevunuzu iptal etmek istiyor musunuz?'))return;
+  await updateDoc(doc(db,'appointments',fid),{cancelled:true});
+  a.cancelled=true;renderAppointments();toast('✓ Randevunuz iptal edildi.','success');
+};
+window.showPanel=function(name){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab,.btn-nav').forEach(b=>b.classList.remove('active'));
+  document.getElementById(`panel-${name}`).classList.add('active');
+  document.querySelectorAll('.tab,.btn-nav').forEach(b=>{if(b.getAttribute('onclick')?.includes(name))b.classList.add('active');});
+};
+
+async function init(){
+  await loadSpecialists();
+  listenBookedSlots();
+  renderSpecialists();
+  document.getElementById('loading-screen').style.display='none';
+}
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin · Tırnak Stüdyo</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0f0d0c;--surface:#1a1714;--card:#221e1b;--border:#2e2825;--border2:#3d3530;--gold:#c9a96e;--gold2:#e8c98a;--rose:#c4826a;--muted:#7a6e66;--text:#f0ebe4;--text2:#b0a89e;--success:#6aab7a;--danger:#c46a6a;--warn:#c4a96a;--sidebar-w:240px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;}
+#login-screen{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:999;}
+.login-box{background:var(--card);border:1px solid var(--border2);border-radius:20px;padding:3rem 2.5rem;width:360px;text-align:center;}
+.login-logo{font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--gold);margin-bottom:0.3rem;}
+.login-sub{color:var(--muted);font-size:0.8rem;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:2rem;}
+.login-input{width:100%;background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:0.75rem 1rem;color:var(--text);font-family:'Outfit',sans-serif;font-size:0.9rem;margin-bottom:0.8rem;outline:none;transition:border-color 0.2s;}
+.login-input:focus{border-color:var(--gold);}
+.login-btn{width:100%;background:var(--gold);color:var(--bg);border:none;border-radius:10px;padding:0.75rem;font-size:0.9rem;font-weight:600;font-family:'Outfit',sans-serif;cursor:pointer;transition:background 0.2s;margin-top:0.4rem;}
+.login-btn:hover{background:var(--gold2);}
+.login-err{color:var(--danger);font-size:0.8rem;margin-top:0.5rem;display:none;}
+#app{display:none;width:100%;}
+.sidebar{width:var(--sidebar-w);background:var(--surface);border-right:1px solid var(--border);height:100vh;position:fixed;left:0;top:0;display:flex;flex-direction:column;z-index:50;}
+.sidebar-logo{padding:1.5rem 1.4rem 1.2rem;border-bottom:1px solid var(--border);}
+.sidebar-logo-text{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--gold);}
+.sidebar-logo-sub{font-size:0.7rem;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;}
+.sidebar-nav{flex:1;padding:1rem 0;overflow-y:auto;}
+.nav-section{padding:0.4rem 1.2rem 0.2rem;font-size:0.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;}
+.nav-item{display:flex;align-items:center;gap:0.7rem;padding:0.6rem 1.4rem;cursor:pointer;color:var(--text2);font-size:0.86rem;transition:all 0.15s;border-left:2px solid transparent;}
+.nav-item:hover{color:var(--text);background:rgba(201,169,110,0.06);}
+.nav-item.active{color:var(--gold);border-left-color:var(--gold);background:rgba(201,169,110,0.08);}
+.sidebar-footer{padding:1rem 1.4rem;border-top:1px solid var(--border);font-size:0.75rem;color:var(--muted);display:flex;align-items:center;justify-content:space-between;}
+.logout-btn{background:none;border:1px solid var(--border2);color:var(--muted);border-radius:6px;padding:0.25rem 0.6rem;font-size:0.72rem;cursor:pointer;font-family:'Outfit',sans-serif;transition:all 0.2s;}
+.logout-btn:hover{border-color:var(--danger);color:var(--danger);}
+.main-content{margin-left:var(--sidebar-w);flex:1;min-height:100vh;overflow-y:auto;}
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 2rem;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:40;}
+.topbar-title{font-family:'Playfair Display',serif;font-size:1.15rem;}
+.topbar-right{display:flex;align-items:center;gap:1rem;}
+.live-badge{background:rgba(106,171,122,0.15);color:var(--success);border:1px solid rgba(106,171,122,0.3);border-radius:20px;padding:0.2rem 0.7rem;font-size:0.72rem;font-weight:500;display:flex;align-items:center;gap:0.35rem;}
+.live-dot{width:6px;height:6px;background:var(--success);border-radius:50%;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.content-area{padding:2rem;}
+.panel{display:none;animation:fadeIn 0.25s ease;}.panel.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem;}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.3rem 1.5rem;position:relative;overflow:hidden;}
+.stat-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.stat-card.gold::after{background:var(--gold)}.stat-card.rose::after{background:var(--rose)}.stat-card.green::after{background:var(--success)}.stat-card.warn::after{background:var(--warn)}
+.stat-label{font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem;}
+.stat-value{font-family:'Playfair Display',serif;font-size:2rem;color:var(--text);font-weight:700;}
+.stat-sub{font-size:0.72rem;color:var(--muted);margin-top:0.2rem;}
+.section-card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:1.5rem;}
+.section-card-header{padding:1rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;}
+.section-card-title{font-family:'Playfair Display',serif;font-size:1rem;}
+.table-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;}
+th{text-align:left;padding:0.7rem 1.2rem;font-size:0.68rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);border-bottom:1px solid var(--border);background:var(--surface);font-weight:500;}
+td{padding:0.85rem 1.2rem;font-size:0.84rem;border-bottom:1px solid var(--border);color:var(--text2);}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:rgba(201,169,110,0.03);}
+.badge{display:inline-block;padding:0.2rem 0.6rem;border-radius:20px;font-size:0.7rem;font-weight:500;}
+.badge-green{background:rgba(106,171,122,0.15);color:var(--success);border:1px solid rgba(106,171,122,0.25);}
+.badge-red{background:rgba(196,106,106,0.15);color:var(--danger);border:1px solid rgba(196,106,106,0.25);}
+.badge-gold{background:rgba(201,169,110,0.15);color:var(--gold);border:1px solid rgba(201,169,110,0.25);}
+.badge-muted{background:rgba(122,110,102,0.15);color:var(--muted);border:1px solid rgba(122,110,102,0.25);}
+.btn{padding:0.45rem 1rem;border-radius:8px;font-size:0.8rem;font-weight:500;font-family:'Outfit',sans-serif;cursor:pointer;border:none;transition:all 0.18s;}
+.btn-gold{background:var(--gold);color:var(--bg);}.btn-gold:hover{background:var(--gold2);}
+.btn-outline{background:none;border:1px solid var(--border2);color:var(--text2);}.btn-outline:hover{border-color:var(--gold);color:var(--gold);}
+.btn-danger{background:none;border:1px solid rgba(196,106,106,0.4);color:var(--danger);}.btn-danger:hover{background:rgba(196,106,106,0.12);}
+.btn-sm{padding:0.28rem 0.65rem;font-size:0.72rem;}
+.filter-row{display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;}
+.filter-select{background:var(--surface);border:1px solid var(--border2);border-radius:8px;color:var(--text2);padding:0.4rem 0.8rem;font-size:0.8rem;font-family:'Outfit',sans-serif;cursor:pointer;outline:none;}
+.filter-input{background:var(--surface);border:1px solid var(--border2);border-radius:8px;color:var(--text);padding:0.4rem 0.8rem;font-size:0.8rem;font-family:'Outfit',sans-serif;outline:none;width:180px;}
+.filter-input:focus,.filter-select:focus{border-color:var(--gold);}
+.filter-input::placeholder{color:var(--muted);}
+.specialist-editor-grid{display:grid;grid-template-columns:260px 1fr;gap:1.5rem;align-items:start;}
+.specialist-list-side{display:flex;flex-direction:column;gap:0.6rem;}
+.spec-list-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:0.9rem 1.1rem;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;gap:0.7rem;}
+.spec-list-item:hover,.spec-list-item.active{border-color:var(--gold);background:rgba(201,169,110,0.06);}
+.spec-list-name{font-size:0.86rem;font-weight:500;}.spec-list-title{font-size:0.72rem;color:var(--muted);}
+.editor-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.5rem;}
+.editor-section-title{font-family:'Playfair Display',serif;font-size:1rem;color:var(--gold);margin-bottom:1rem;padding-bottom:0.6rem;border-bottom:1px solid var(--border);}
+.form-group{margin-bottom:1rem;}
+.form-label{display:block;font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.35rem;}
+.form-input{width:100%;background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:0.6rem 0.9rem;color:var(--text);font-family:'Outfit',sans-serif;font-size:0.86rem;outline:none;transition:border-color 0.2s;}
+.form-input:focus{border-color:var(--gold);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;}
+.service-row{display:grid;grid-template-columns:1fr 80px 90px 36px;gap:0.5rem;align-items:center;margin-bottom:0.5rem;animation:fadeIn 0.2s ease;}
+.btn-icon{width:36px;height:36px;border-radius:8px;border:1px solid var(--border2);background:none;color:var(--muted);cursor:pointer;font-size:0.9rem;display:flex;align-items:center;justify-content:center;transition:all 0.15s;}
+.btn-icon:hover{border-color:var(--danger);color:var(--danger);}
+.week-header{display:grid;grid-template-columns:70px repeat(7,1fr);gap:0.4rem;margin-bottom:0.5rem;}
+.week-day-header{text-align:center;font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;padding:0.4rem 0;}
+.week-day-header.today-col{color:var(--gold);}
+.calendar-grid{display:grid;grid-template-columns:70px repeat(7,1fr);gap:0.4rem;}
+.time-label{font-size:0.68rem;color:var(--muted);text-align:right;padding-right:0.6rem;padding-top:0.15rem;}
+.cal-cell{min-height:34px;border-radius:6px;border:1px solid var(--border);background:var(--surface);font-size:0.65rem;display:flex;align-items:center;justify-content:center;cursor:default;transition:all 0.15s;padding:0.2rem;text-align:center;line-height:1.2;}
+.cal-cell.booked{background:rgba(201,169,110,0.12);border-color:rgba(201,169,110,0.35);color:var(--gold);cursor:pointer;font-weight:500;}
+.cal-cell.booked:hover{background:rgba(201,169,110,0.2);}
+.cal-cell.past{opacity:0.35;}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;align-items:center;justify-content:center;display:none;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--card);border:1px solid var(--border2);border-radius:18px;padding:2rem;width:460px;max-width:95vw;animation:fadeIn 0.25s ease;max-height:90vh;overflow-y:auto;}
+.modal-title{font-family:'Playfair Display',serif;font-size:1.2rem;margin-bottom:1.2rem;padding-bottom:0.8rem;border-bottom:1px solid var(--border);}
+.modal-actions{display:flex;gap:0.6rem;justify-content:flex-end;margin-top:1.2rem;}
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--card);border:1px solid var(--border2);color:var(--text);padding:0.8rem 1.2rem;border-radius:12px;font-size:0.82rem;z-index:500;transform:translateY(80px);opacity:0;transition:all 0.3s ease;max-width:300px;}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast.success{border-color:rgba(106,171,122,0.4);}
+.toast.error{border-color:rgba(196,106,106,0.4);}
+.empty{text-align:center;padding:3rem;color:var(--muted);}
+.empty-icon{font-size:2rem;margin-bottom:0.6rem;}
+.loading-overlay{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;}
+.spinner{width:36px;height:36px;border:2px solid var(--border2);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+@media(max-width:900px){.stats-grid{grid-template-columns:1fr 1fr;}.specialist-editor-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<div class="loading-overlay" id="loading-overlay">
+  <div style="font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--gold);margin-bottom:1rem;">Tırnak Stüdyo</div>
+  <div class="spinner"></div>
+</div>
+
+<div id="login-screen" style="display:none">
+  <div class="login-box">
+    <div class="login-logo">Tırnak Stüdyo</div>
+    <div class="login-sub">Yönetici Paneli</div>
+    <input type="text" class="login-input" id="login-user" placeholder="Kullanıcı adı" onkeydown="if(event.key==='Enter')doLogin()">
+    <input type="password" class="login-input" id="login-pass" placeholder="Şifre" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="login-btn" onclick="doLogin()">Giriş Yap</button>
+    <div class="login-err" id="login-err">Kullanıcı adı veya şifre hatalı.</div>
+    <div style="margin-top:1rem;font-size:0.72rem;color:var(--muted)">Varsayılan: admin / admin123</div>
+  </div>
+</div>
+
+<div id="app">
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-text">Tırnak Stüdyo</div>
+      <div class="sidebar-logo-sub">Admin Paneli</div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">Genel</div>
+      <div class="nav-item active" onclick="navigate('dashboard')"><span>◈</span> Dashboard</div>
+      <div class="nav-item" onclick="navigate('randevular')"><span>📅</span> Randevular</div>
+      <div class="nav-item" onclick="navigate('takvim')"><span>🗓</span> Haftalık Takvim</div>
+      <div class="nav-section">Yönetim</div>
+      <div class="nav-item" onclick="navigate('uzmanlar')"><span>👥</span> Uzmanlar</div>
+      <div class="nav-item" onclick="navigate('ayarlar')"><span>⚙️</span> Ayarlar</div>
+    </nav>
+    <div class="sidebar-footer">
+      <span id="admin-label">Admin</span>
+      <button class="logout-btn" onclick="doLogout()">Çıkış</button>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <div class="topbar">
+      <div class="topbar-title" id="topbar-title">Dashboard</div>
+      <div class="topbar-right">
+        <button class="btn btn-gold btn-sm" onclick="openAddApptModal()">+ Randevu Ekle</button>
+        <div class="live-badge"><div class="live-dot"></div> Canlı</div>
+        <span style="font-size:0.78rem;color:var(--muted)" id="clock"></span>
+      </div>
+    </div>
+    <div class="content-area">
+
+      <div class="panel active" id="panel-dashboard">
+        <div class="stats-grid" id="stats-grid"></div>
+        <div class="section-card">
+          <div class="section-card-header"><div class="section-card-title">Bugünkü Randevular</div></div>
+          <div class="table-wrap"><table><thead><tr><th>Müşteri</th><th>Uzman</th><th>Hizmet</th><th>Saat</th><th>Durum</th><th>İşlem</th></tr></thead><tbody id="today-tbody"></tbody></table></div>
+        </div>
+        <div class="section-card">
+          <div class="section-card-header"><div class="section-card-title">Yaklaşan Randevular (7 gün)</div></div>
+          <div class="table-wrap"><table><thead><tr><th>Müşteri</th><th>Uzman</th><th>Hizmet</th><th>Tarih</th><th>Saat</th><th>Durum</th><th>İşlem</th></tr></thead><tbody id="upcoming-tbody"></tbody></table></div>
+        </div>
+      </div>
+
+      <div class="panel" id="panel-randevular">
+        <div class="section-card">
+          <div class="section-card-header">
+            <div class="section-card-title">Tüm Randevular</div>
+            <div class="filter-row">
+              <input class="filter-input" id="filter-search" placeholder="Müşteri ara..." oninput="renderAllAppointments()">
+              <select class="filter-select" id="filter-specialist" onchange="renderAllAppointments()"><option value="">Tüm Uzmanlar</option></select>
+              <select class="filter-select" id="filter-status" onchange="renderAllAppointments()">
+                <option value="">Tüm Durumlar</option><option value="active">Aktif</option><option value="cancelled">İptal</option><option value="past">Geçmiş</option>
+              </select>
+            </div>
+          </div>
+          <div class="table-wrap"><table><thead><tr><th>Müşteri</th><th>Telefon</th><th>Uzman</th><th>Hizmet</th><th>Tarih & Saat</th><th>Durum</th><th>İşlem</th></tr></thead><tbody id="all-tbody"></tbody></table></div>
+        </div>
+      </div>
+
+      <div class="panel" id="panel-takvim">
+        <div class="section-card">
+          <div class="section-card-header">
+            <div class="section-card-title">Haftalık Takvim</div>
+            <div class="filter-row">
+              <button class="btn btn-outline" onclick="calWeekChange(-1)">‹ Önceki</button>
+              <span id="cal-week-label" style="font-size:0.85rem;color:var(--muted)"></span>
+              <button class="btn btn-outline" onclick="calWeekChange(1)">Sonraki ›</button>
+              <select class="filter-select" id="cal-sp-filter" onchange="renderCalendar()"><option value="">Tüm Uzmanlar</option></select>
+            </div>
+          </div>
+          <div style="padding:1rem;overflow-x:auto"><div id="calendar-container"></div></div>
+        </div>
+      </div>
+
+      <div class="panel" id="panel-uzmanlar">
+        <div class="specialist-editor-grid">
+          <div>
+            <div class="specialist-list-side" id="spec-list-side"></div>
+            <button class="btn btn-gold" style="width:100%;margin-top:0.8rem" onclick="addNewSpecialist()">+ Yeni Uzman Ekle</button>
+          </div>
+          <div id="spec-editor-area"><div class="empty"><div class="empty-icon">👆</div><p>Bir uzman seçin veya yeni uzman ekleyin.</p></div></div>
+        </div>
+      </div>
+
+      <div class="panel" id="panel-ayarlar">
+        <div style="max-width:480px">
+          <div class="section-card">
+            <div class="section-card-header"><div class="section-card-title">Salon Bilgileri</div></div>
+            <div style="padding:1.5rem">
+              <div class="form-group"><label class="form-label">Salon Adı</label><input class="form-input" id="setting-name" value="Tırnak Stüdyo"></div>
+              <div class="form-group"><label class="form-label">Adres</label><input class="form-input" id="setting-address" placeholder="Salon adresi..."></div>
+              <div class="form-group"><label class="form-label">Telefon</label><input class="form-input" id="setting-phone" placeholder="0212 000 00 00"></div>
+              <button class="btn btn-gold" onclick="saveSettings()">Kaydet</button>
+            </div>
+          </div>
+          <div class="section-card" style="margin-top:1rem">
+            <div class="section-card-header"><div class="section-card-title">Admin Şifresi</div></div>
+            <div style="padding:1.5rem">
+              <div class="form-group"><label class="form-label">Yeni Şifre</label><input type="password" class="form-input" id="new-pass" placeholder="Yeni şifre..."></div>
+              <div class="form-group"><label class="form-label">Şifre Tekrar</label><input type="password" class="form-input" id="new-pass2" placeholder="Tekrar girin..."></div>
+              <button class="btn btn-gold" onclick="changePassword()">Şifreyi Güncelle</button>
+            </div>
+          </div>
+          <div class="section-card" style="margin-top:1rem">
+            <div class="section-card-header"><div class="section-card-title">Veri Yönetimi</div></div>
+            <div style="padding:1.5rem;display:flex;gap:0.8rem;flex-wrap:wrap">
+              <button class="btn btn-outline" onclick="exportData()">📥 CSV Dışa Aktar</button>
+              <button class="btn btn-danger" onclick="clearCancelled()">🗑 İptal edilenleri temizle</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="modal-appt">
+  <div class="modal">
+    <div class="modal-title">Randevu Detayı</div>
+    <div id="modal-appt-body"></div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal('modal-appt')">Kapat</button>
+      <button class="btn btn-danger btn-sm" id="modal-cancel-btn" onclick="modalCancelAppt()">İptal Et</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-add-appt">
+  <div class="modal">
+    <div class="modal-title">Manuel Randevu Ekle</div>
+    <div class="form-group"><label class="form-label">Müşteri Adı</label><input class="form-input" id="ma-name" placeholder="Ad Soyad"></div>
+    <div class="form-group"><label class="form-label">Telefon</label><input class="form-input" id="ma-phone" placeholder="Telefon"></div>
+    <div class="form-group"><label class="form-label">Uzman</label><select class="form-input" id="ma-specialist" onchange="updateMAServices()"></select></div>
+    <div class="form-group"><label class="form-label">Hizmet</label><select class="form-input" id="ma-service"></select></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Tarih</label><input type="date" class="form-input" id="ma-date"></div>
+      <div class="form-group"><label class="form-label">Saat</label><select class="form-input" id="ma-time"></select></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal('modal-add-appt')">İptal</button>
+      <button class="btn btn-gold" onclick="saveManualAppt()">Randevu Oluştur</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, doc, addDoc, getDocs, updateDoc, deleteDoc, query, where, onSnapshot, setDoc }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBL4bH5VBu2bxuT4QzCLhy8pdUM-s9ZfQ0",
+  authDomain: "tirnak-studyo.firebaseapp.com",
+  projectId: "tirnak-studyo",
+  storageBucket: "tirnak-studyo.firebasestorage.app",
+  messagingSenderId: "241007669140",
+  appId: "1:241007669140:web:a2d9f7b1249773c2a0e981"
+};
+
+const fbApp = initializeApp(firebaseConfig);
+const db = getFirestore(fbApp);
+
+// STATE
+let SPECIALISTS = [];
+let ALL_APPOINTMENTS = [];
+let editingSpecId = null;
+let calWeekOffset = 0;
+let currentPanel = 'dashboard';
+let modalApptId = null;
+
+// AUTH
+const ADMIN_KEY = 'nail_admin_creds';
+function getCreds(){const c=localStorage.getItem(ADMIN_KEY);return c?JSON.parse(c):{user:'admin',pass:'admin123'};}
+
+window.doLogin=function(){
+  const u=document.getElementById('login-user').value.trim();
+  const p=document.getElementById('login-pass').value;
+  const creds=getCreds();
+  if(u===creds.user&&p===creds.pass){
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('app').style.display='flex';
+    document.getElementById('admin-label').textContent=u;
+    initApp();
+  } else {
+    document.getElementById('login-err').style.display='block';
+  }
+};
+window.doLogout=function(){
+  document.getElementById('app').style.display='none';
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('login-user').value='';document.getElementById('login-pass').value='';
+};
+window.changePassword=function(){
+  const p1=document.getElementById('new-pass').value;const p2=document.getElementById('new-pass2').value;
+  if(!p1){toast('Şifre boş olamaz.','error');return;}
+  if(p1!==p2){toast('Şifreler eşleşmiyor.','error');return;}
+  const c=getCreds();c.pass=p1;localStorage.setItem(ADMIN_KEY,JSON.stringify(c));
+  toast('Şifre güncellendi ✓','success');document.getElementById('new-pass').value='';document.getElementById('new-pass2').value='';
+};
+
+// CLOCK
+function updateClock(){document.getElementById('clock').textContent=new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});}
+setInterval(updateClock,1000);updateClock();
+
+// HELPERS
+function fd(d){return d.toISOString().split('T')[0];}
+function fdisp(ds){return new Date(ds+'T12:00').toLocaleDateString('tr-TR',{day:'numeric',month:'short',year:'numeric'});}
+function isToday(ds){return ds===fd(new Date());}
+function isPast(ds,time){return new Date(ds+'T'+time)<new Date();}
+function canCancel(a){const t=new Date(a.date+'T'+a.time);const lim=new Date();lim.setHours(lim.getHours()+5);return t>lim;}
+function getWeekDates(offset){
+  const today=new Date();today.setHours(0,0,0,0);
+  const day=today.getDay();const diff=day===0?-6:1-day;
+  const mon=new Date(today);mon.setDate(today.getDate()+diff+offset*7);
+  const days=[];for(let i=0;i<7;i++){const d=new Date(mon);d.setDate(mon.getDate()+i);days.push(d);}return days;
+}
+function statusBadge(a){
+  if(a.cancelled)return '<span class="badge badge-red">İptal</span>';
+  if(isPast(a.date,a.time))return '<span class="badge badge-muted">Tamamlandı</span>';
+  return '<span class="badge badge-green">Aktif</span>';
+}
+function toast(msg,type=''){
+  const t=document.getElementById('toast');t.textContent=msg;t.className=`toast show ${type}`;
+  setTimeout(()=>t.className='toast',2800);
+}
+window.openModal=function(id){document.getElementById(id).classList.add('open');}
+window.closeModal=function(id){document.getElementById(id).classList.remove('open');}
+
+// NAVIGATION
+const titles={dashboard:'Dashboard',randevular:'Randevular',takvim:'Haftalık Takvim',uzmanlar:'Uzman Yönetimi',ayarlar:'Ayarlar'};
+window.navigate=function(name){
+  currentPanel=name;
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('panel-'+name).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>{if(n.getAttribute('onclick')?.includes(name))n.classList.add('active');});
+  document.getElementById('topbar-title').textContent=titles[name];
+  renderPanel(name);
+};
+function renderPanel(name){
+  if(name==='dashboard')renderDashboard();
+  else if(name==='randevular')renderAllAppointments();
+  else if(name==='takvim')renderCalendar();
+  else if(name==='uzmanlar')renderSpecialistManager();
+}
+
+// DASHBOARD
+function renderDashboard(){
+  const today=fd(new Date());const now=new Date();
+  const in7=new Date();in7.setDate(in7.getDate()+7);
+  const todayAppts=ALL_APPOINTMENTS.filter(a=>!a.cancelled&&a.date===today);
+  const upcoming=ALL_APPOINTMENTS.filter(a=>!a.cancelled&&new Date(a.date+'T'+a.time)>now&&new Date(a.date+'T'+a.time)<=in7);
+  const revenue=ALL_APPOINTMENTS.filter(a=>!a.cancelled&&isPast(a.date,a.time)).reduce((s,a)=>s+(a.servicePrice||0),0);
+  const activeCount=ALL_APPOINTMENTS.filter(a=>!a.cancelled&&!isPast(a.date,a.time)).length;
+
+  document.getElementById('stats-grid').innerHTML=`
+    <div class="stat-card gold"><div class="stat-label">Bugünkü Randevular</div><div class="stat-value">${todayAppts.length}</div><div class="stat-sub">Bugün</div></div>
+    <div class="stat-card rose"><div class="stat-label">Aktif Randevular</div><div class="stat-value">${activeCount}</div><div class="stat-sub">Bekleyen</div></div>
+    <div class="stat-card green"><div class="stat-label">Toplam Gelir</div><div class="stat-value">${revenue.toLocaleString('tr-TR')}₺</div><div class="stat-sub">Tamamlanan</div></div>
+    <div class="stat-card warn"><div class="stat-label">Uzman Sayısı</div><div class="stat-value">${SPECIALISTS.length}</div><div class="stat-sub">Aktif uzman</div></div>`;
+
+  const renderTbody=(tbody,rows,showDate)=>{
+    if(!rows.length){document.getElementById(tbody).innerHTML=`<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:2rem">Randevu bulunmuyor.</td></tr>`;return;}
+    document.getElementById(tbody).innerHTML=rows.sort((a,b)=>new Date(a.date+'T'+a.time)-new Date(b.date+'T'+b.time)).slice(0,10).map(a=>{
+      const sp=SPECIALISTS.find(s=>s.id===a.specialistId);
+      return `<tr>
+        <td style="color:var(--text);font-weight:500">${a.customerName}</td>
+        <td>${sp?.name||'–'}</td><td>${a.serviceName}</td>
+        ${showDate?`<td>${fdisp(a.date)}</td>`:''}
+        <td><span class="badge badge-gold">${a.time}</span></td>
+        <td>${statusBadge(a)}</td>
+        <td><button class="btn btn-outline btn-sm" onclick="viewAppt('${a.firestoreId}')">Detay</button></td>
+      </tr>`;
+    }).join('');
+  };
+  renderTbody('today-tbody',todayAppts,false);
+  renderTbody('upcoming-tbody',upcoming,true);
+}
+
+// ALL APPOINTMENTS
+function renderAllAppointments(){
+  populateFilters();
+  const search=document.getElementById('filter-search')?.value?.toLowerCase()||'';
+  const spFilter=document.getElementById('filter-specialist')?.value||'';
+  const statusFilter=document.getElementById('filter-status')?.value||'';
+  let filtered=ALL_APPOINTMENTS.filter(a=>{
+    if(search&&!a.customerName.toLowerCase().includes(search)&&!a.customerPhone.includes(search))return false;
+    if(spFilter&&a.specialistId!=spFilter)return false;
+    if(statusFilter==='active'&&(a.cancelled||isPast(a.date,a.time)))return false;
+    if(statusFilter==='cancelled'&&!a.cancelled)return false;
+    if(statusFilter==='past'&&(a.cancelled||!isPast(a.date,a.time)))return false;
+    return true;
+  }).sort((a,b)=>new Date(b.date+'T'+b.time)-new Date(a.date+'T'+a.time));
+
+  const tbody=document.getElementById('all-tbody');
+  if(!filtered.length){tbody.innerHTML=`<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:2rem">Randevu bulunamadı.</td></tr>`;return;}
+  tbody.innerHTML=filtered.map(a=>{
+    const sp=SPECIALISTS.find(s=>s.id===a.specialistId);
+    return `<tr>
+      <td style="color:var(--text);font-weight:500">${a.customerName}</td>
+      <td style="font-size:0.78rem">${a.customerPhone}</td>
+      <td>${sp?.name||'–'}</td><td>${a.serviceName}</td>
+      <td>${fdisp(a.date)} ${a.time}</td>
+      <td>${statusBadge(a)}</td>
+      <td style="display:flex;gap:0.4rem">
+        <button class="btn btn-outline btn-sm" onclick="viewAppt('${a.firestoreId}')">Detay</button>
+        ${!a.cancelled?`<button class="btn btn-danger btn-sm" onclick="cancelApptById('${a.firestoreId}')">İptal</button>`:''}
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function populateFilters(){
+  ['filter-specialist','cal-sp-filter','ma-specialist'].forEach(id=>{
+    const el=document.getElementById(id);if(!el)return;
+    const val=el.value;
+    el.innerHTML=`<option value="">Tüm Uzmanlar</option>`+SPECIALISTS.map(s=>`<option value="${s.id}">${s.name}</option>`).join('');
+    if(val)el.value=val;
+  });
+}
+
+// VIEW APPOINTMENT
+window.viewAppt=function(fid){
+  const a=ALL_APPOINTMENTS.find(x=>x.firestoreId===fid);if(!a)return;
+  modalApptId=fid;
+  const sp=SPECIALISTS.find(s=>s.id===a.specialistId);
+  document.getElementById('modal-appt-body').innerHTML=`
+    <div style="display:grid;gap:0.7rem">
+      <div style="display:flex;justify-content:space-between"><span style="color:var(--muted);font-size:0.8rem">Müşteri</span><strong>${a.customerName}</strong></div>
+      <div style="display:flex;justify-content:space-between"><span style="color:var(--muted);font-size:0.8rem">Telefon</span><span>${a.customerPhone}</span></div>
+      <div style="display:flex;justify-content:space-between"><span style="color:var(--muted);font-size:0.8rem">Uzman</span><span>${sp?.name||'–'}</span></div>
+      <div style="display:flex;justify-content:space-between"><span style="color:var(--muted);font-size:0.8rem">Hizmet</span><span>${a.serviceName}</span></div>
+      <div style="display:flex;justify-content:space-between"><span style="color:var(--muted);font-size:0.8rem">Tarih & Saat</span><span>${fdisp(a.date)} — ${a.time}</span></div>
+      <div style="display:flex;justify-content:space-between"><span style="color:var(--muted);font-size:0.8rem">Ücret</span><span>${a.servicePrice?a.servicePrice+'₺':'–'}</span></div>
+      <div style="display:flex;justify-content:space-between"><span style="color:var(--muted);font-size:0.8rem">Durum</span>${statusBadge(a)}</div>
+    </div>`;
+  document.getElementById('modal-cancel-btn').style.display=a.cancelled?'none':'inline-flex';
+  openModal('modal-appt');
+};
+window.modalCancelAppt=async function(){if(modalApptId){await cancelApptById(modalApptId);closeModal('modal-appt');}};
+window.cancelApptById=async function(fid){
+  if(!confirm('Bu randevuyu iptal etmek istiyor musunuz?'))return;
+  await updateDoc(doc(db,'appointments',fid),{cancelled:true});
+  toast('Randevu iptal edildi.','success');
+};
+
+// CALENDAR
+window.calWeekChange=function(dir){calWeekOffset+=dir;renderCalendar();};
+function renderCalendar(){
+  populateFilters();
+  const spFilter=document.getElementById('cal-sp-filter')?.value||'';
+  const days=getWeekDates(calWeekOffset);
+  const todayStr=fd(new Date());
+  const first=days[0],last=days[6];
+  document.getElementById('cal-week-label').textContent=`${first.toLocaleDateString('tr-TR',{day:'numeric',month:'short'})} – ${last.toLocaleDateString('tr-TR',{day:'numeric',month:'short',year:'numeric'})}`;
+
+  const filteredSpecs=spFilter?SPECIALISTS.filter(s=>s.id==spFilter):SPECIALISTS;
+  const allHours=new Set();
+  filteredSpecs.forEach(sp=>{for(let h=sp.hours.start;h<sp.hours.end;h++){allHours.add(`${String(h).padStart(2,'0')}:00`);allHours.add(`${String(h).padStart(2,'0')}:30`);}});
+  const timeSlots=[...allHours].sort();
+  const DAY_NAMES=['Pzt','Sal','Çar','Per','Cum','Cmt','Paz'];
+
+  let html=`<div class="week-header"><div></div>${days.map((d,i)=>`<div class="week-day-header ${fd(d)===todayStr?'today-col':''}">${DAY_NAMES[i]}<br>${d.getDate()}</div>`).join('')}</div><div class="calendar-grid">`;
+  timeSlots.forEach(t=>{
+    html+=`<div class="time-label">${t}</div>`;
+    days.forEach(d=>{
+      const ds=fd(d);const now=new Date();const slotTime=new Date(ds+'T'+t);const past=slotTime<=now;
+      const booked=ALL_APPOINTMENTS.filter(a=>!a.cancelled&&a.date===ds&&a.time===t&&(!spFilter||a.specialistId==spFilter));
+      if(booked.length){
+        const a=booked[0];const sp=SPECIALISTS.find(s=>s.id===a.specialistId);
+        html+=`<div class="cal-cell booked ${past?'past':''}" onclick="viewAppt('${a.firestoreId}')">${a.customerName.split(' ')[0]}<br><span style="font-size:0.58rem;opacity:0.7">${sp?.name?.split(' ')[0]||''}</span></div>`;
+      } else {
+        html+=`<div class="cal-cell ${past?'past':''}"></div>`;
+      }
+    });
+  });
+  html+='</div>';
+  document.getElementById('calendar-container').innerHTML=html;
+}
+
+// SPECIALIST MANAGER
+function renderSpecialistManager(){
+  document.getElementById('spec-list-side').innerHTML=SPECIALISTS.map(s=>`
+    <div class="spec-list-item ${editingSpecId===s.firestoreId?'active':''}" onclick="editSpecialist('${s.firestoreId}')">
+      <span style="font-size:1.3rem">${s.avatar}</span>
+      <div><div class="spec-list-name">${s.name}</div><div class="spec-list-title">${s.title}</div></div>
+    </div>`).join('');
+  if(editingSpecId){
+    const sp=SPECIALISTS.find(s=>s.firestoreId===editingSpecId);
+    if(sp)renderSpecEditor(sp);
+  }
+}
+window.editSpecialist=function(fid){editingSpecId=fid;renderSpecialistManager();};
+
+function renderSpecEditor(sp){
+  document.getElementById('spec-editor-area').innerHTML=`
+    <div class="editor-card">
+      <div class="editor-section-title">Uzman Bilgileri</div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Ad Soyad</label><input class="form-input" id="ed-name" value="${sp.name}"></div>
+        <div class="form-group"><label class="form-label">Unvan</label><input class="form-input" id="ed-title" value="${sp.title}"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Emoji Avatar</label><input class="form-input" id="ed-avatar" value="${sp.avatar}"></div>
+        <div class="form-group"><label class="form-label">Kart Rengi</label><input class="form-input" id="ed-color" type="color" value="${sp.color}"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Çalışma Başlangıcı</label><input class="form-input" id="ed-start" type="number" min="6" max="20" value="${sp.hours.start}"></div>
+        <div class="form-group"><label class="form-label">Çalışma Bitişi</label><input class="form-input" id="ed-end" type="number" min="10" max="23" value="${sp.hours.end}"></div>
+      </div>
+      <div class="editor-section-title" style="margin-top:1.5rem">Hizmetler</div>
+      <div style="display:grid;grid-template-columns:1fr 80px 90px 36px;gap:0.4rem;margin-bottom:0.5rem">
+        <span style="font-size:0.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;padding-left:2px">Hizmet Adı</span>
+        <span style="font-size:0.68rem;color:var(--muted);text-transform:uppercase;">Süre(dk)</span>
+        <span style="font-size:0.68rem;color:var(--muted);text-transform:uppercase;">Fiyat(₺)</span>
+        <span></span>
+      </div>
+      <div id="services-editor">${sp.services.map((s,i)=>serviceRowHTML(s,i)).join('')}</div>
+      <button class="btn btn-outline" style="margin-top:0.5rem;width:100%" onclick="addServiceRow()">+ Hizmet Ekle</button>
+      <div style="display:flex;gap:0.8rem;margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border)">
+        <button class="btn btn-gold" onclick="saveSpecialist()">Kaydet</button>
+        <button class="btn btn-danger" onclick="deleteSpecialist('${sp.firestoreId}')">Uzmanı Sil</button>
+      </div>
+    </div>`;
+}
+
+function serviceRowHTML(s,i){
+  return `<div class="service-row">
+    <input class="form-input srv-name" placeholder="Hizmet adı" value="${s.name}">
+    <input class="form-input srv-dur" type="number" placeholder="dk" value="${s.duration}">
+    <input class="form-input srv-price" type="number" placeholder="₺" value="${s.price}">
+    <button class="btn-icon" onclick="this.closest('.service-row').remove()">✕</button>
+  </div>`;
+}
+window.addServiceRow=function(){
+  const div=document.createElement('div');div.className='service-row';
+  div.innerHTML=`<input class="form-input srv-name" placeholder="Hizmet adı"><input class="form-input srv-dur" type="number" placeholder="dk"><input class="form-input srv-price" type="number" placeholder="₺"><button class="btn-icon" onclick="this.closest('.service-row').remove()">✕</button>`;
+  document.getElementById('services-editor').appendChild(div);
+};
+
+window.saveSpecialist=async function(){
+  const sp=SPECIALISTS.find(s=>s.firestoreId===editingSpecId);if(!sp)return;
+  const rows=document.querySelectorAll('#services-editor .service-row');
+  const services=[];
+  rows.forEach((r,i)=>{
+    const name=r.querySelector('.srv-name').value.trim();
+    const dur=parseInt(r.querySelector('.srv-dur').value)||0;
+    const price=parseInt(r.querySelector('.srv-price').value)||0;
+    if(name)services.push({id:'svc'+i+'_'+sp.id,name,duration:dur,price});
+  });
+  const updated={
+    name:document.getElementById('ed-name').value.trim()||sp.name,
+    title:document.getElementById('ed-title').value.trim(),
+    avatar:document.getElementById('ed-avatar').value.trim(),
+    color:document.getElementById('ed-color').value,
+    hours:{start:parseInt(document.getElementById('ed-start').value)||sp.hours.start,end:parseInt(document.getElementById('ed-end').value)||sp.hours.end},
+    services
+  };
+  await updateDoc(doc(db,'specialists',editingSpecId),updated);
+  toast('Uzman bilgileri kaydedildi ✓','success');
+};
+
+window.deleteSpecialist=async function(fid){
+  if(!confirm('Bu uzmanı silmek istiyor musunuz?'))return;
+  await deleteDoc(doc(db,'specialists',fid));
+  editingSpecId=null;
+  document.getElementById('spec-editor-area').innerHTML=`<div class="empty"><div class="empty-icon">👆</div><p>Bir uzman seçin veya yeni uzman ekleyin.</p></div>`;
+  toast('Uzman silindi.','success');
+};
+
+window.addNewSpecialist=async function(){
+  const newSpec={id:Date.now(),name:'Yeni Uzman',title:'Tırnak Uzmanı',avatar:'💅',color:'#f0e8e0',services:[],hours:{start:9,end:18}};
+  const ref=await addDoc(collection(db,'specialists'),newSpec);
+  editingSpecId=ref.id;
+  toast('Yeni uzman oluşturuldu, bilgileri doldurup kaydedin.','success');
+};
+
+// MANUEL RANDEVU
+window.openAddApptModal=function(){
+  populateFilters();
+  const maSpec=document.getElementById('ma-specialist');
+  maSpec.innerHTML=SPECIALISTS.map(s=>`<option value="${s.id}">${s.name}</option>`).join('');
+  updateMAServices();
+  document.getElementById('ma-date').value=fd(new Date());
+  document.getElementById('ma-date').min=fd(new Date());
+  openModal('modal-add-appt');
+};
+window.updateMAServices=function(){
+  const spId=parseInt(document.getElementById('ma-specialist').value);
+  const sp=SPECIALISTS.find(s=>s.id===spId);
+  document.getElementById('ma-service').innerHTML=(sp?.services||[]).map(s=>`<option value="${s.id}" data-price="${s.price}" data-dur="${s.duration}">${s.name} (${s.price}₺)</option>`).join('');
+  const slots=[];
+  if(sp){for(let h=sp.hours.start;h<sp.hours.end;h++){slots.push(`${String(h).padStart(2,'0')}:00`,`${String(h).padStart(2,'0')}:30`);}}
+  document.getElementById('ma-time').innerHTML=slots.map(t=>`<option value="${t}">${t}</option>`).join('');
+};
+window.saveManualAppt=async function(){
+  const name=document.getElementById('ma-name').value.trim();
+  const phone=document.getElementById('ma-phone').value.trim();
+  const spId=parseInt(document.getElementById('ma-specialist').value);
+  const svcEl=document.getElementById('ma-service');
+  const svcOpt=svcEl.options[svcEl.selectedIndex];
+  const date=document.getElementById('ma-date').value;
+  const time=document.getElementById('ma-time').value;
+  if(!name||!phone||!date||!time){toast('Tüm alanları doldurun.','error');return;}
+  await addDoc(collection(db,'appointments'),{
+    specialistId:spId,serviceId:svcEl.value,
+    serviceName:svcOpt?.text?.split(' (')[0]||'',
+    servicePrice:parseInt(svcOpt?.dataset?.price)||0,
+    serviceDuration:parseInt(svcOpt?.dataset?.dur)||0,
+    date,time,customerName:name,customerPhone:phone,
+    bookedAt:new Date().toISOString(),cancelled:false,manualEntry:true
+  });
+  closeModal('modal-add-appt');toast('Randevu oluşturuldu ✓','success');
+  document.getElementById('ma-name').value='';document.getElementById('ma-phone').value='';
+};
+
+// SETTINGS
+window.saveSettings=function(){
+  localStorage.setItem('nail_settings',JSON.stringify({
+    name:document.getElementById('setting-name').value,
+    addr:document.getElementById('setting-address').value,
+    phone:document.getElementById('setting-phone').value
+  }));toast('Ayarlar kaydedildi ✓','success');
+};
+
+window.exportData=function(){
+  let csv='Müşteri,Telefon,Uzman,Hizmet,Tarih,Saat,Ücret,Durum\n';
+  ALL_APPOINTMENTS.forEach(a=>{
+    const sp=SPECIALISTS.find(s=>s.id===a.specialistId);
+    const status=a.cancelled?'İptal':isPast(a.date,a.time)?'Tamamlandı':'Aktif';
+    csv+=`"${a.customerName}","${a.customerPhone}","${sp?.name||''}","${a.serviceName}","${a.date}","${a.time}","${a.servicePrice||0}₺","${status}"\n`;
+  });
+  const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'});
+  const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;
+  a.download=`randevular_${fd(new Date())}.csv`;a.click();URL.revokeObjectURL(url);
+  toast('Dışa aktarıldı ✓','success');
+};
+
+window.clearCancelled=async function(){
+  if(!confirm('İptal edilen tüm randevular silinsin mi?'))return;
+  const toDelete=ALL_APPOINTMENTS.filter(a=>a.cancelled);
+  for(const a of toDelete){await deleteDoc(doc(db,'appointments',a.firestoreId));}
+  toast('İptal edilen randevular temizlendi.','success');
+};
+
+// REALTIME LISTENERS
+function listenSpecialists(){
+  onSnapshot(collection(db,'specialists'),snap=>{
+    SPECIALISTS=snap.docs.map(d=>({firestoreId:d.id,...d.data()}));
+    if(currentPanel==='uzmanlar')renderSpecialistManager();
+    if(currentPanel==='dashboard')renderDashboard();
+    populateFilters();
+  });
+}
+function listenAppointments(){
+  onSnapshot(collection(db,'appointments'),snap=>{
+    ALL_APPOINTMENTS=snap.docs.map(d=>({firestoreId:d.id,...d.data()}));
+    renderPanel(currentPanel);
+  });
+}
+
+async function initApp(){
+  listenSpecialists();
+  listenAppointments();
+  const s=localStorage.getItem('nail_settings');
+  if(s){const{name,addr,phone}=JSON.parse(s);document.getElementById('setting-name').value=name||'';document.getElementById('setting-address').value=addr||'';document.getElementById('setting-phone').value=phone||'';}
+}
+
+// BOOT
+document.getElementById('loading-overlay').style.display='none';
+document.getElementById('login-screen').style.display='flex';
+</script>
+</body>
+</html>
