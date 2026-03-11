@@ -3,709 +3,200 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin · Tırnak Stüdyo</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<title>O'Nail · Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Tenor+Sans&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0f0d0c;--surface:#1a1714;--card:#221e1b;--border:#2e2825;--border2:#3d3530;--gold:#c9a96e;--gold2:#e8c98a;--rose:#c4826a;--muted:#7a6e66;--text:#f0ebe4;--text2:#b0a89e;--success:#6aab7a;--danger:#c46a6a;--warn:#c4a96a;--sidebar-w:240px;}
+:root{--bg:#0e0c0b;--surface:#171412;--card:#1e1a17;--border:#2a2420;--border2:#3a302a;--gold:#c9975a;--gold2:#e8b87a;--rose:#c4725a;--muted:#7a6e66;--text:#f0ebe4;--text2:#b0a89e;--success:#6aab7a;--danger:#c46a6a;--warn:#c49a5a;--sw:240px;}
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;}
-#login-screen{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:999;}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;}
+.spinner{width:34px;height:34px;border:2px solid var(--border2);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+#loading-overlay{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;}
+.loading-brand{font-family:'Tenor Sans',serif;font-size:2rem;color:var(--gold);letter-spacing:0.1em;margin-bottom:0.5rem;}
+#login-screen{position:fixed;inset:0;background:var(--bg);display:none;align-items:center;justify-content:center;z-index:998;}
 .login-box{background:var(--card);border:1px solid var(--border2);border-radius:20px;padding:3rem 2.5rem;width:360px;text-align:center;}
-.login-logo{font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--gold);margin-bottom:0.3rem;}
-.login-sub{color:var(--muted);font-size:0.8rem;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:2rem;}
-.login-input{width:100%;background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:0.75rem 1rem;color:var(--text);font-family:'Outfit',sans-serif;font-size:0.9rem;margin-bottom:0.8rem;outline:none;transition:border-color 0.2s;}
+.login-logo{font-family:'Tenor Sans',serif;font-size:2rem;color:var(--gold);letter-spacing:0.1em;margin-bottom:0.2rem;}
+.login-sub{color:var(--muted);font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:2rem;}
+.login-input{width:100%;background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:0.75rem 1rem;color:var(--text);font-family:'Nunito',sans-serif;font-size:0.88rem;margin-bottom:0.8rem;outline:none;transition:border-color 0.2s;}
 .login-input:focus{border-color:var(--gold);}
-.login-btn{width:100%;background:var(--gold);color:var(--bg);border:none;border-radius:10px;padding:0.75rem;font-size:0.9rem;font-weight:600;font-family:'Outfit',sans-serif;cursor:pointer;transition:background 0.2s;margin-top:0.4rem;}
+.login-btn{width:100%;background:var(--gold);color:var(--bg);border:none;border-radius:10px;padding:0.75rem;font-size:0.9rem;font-weight:700;font-family:'Nunito',sans-serif;cursor:pointer;}
 .login-btn:hover{background:var(--gold2);}
-.login-err{color:var(--danger);font-size:0.8rem;margin-top:0.5rem;display:none;}
+.login-err{color:var(--danger);font-size:0.78rem;margin-top:0.5rem;display:none;}
 #app{display:none;width:100%;}
-.sidebar{width:var(--sidebar-w);background:var(--surface);border-right:1px solid var(--border);height:100vh;position:fixed;left:0;top:0;display:flex;flex-direction:column;z-index:50;}
-.sidebar-logo{padding:1.5rem 1.4rem 1.2rem;border-bottom:1px solid var(--border);}
-.sidebar-logo-text{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--gold);}
-.sidebar-logo-sub{font-size:0.7rem;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;}
-.sidebar-nav{flex:1;padding:1rem 0;overflow-y:auto;}
-.nav-section{padding:0.4rem 1.2rem 0.2rem;font-size:0.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;}
-.nav-item{display:flex;align-items:center;gap:0.7rem;padding:0.6rem 1.4rem;cursor:pointer;color:var(--text2);font-size:0.86rem;transition:all 0.15s;border-left:2px solid transparent;}
-.nav-item:hover{color:var(--text);background:rgba(201,169,110,0.06);}
-.nav-item.active{color:var(--gold);border-left-color:var(--gold);background:rgba(201,169,110,0.08);}
-.sidebar-footer{padding:1rem 1.4rem;border-top:1px solid var(--border);font-size:0.75rem;color:var(--muted);display:flex;align-items:center;justify-content:space-between;}
-.logout-btn{background:none;border:1px solid var(--border2);color:var(--muted);border-radius:6px;padding:0.25rem 0.6rem;font-size:0.72rem;cursor:pointer;font-family:'Outfit',sans-serif;transition:all 0.2s;}
+.sidebar{width:var(--sw);background:var(--surface);border-right:1px solid var(--border);height:100vh;position:fixed;left:0;top:0;display:flex;flex-direction:column;z-index:50;}
+.sb-logo{padding:1.4rem;border-bottom:1px solid var(--border);}
+.sb-logo-text{font-family:'Tenor Sans',serif;font-size:1.3rem;color:var(--gold);letter-spacing:0.08em;}
+.sb-logo-sub{font-size:0.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;}
+.sb-nav{flex:1;padding:0.8rem 0;overflow-y:auto;}
+.nav-sec{padding:0.5rem 1.2rem 0.2rem;font-size:0.62rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;}
+.nav-item{display:flex;align-items:center;gap:0.65rem;padding:0.6rem 1.3rem;cursor:pointer;color:var(--text2);font-size:0.83rem;transition:all 0.15s;border-left:2px solid transparent;font-weight:500;}
+.nav-item:hover{color:var(--text);background:rgba(201,151,90,0.06);}
+.nav-item.active{color:var(--gold);border-left-color:var(--gold);background:rgba(201,151,90,0.08);}
+.sb-footer{padding:1rem 1.3rem;border-top:1px solid var(--border);font-size:0.73rem;color:var(--muted);display:flex;align-items:center;justify-content:space-between;}
+.logout-btn{background:none;border:1px solid var(--border2);color:var(--muted);border-radius:6px;padding:0.22rem 0.6rem;font-size:0.7rem;cursor:pointer;font-family:'Nunito',sans-serif;}
 .logout-btn:hover{border-color:var(--danger);color:var(--danger);}
-.main-content{margin-left:var(--sidebar-w);flex:1;min-height:100vh;overflow-y:auto;}
-.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 2rem;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:40;}
-.topbar-title{font-family:'Playfair Display',serif;font-size:1.15rem;}
-.topbar-right{display:flex;align-items:center;gap:1rem;}
-.live-badge{background:rgba(106,171,122,0.15);color:var(--success);border:1px solid rgba(106,171,122,0.3);border-radius:20px;padding:0.2rem 0.7rem;font-size:0.72rem;font-weight:500;display:flex;align-items:center;gap:0.35rem;}
+.main-content{margin-left:var(--sw);flex:1;min-height:100vh;overflow-y:auto;}
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 2rem;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:40;}
+.topbar-title{font-family:'Tenor Sans',serif;font-size:1.1rem;letter-spacing:0.04em;}
+.topbar-right{display:flex;align-items:center;gap:0.8rem;}
+.live-badge{background:rgba(106,171,122,0.15);color:var(--success);border:1px solid rgba(106,171,122,0.3);border-radius:20px;padding:0.18rem 0.65rem;font-size:0.7rem;font-weight:600;display:flex;align-items:center;gap:0.3rem;}
 .live-dot{width:6px;height:6px;background:var(--success);border-radius:50%;animation:pulse 2s infinite;}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
-.content-area{padding:2rem;}
-.panel{display:none;animation:fadeIn 0.25s ease;}.panel.active{display:block;}
-@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem;}
-.stat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.3rem 1.5rem;position:relative;overflow:hidden;}
+.content-area{padding:1.8rem;}
+.panel{display:none;animation:fadeIn 0.22s ease;}.panel.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.8rem;}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.2rem 1.4rem;position:relative;overflow:hidden;}
 .stat-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
 .stat-card.gold::after{background:var(--gold)}.stat-card.rose::after{background:var(--rose)}.stat-card.green::after{background:var(--success)}.stat-card.warn::after{background:var(--warn)}
-.stat-label{font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem;}
-.stat-value{font-family:'Playfair Display',serif;font-size:2rem;color:var(--text);font-weight:700;}
-.stat-sub{font-size:0.72rem;color:var(--muted);margin-top:0.2rem;}
-.section-card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:1.5rem;}
-.section-card-header{padding:1rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;}
-.section-card-title{font-family:'Playfair Display',serif;font-size:1rem;}
+.stat-label{font-size:0.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem;font-weight:600;}
+.stat-value{font-family:'Tenor Sans',serif;font-size:1.9rem;color:var(--text);}
+.stat-sub{font-size:0.68rem;color:var(--muted);margin-top:0.15rem;}
+.section-card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:1.4rem;}
+.sc-header{padding:0.9rem 1.4rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;}
+.sc-title{font-family:'Tenor Sans',serif;font-size:0.95rem;}
 .table-wrap{overflow-x:auto;}
 table{width:100%;border-collapse:collapse;}
-th{text-align:left;padding:0.7rem 1.2rem;font-size:0.68rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);border-bottom:1px solid var(--border);background:var(--surface);font-weight:500;}
-td{padding:0.85rem 1.2rem;font-size:0.84rem;border-bottom:1px solid var(--border);color:var(--text2);}
+th{text-align:left;padding:0.65rem 1.1rem;font-size:0.65rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);border-bottom:1px solid var(--border);background:var(--surface);font-weight:600;}
+td{padding:0.8rem 1.1rem;font-size:0.82rem;border-bottom:1px solid var(--border);color:var(--text2);}
 tr:last-child td{border-bottom:none;}
-tr:hover td{background:rgba(201,169,110,0.03);}
-.badge{display:inline-block;padding:0.2rem 0.6rem;border-radius:20px;font-size:0.7rem;font-weight:500;}
+tr:hover td{background:rgba(201,151,90,0.03);}
+.badge{display:inline-block;padding:0.18rem 0.55rem;border-radius:20px;font-size:0.67rem;font-weight:600;}
 .badge-green{background:rgba(106,171,122,0.15);color:var(--success);border:1px solid rgba(106,171,122,0.25);}
 .badge-red{background:rgba(196,106,106,0.15);color:var(--danger);border:1px solid rgba(196,106,106,0.25);}
-.badge-gold{background:rgba(201,169,110,0.15);color:var(--gold);border:1px solid rgba(201,169,110,0.25);}
+.badge-gold{background:rgba(201,151,90,0.15);color:var(--gold);border:1px solid rgba(201,151,90,0.25);}
 .badge-muted{background:rgba(122,110,102,0.15);color:var(--muted);border:1px solid rgba(122,110,102,0.25);}
-.btn{padding:0.45rem 1rem;border-radius:8px;font-size:0.8rem;font-weight:500;font-family:'Outfit',sans-serif;cursor:pointer;border:none;transition:all 0.18s;}
+.btn{padding:0.4rem 0.9rem;border-radius:8px;font-size:0.78rem;font-weight:600;font-family:'Nunito',sans-serif;cursor:pointer;border:none;transition:all 0.18s;}
 .btn-gold{background:var(--gold);color:var(--bg);}.btn-gold:hover{background:var(--gold2);}
 .btn-outline{background:none;border:1px solid var(--border2);color:var(--text2);}.btn-outline:hover{border-color:var(--gold);color:var(--gold);}
 .btn-danger{background:none;border:1px solid rgba(196,106,106,0.4);color:var(--danger);}.btn-danger:hover{background:rgba(196,106,106,0.12);}
-.btn-sm{padding:0.28rem 0.65rem;font-size:0.72rem;}
+.btn-success{background:none;border:1px solid rgba(106,171,122,0.4);color:var(--success);}.btn-success:hover{background:rgba(106,171,122,0.12);}
+.btn-sm{padding:0.24rem 0.6rem;font-size:0.7rem;}
 .filter-row{display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;}
-.filter-select{background:var(--surface);border:1px solid var(--border2);border-radius:8px;color:var(--text2);padding:0.4rem 0.8rem;font-size:0.8rem;font-family:'Outfit',sans-serif;cursor:pointer;outline:none;}
-.filter-input{background:var(--surface);border:1px solid var(--border2);border-radius:8px;color:var(--text);padding:0.4rem 0.8rem;font-size:0.8rem;font-family:'Outfit',sans-serif;outline:none;width:180px;}
+.filter-select,.filter-input{background:var(--surface);border:1px solid var(--border2);border-radius:8px;color:var(--text2);padding:0.38rem 0.75rem;font-size:0.78rem;font-family:'Nunito',sans-serif;outline:none;}
+.filter-input{color:var(--text);width:170px;}
 .filter-input:focus,.filter-select:focus{border-color:var(--gold);}
 .filter-input::placeholder{color:var(--muted);}
-.specialist-editor-grid{display:grid;grid-template-columns:260px 1fr;gap:1.5rem;align-items:start;}
-.specialist-list-side{display:flex;flex-direction:column;gap:0.6rem;}
-.spec-list-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:0.9rem 1.1rem;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;gap:0.7rem;}
-.spec-list-item:hover,.spec-list-item.active{border-color:var(--gold);background:rgba(201,169,110,0.06);}
-.spec-list-name{font-size:0.86rem;font-weight:500;}.spec-list-title{font-size:0.72rem;color:var(--muted);}
-.editor-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.5rem;}
-.editor-section-title{font-family:'Playfair Display',serif;font-size:1rem;color:var(--gold);margin-bottom:1rem;padding-bottom:0.6rem;border-bottom:1px solid var(--border);}
-.form-group{margin-bottom:1rem;}
-.form-label{display:block;font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.35rem;}
-.form-input{width:100%;background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:0.6rem 0.9rem;color:var(--text);font-family:'Outfit',sans-serif;font-size:0.86rem;outline:none;transition:border-color 0.2s;}
+.two-col{display:grid;grid-template-columns:260px 1fr;gap:1.4rem;align-items:start;}
+.list-side{display:flex;flex-direction:column;gap:0.55rem;}
+.list-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:0.85rem 1rem;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;gap:0.65rem;}
+.list-item:hover,.list-item.active{border-color:var(--gold);background:rgba(201,151,90,0.06);}
+.list-item-name{font-size:0.84rem;font-weight:600;}
+.list-item-sub{font-size:0.7rem;color:var(--muted);}
+.editor-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.4rem;}
+.ed-title{font-family:'Tenor Sans',serif;font-size:0.95rem;color:var(--gold);margin-bottom:0.9rem;padding-bottom:0.6rem;border-bottom:1px solid var(--border);}
+.form-group{margin-bottom:0.9rem;}
+.form-label{display:block;font-size:0.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.3rem;font-weight:600;}
+.form-input{width:100%;background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:0.55rem 0.85rem;color:var(--text);font-family:'Nunito',sans-serif;font-size:0.84rem;outline:none;transition:border-color 0.2s;}
 .form-input:focus{border-color:var(--gold);}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;}
-.service-row{display:grid;grid-template-columns:1fr 80px 90px 36px;gap:0.5rem;align-items:center;margin-bottom:0.5rem;animation:fadeIn 0.2s ease;}
-.btn-icon{width:36px;height:36px;border-radius:8px;border:1px solid var(--border2);background:none;color:var(--muted);cursor:pointer;font-size:0.9rem;display:flex;align-items:center;justify-content:center;transition:all 0.15s;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:0.7rem;}
+.svc-row{display:grid;grid-template-columns:1fr 80px 85px 36px;gap:0.45rem;align-items:center;margin-bottom:0.45rem;}
+.btn-icon{width:34px;height:34px;border-radius:8px;border:1px solid var(--border2);background:none;color:var(--muted);cursor:pointer;font-size:0.85rem;display:flex;align-items:center;justify-content:center;}
 .btn-icon:hover{border-color:var(--danger);color:var(--danger);}
-.week-header{display:grid;grid-template-columns:70px repeat(7,1fr);gap:0.4rem;margin-bottom:0.5rem;}
-.week-day-header{text-align:center;font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;padding:0.4rem 0;}
-.week-day-header.today-col{color:var(--gold);}
-.calendar-grid{display:grid;grid-template-columns:70px repeat(7,1fr);gap:0.4rem;}
-.time-label{font-size:0.68rem;color:var(--muted);text-align:right;padding-right:0.6rem;padding-top:0.15rem;}
-.cal-cell{min-height:34px;border-radius:6px;border:1px solid var(--border);background:var(--surface);font-size:0.65rem;display:flex;align-items:center;justify-content:center;cursor:default;transition:all 0.15s;padding:0.2rem;text-align:center;line-height:1.2;}
-.cal-cell.booked{background:rgba(201,169,110,0.12);border-color:rgba(201,169,110,0.35);color:var(--gold);cursor:pointer;font-weight:500;}
-.cal-cell.booked:hover{background:rgba(201,169,110,0.2);}
-.cal-cell.past{opacity:0.35;}
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;align-items:center;justify-content:center;display:none;}
+.week-header{display:grid;grid-template-columns:65px repeat(7,1fr);gap:0.35rem;margin-bottom:0.4rem;}
+.wdh{text-align:center;font-size:0.65rem;color:var(--muted);text-transform:uppercase;padding:0.35rem 0;}
+.wdh.today-col{color:var(--gold);}
+.cal-grid{display:grid;grid-template-columns:65px repeat(7,1fr);gap:0.35rem;}
+.t-label{font-size:0.65rem;color:var(--muted);text-align:right;padding-right:0.5rem;padding-top:0.12rem;}
+.cal-cell{min-height:32px;border-radius:6px;border:1px solid var(--border);background:var(--surface);font-size:0.62rem;display:flex;align-items:center;justify-content:center;cursor:default;transition:all 0.15s;padding:0.18rem;text-align:center;line-height:1.2;}
+.cal-cell.booked{background:rgba(201,151,90,0.12);border-color:rgba(201,151,90,0.35);color:var(--gold);cursor:pointer;font-weight:600;}
+.cal-cell.blocked{background:rgba(201,151,90,0.04);border-color:rgba(201,151,90,0.1);color:var(--border2);}
+.cal-cell.past{opacity:0.3;}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;align-items:center;justify-content:center;display:none;padding:1rem;}
 .modal-overlay.open{display:flex;}
-.modal{background:var(--card);border:1px solid var(--border2);border-radius:18px;padding:2rem;width:460px;max-width:95vw;animation:fadeIn 0.25s ease;max-height:90vh;overflow-y:auto;}
-.modal-title{font-family:'Playfair Display',serif;font-size:1.2rem;margin-bottom:1.2rem;padding-bottom:0.8rem;border-bottom:1px solid var(--border);}
-.modal-actions{display:flex;gap:0.6rem;justify-content:flex-end;margin-top:1.2rem;}
-.toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--card);border:1px solid var(--border2);color:var(--text);padding:0.8rem 1.2rem;border-radius:12px;font-size:0.82rem;z-index:500;transform:translateY(80px);opacity:0;transition:all 0.3s ease;max-width:300px;}
+.modal{background:var(--card);border:1px solid var(--border2);border-radius:18px;padding:1.8rem;width:100%;max-width:480px;animation:fadeIn 0.22s ease;max-height:90vh;overflow-y:auto;}
+.modal-title{font-family:'Tenor Sans',serif;font-size:1.15rem;margin-bottom:1.2rem;padding-bottom:0.7rem;border-bottom:1px solid var(--border);}
+.modal-actions{display:flex;gap:0.55rem;justify-content:flex-end;margin-top:1.1rem;}
+.toast{position:fixed;bottom:1.4rem;right:1.4rem;background:var(--card);border:1px solid var(--border2);color:var(--text);padding:0.75rem 1.1rem;border-radius:12px;font-size:0.8rem;z-index:500;transform:translateY(70px);opacity:0;transition:all 0.3s ease;max-width:280px;font-weight:500;}
 .toast.show{transform:translateY(0);opacity:1;}
 .toast.success{border-color:rgba(106,171,122,0.4);}
 .toast.error{border-color:rgba(196,106,106,0.4);}
-.empty{text-align:center;padding:3rem;color:var(--muted);}
-.empty-icon{font-size:2rem;margin-bottom:0.6rem;}
-.loading-overlay{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;}
-.spinner{width:36px;height:36px;border:2px solid var(--border2);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite;}
-@keyframes spin{to{transform:rotate(360deg);}}
-@media(max-width:900px){.stats-grid{grid-template-columns:1fr 1fr;}.specialist-editor-grid{grid-template-columns:1fr;}}
+.empty{text-align:center;padding:2.5rem;color:var(--muted);}
+.cats-checkboxes{display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:0.3rem;}
+.cat-check{display:flex;align-items:center;gap:0.35rem;background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:0.3rem 0.6rem;cursor:pointer;font-size:0.78rem;}
+.cat-check input{accent-color:var(--gold);}
+@media(max-width:900px){.stats-grid{grid-template-columns:1fr 1fr;}.two-col{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
-
-<div class="loading-overlay" id="loading-overlay">
-  <div style="font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--gold);margin-bottom:1rem;">Tırnak Stüdyo</div>
-  <div class="spinner"></div>
-</div>
-
-<div id="login-screen" style="display:none">
-  <div class="login-box">
-    <div class="login-logo">Tırnak Stüdyo</div>
-    <div class="login-sub">Yönetici Paneli</div>
-    <input type="text" class="login-input" id="login-user" placeholder="Kullanıcı adı" onkeydown="if(event.key==='Enter')doLogin()">
-    <input type="password" class="login-input" id="login-pass" placeholder="Şifre" onkeydown="if(event.key==='Enter')doLogin()">
-    <button class="login-btn" onclick="doLogin()">Giriş Yap</button>
-    <div class="login-err" id="login-err">Kullanıcı adı veya şifre hatalı.</div>
-    <div style="margin-top:1rem;font-size:0.72rem;color:var(--muted)">Varsayılan: admin / admin123</div>
-  </div>
-</div>
-
+<div id="loading-overlay"><div class="loading-brand">O'Nail</div><div style="color:var(--muted);font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:1.5rem">Admin Panel</div><div class="spinner"></div></div>
+<div id="login-screen"><div class="login-box"><div class="login-logo">O'Nail</div><div class="login-sub">Yönetici Girişi</div><input type="text" class="login-input" id="login-user" placeholder="Kullanıcı adı" onkeydown="if(event.key==='Enter')doLogin()"><input type="password" class="login-input" id="login-pass" placeholder="Şifre" onkeydown="if(event.key==='Enter')doLogin()"><button class="login-btn" onclick="doLogin()">Giriş Yap</button><div class="login-err" id="login-err">Hatalı kullanıcı adı veya şifre.</div><div style="margin-top:1rem;font-size:0.7rem;color:var(--muted)">Varsayılan: admin / admin123</div></div></div>
 <div id="app">
-  <div class="sidebar">
-    <div class="sidebar-logo">
-      <div class="sidebar-logo-text">Tırnak Stüdyo</div>
-      <div class="sidebar-logo-sub">Admin Paneli</div>
-    </div>
-    <nav class="sidebar-nav">
-      <div class="nav-section">Genel</div>
-      <div class="nav-item active" onclick="navigate('dashboard')"><span>◈</span> Dashboard</div>
-      <div class="nav-item" onclick="navigate('randevular')"><span>📅</span> Randevular</div>
-      <div class="nav-item" onclick="navigate('takvim')"><span>🗓</span> Haftalık Takvim</div>
-      <div class="nav-section">Yönetim</div>
-      <div class="nav-item" onclick="navigate('uzmanlar')"><span>👥</span> Uzmanlar</div>
-      <div class="nav-item" onclick="navigate('ayarlar')"><span>⚙️</span> Ayarlar</div>
-    </nav>
-    <div class="sidebar-footer">
-      <span id="admin-label">Admin</span>
-      <button class="logout-btn" onclick="doLogout()">Çıkış</button>
-    </div>
-  </div>
-
+  <div class="sidebar"><div class="sb-logo"><div class="sb-logo-text">O'Nail</div><div class="sb-logo-sub">Admin Panel</div></div><nav class="sb-nav"><div class="nav-sec">Genel</div><div class="nav-item active" onclick="navigate('dashboard')"><span>◈</span> Dashboard</div><div class="nav-item" onclick="navigate('randevular')"><span>📅</span> Randevular</div><div class="nav-item" onclick="navigate('takvim')"><span>🗓</span> Haftalık Takvim</div><div class="nav-sec">Yönetim</div><div class="nav-item" onclick="navigate('subeler')"><span>🏪</span> Şubeler</div><div class="nav-item" onclick="navigate('uzmanlar')"><span>👥</span> Uzmanlar</div><div class="nav-sec">Sistem</div><div class="nav-item" onclick="navigate('ayarlar')"><span>⚙️</span> Ayarlar</div></nav><div class="sb-footer"><span id="admin-label">Admin</span><button class="logout-btn" onclick="doLogout()">Çıkış</button></div></div>
   <div class="main-content">
-    <div class="topbar">
-      <div class="topbar-title" id="topbar-title">Dashboard</div>
-      <div class="topbar-right">
-        <button class="btn btn-gold btn-sm" onclick="openAddApptModal()">+ Randevu Ekle</button>
-        <div class="live-badge"><div class="live-dot"></div> Canlı</div>
-        <span style="font-size:0.78rem;color:var(--muted)" id="clock"></span>
-      </div>
-    </div>
+    <div class="topbar"><div class="topbar-title" id="topbar-title">Dashboard</div><div class="topbar-right"><button class="btn btn-gold btn-sm" onclick="openModal('modal-add-appt')">+ Randevu Ekle</button><div class="live-badge"><div class="live-dot"></div> Canlı</div><span style="font-size:0.76rem;color:var(--muted)" id="clock"></span></div></div>
     <div class="content-area">
-
-      <div class="panel active" id="panel-dashboard">
-        <div class="stats-grid" id="stats-grid"></div>
-        <div class="section-card">
-          <div class="section-card-header"><div class="section-card-title">Bugünkü Randevular</div></div>
-          <div class="table-wrap"><table><thead><tr><th>Müşteri</th><th>Uzman</th><th>Hizmet</th><th>Saat</th><th>Durum</th><th>İşlem</th></tr></thead><tbody id="today-tbody"></tbody></table></div>
-        </div>
-        <div class="section-card">
-          <div class="section-card-header"><div class="section-card-title">Yaklaşan Randevular (7 gün)</div></div>
-          <div class="table-wrap"><table><thead><tr><th>Müşteri</th><th>Uzman</th><th>Hizmet</th><th>Tarih</th><th>Saat</th><th>Durum</th><th>İşlem</th></tr></thead><tbody id="upcoming-tbody"></tbody></table></div>
-        </div>
-      </div>
-
-      <div class="panel" id="panel-randevular">
-        <div class="section-card">
-          <div class="section-card-header">
-            <div class="section-card-title">Tüm Randevular</div>
-            <div class="filter-row">
-              <input class="filter-input" id="filter-search" placeholder="Müşteri ara..." oninput="renderAllAppointments()">
-              <select class="filter-select" id="filter-specialist" onchange="renderAllAppointments()"><option value="">Tüm Uzmanlar</option></select>
-              <select class="filter-select" id="filter-status" onchange="renderAllAppointments()">
-                <option value="">Tüm Durumlar</option><option value="active">Aktif</option><option value="cancelled">İptal</option><option value="past">Geçmiş</option>
-              </select>
-            </div>
-          </div>
-          <div class="table-wrap"><table><thead><tr><th>Müşteri</th><th>Telefon</th><th>Uzman</th><th>Hizmet</th><th>Tarih & Saat</th><th>Durum</th><th>İşlem</th></tr></thead><tbody id="all-tbody"></tbody></table></div>
-        </div>
-      </div>
-
-      <div class="panel" id="panel-takvim">
-        <div class="section-card">
-          <div class="section-card-header">
-            <div class="section-card-title">Haftalık Takvim</div>
-            <div class="filter-row">
-              <button class="btn btn-outline" onclick="calWeekChange(-1)">‹ Önceki</button>
-              <span id="cal-week-label" style="font-size:0.85rem;color:var(--muted)"></span>
-              <button class="btn btn-outline" onclick="calWeekChange(1)">Sonraki ›</button>
-              <select class="filter-select" id="cal-sp-filter" onchange="renderCalendar()"><option value="">Tüm Uzmanlar</option></select>
-            </div>
-          </div>
-          <div style="padding:1rem;overflow-x:auto"><div id="calendar-container"></div></div>
-        </div>
-      </div>
-
-      <div class="panel" id="panel-uzmanlar">
-        <div class="specialist-editor-grid">
-          <div>
-            <div class="specialist-list-side" id="spec-list-side"></div>
-            <button class="btn btn-gold" style="width:100%;margin-top:0.8rem" onclick="addNewSpecialist()">+ Yeni Uzman Ekle</button>
-          </div>
-          <div id="spec-editor-area"><div class="empty"><div class="empty-icon">👆</div><p>Bir uzman seçin veya yeni uzman ekleyin.</p></div></div>
-        </div>
-      </div>
-
-      <div class="panel" id="panel-ayarlar">
-        <div style="max-width:480px">
-          <div class="section-card">
-            <div class="section-card-header"><div class="section-card-title">Salon Bilgileri</div></div>
-            <div style="padding:1.5rem">
-              <div class="form-group"><label class="form-label">Salon Adı</label><input class="form-input" id="setting-name" value="Tırnak Stüdyo"></div>
-              <div class="form-group"><label class="form-label">Adres</label><input class="form-input" id="setting-address" placeholder="Salon adresi..."></div>
-              <div class="form-group"><label class="form-label">Telefon</label><input class="form-input" id="setting-phone" placeholder="0212 000 00 00"></div>
-              <button class="btn btn-gold" onclick="saveSettings()">Kaydet</button>
-            </div>
-          </div>
-          <div class="section-card" style="margin-top:1rem">
-            <div class="section-card-header"><div class="section-card-title">Admin Şifresi</div></div>
-            <div style="padding:1.5rem">
-              <div class="form-group"><label class="form-label">Yeni Şifre</label><input type="password" class="form-input" id="new-pass" placeholder="Yeni şifre..."></div>
-              <div class="form-group"><label class="form-label">Şifre Tekrar</label><input type="password" class="form-input" id="new-pass2" placeholder="Tekrar girin..."></div>
-              <button class="btn btn-gold" onclick="changePassword()">Şifreyi Güncelle</button>
-            </div>
-          </div>
-          <div class="section-card" style="margin-top:1rem">
-            <div class="section-card-header"><div class="section-card-title">Veri Yönetimi</div></div>
-            <div style="padding:1.5rem;display:flex;gap:0.8rem;flex-wrap:wrap">
-              <button class="btn btn-outline" onclick="exportData()">📥 CSV Dışa Aktar</button>
-              <button class="btn btn-danger" onclick="clearCancelled()">🗑 İptal edilenleri temizle</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
+      <div class="panel active" id="panel-dashboard"><div class="stats-grid" id="stats-grid"></div><div class="section-card"><div class="sc-header"><div class="sc-title">Bugünkü Randevular</div><select class="filter-select" id="dash-branch-filter" onchange="renderDashboard()"><option value="">Tüm Şubeler</option></select></div><div class="table-wrap"><table><thead><tr><th>Müşteri</th><th>Şube</th><th>Uzman</th><th>Hizmet</th><th>Saat</th><th>Durum</th><th>İşlem</th></tr></thead><tbody id="today-tbody"></tbody></table></div></div><div class="section-card"><div class="sc-header"><div class="sc-title">Yaklaşan 7 Gün</div></div><div class="table-wrap"><table><thead><tr><th>Müşteri</th><th>Şube</th><th>Uzman</th><th>Hizmet</th><th>Tarih</th><th>Saat</th><th>Durum</th><th>İşlem</th></tr></thead><tbody id="upcoming-tbody"></tbody></table></div></div></div>
+      <div class="panel" id="panel-randevular"><div class="section-card"><div class="sc-header"><div class="sc-title">Tüm Randevular</div><div class="filter-row"><input class="filter-input" id="f-search" placeholder="Müşteri ara..." oninput="renderAllAppts()"><select class="filter-select" id="f-branch" onchange="renderAllAppts()"><option value="">Tüm Şubeler</option></select><select class="filter-select" id="f-specialist" onchange="renderAllAppts()"><option value="">Tüm Uzmanlar</option></select><select class="filter-select" id="f-status" onchange="renderAllAppts()"><option value="">Tüm</option><option value="active">Aktif</option><option value="completed">Tamamlandı</option><option value="cancelled">İptal</option></select></div></div><div class="table-wrap"><table><thead><tr><th>Müşteri</th><th>Tel</th><th>Şube</th><th>Uzman</th><th>Hizmet</th><th>Tarih & Saat</th><th>Ücret</th><th>Durum</th><th>İşlem</th></tr></thead><tbody id="all-tbody"></tbody></table></div></div></div>
+      <div class="panel" id="panel-takvim"><div class="section-card"><div class="sc-header"><div class="sc-title">Haftalık Takvim</div><div class="filter-row"><button class="btn btn-outline" onclick="calWkChange(-1)">‹</button><span id="cal-wk-label" style="font-size:0.82rem;color:var(--muted);min-width:160px;text-align:center"></span><button class="btn btn-outline" onclick="calWkChange(1)">›</button><select class="filter-select" id="cal-branch" onchange="renderCalendar()"><option value="">Tüm Şubeler</option></select><select class="filter-select" id="cal-sp" onchange="renderCalendar()"><option value="">Tüm Uzmanlar</option></select></div></div><div style="padding:1rem;overflow-x:auto"><div id="cal-container"></div></div></div></div>
+      <div class="panel" id="panel-subeler"><div class="two-col"><div><div class="list-side" id="branch-list-side"></div><button class="btn btn-gold" style="width:100%;margin-top:0.7rem" onclick="addNewBranch()">+ Yeni Şube Ekle</button></div><div id="branch-editor-area"><div class="empty">Bir şube seçin veya yeni ekleyin.</div></div></div></div>
+      <div class="panel" id="panel-uzmanlar"><div class="two-col"><div><div style="margin-bottom:0.6rem"><select class="filter-select" style="width:100%" id="sp-branch-filter" onchange="renderSpecialistManager()"><option value="">Tüm Şubeler</option></select></div><div class="list-side" id="sp-list-side"></div><button class="btn btn-gold" style="width:100%;margin-top:0.7rem" onclick="addNewSpecialist()">+ Yeni Uzman Ekle</button></div><div id="sp-editor-area"><div class="empty">Bir uzman seçin veya yeni ekleyin.</div></div></div></div>
+      <div class="panel" id="panel-ayarlar"><div style="max-width:460px"><div class="section-card"><div class="sc-header"><div class="sc-title">Admin Şifresi</div></div><div style="padding:1.3rem"><div class="form-group"><label class="form-label">Yeni Şifre</label><input type="password" class="form-input" id="new-pass" placeholder="Yeni şifre..."></div><div class="form-group"><label class="form-label">Şifre Tekrar</label><input type="password" class="form-input" id="new-pass2" placeholder="Tekrar girin..."></div><button class="btn btn-gold" onclick="changePassword()">Güncelle</button></div></div><div class="section-card" style="margin-top:1rem"><div class="sc-header"><div class="sc-title">Veri Yönetimi</div></div><div style="padding:1.3rem;display:flex;gap:0.7rem;flex-wrap:wrap"><button class="btn btn-outline" onclick="exportData()">📥 CSV Dışa Aktar</button><button class="btn btn-danger" onclick="clearCancelled()">🗑 İptal edilenleri sil</button></div></div></div></div>
     </div>
   </div>
 </div>
-
-<!-- MODALS -->
-<div class="modal-overlay" id="modal-appt">
-  <div class="modal">
-    <div class="modal-title">Randevu Detayı</div>
-    <div id="modal-appt-body"></div>
-    <div class="modal-actions">
-      <button class="btn btn-outline" onclick="closeModal('modal-appt')">Kapat</button>
-      <button class="btn btn-danger btn-sm" id="modal-cancel-btn" onclick="modalCancelAppt()">İptal Et</button>
-    </div>
-  </div>
-</div>
-
-<div class="modal-overlay" id="modal-add-appt">
-  <div class="modal">
-    <div class="modal-title">Manuel Randevu Ekle</div>
-    <div class="form-group"><label class="form-label">Müşteri Adı</label><input class="form-input" id="ma-name" placeholder="Ad Soyad"></div>
-    <div class="form-group"><label class="form-label">Telefon</label><input class="form-input" id="ma-phone" placeholder="Telefon"></div>
-    <div class="form-group"><label class="form-label">Uzman</label><select class="form-input" id="ma-specialist" onchange="updateMAServices()"></select></div>
-    <div class="form-group"><label class="form-label">Hizmet</label><select class="form-input" id="ma-service"></select></div>
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">Tarih</label><input type="date" class="form-input" id="ma-date"></div>
-      <div class="form-group"><label class="form-label">Saat</label><select class="form-input" id="ma-time"></select></div>
-    </div>
-    <div class="modal-actions">
-      <button class="btn btn-outline" onclick="closeModal('modal-add-appt')">İptal</button>
-      <button class="btn btn-gold" onclick="saveManualAppt()">Randevu Oluştur</button>
-    </div>
-  </div>
-</div>
-
+<div class="modal-overlay" id="modal-appt"><div class="modal"><div class="modal-title">Randevu Detayı</div><div id="modal-appt-body"></div><div class="modal-actions"><button class="btn btn-outline" onclick="closeModal('modal-appt')">Kapat</button><button class="btn btn-success btn-sm" id="modal-complete-btn" onclick="modalCompleteAppt()">✓ Tamamlandı</button><button class="btn btn-danger btn-sm" id="modal-cancel-btn" onclick="modalCancelAppt()">İptal Et</button></div></div></div>
+<div class="modal-overlay" id="modal-add-appt"><div class="modal"><div class="modal-title">Manuel Randevu Ekle</div><div class="form-row"><div class="form-group"><label class="form-label">Müşteri Adı</label><input class="form-input" id="ma-name" placeholder="Ad Soyad"></div><div class="form-group"><label class="form-label">Telefon</label><input class="form-input" id="ma-phone" placeholder="05XX..."></div></div><div class="form-group"><label class="form-label">Şube</label><select class="form-input" id="ma-branch" onchange="updateMASpecialists()"></select></div><div class="form-group"><label class="form-label">Uzman</label><select class="form-input" id="ma-specialist" onchange="updateMAServices()"></select></div><div class="form-group"><label class="form-label">Hizmet</label><select class="form-input" id="ma-service"></select></div><div class="form-row"><div class="form-group"><label class="form-label">Tarih</label><input type="date" class="form-input" id="ma-date"></div><div class="form-group"><label class="form-label">Saat</label><select class="form-input" id="ma-time"></select></div></div><div class="modal-actions"><button class="btn btn-outline" onclick="closeModal('modal-add-appt')">İptal</button><button class="btn btn-gold" onclick="saveManualAppt()">Oluştur</button></div></div></div>
 <div class="toast" id="toast"></div>
-
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, doc, addDoc, getDocs, updateDoc, deleteDoc, query, where, onSnapshot, setDoc }
-  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyBL4bH5VBu2bxuT4QzCLhy8pdUM-s9ZfQ0",
-  authDomain: "tirnak-studyo.firebaseapp.com",
-  projectId: "tirnak-studyo",
-  storageBucket: "tirnak-studyo.firebasestorage.app",
-  messagingSenderId: "241007669140",
-  appId: "1:241007669140:web:a2d9f7b1249773c2a0e981"
-};
-
-const fbApp = initializeApp(firebaseConfig);
-const db = getFirestore(fbApp);
-
-// STATE
-let SPECIALISTS = [];
-let ALL_APPOINTMENTS = [];
-let editingSpecId = null;
-let calWeekOffset = 0;
-let currentPanel = 'dashboard';
-let modalApptId = null;
-
-// AUTH
-const ADMIN_KEY = 'nail_admin_creds';
-function getCreds(){const c=localStorage.getItem(ADMIN_KEY);return c?JSON.parse(c):{user:'admin',pass:'admin123'};}
-
-window.doLogin=function(){
-  const u=document.getElementById('login-user').value.trim();
-  const p=document.getElementById('login-pass').value;
-  const creds=getCreds();
-  if(u===creds.user&&p===creds.pass){
-    document.getElementById('login-screen').style.display='none';
-    document.getElementById('app').style.display='flex';
-    document.getElementById('admin-label').textContent=u;
-    initApp();
-  } else {
-    document.getElementById('login-err').style.display='block';
-  }
-};
-window.doLogout=function(){
-  document.getElementById('app').style.display='none';
-  document.getElementById('login-screen').style.display='flex';
-  document.getElementById('login-user').value='';document.getElementById('login-pass').value='';
-};
-window.changePassword=function(){
-  const p1=document.getElementById('new-pass').value;const p2=document.getElementById('new-pass2').value;
-  if(!p1){toast('Şifre boş olamaz.','error');return;}
-  if(p1!==p2){toast('Şifreler eşleşmiyor.','error');return;}
-  const c=getCreds();c.pass=p1;localStorage.setItem(ADMIN_KEY,JSON.stringify(c));
-  toast('Şifre güncellendi ✓','success');document.getElementById('new-pass').value='';document.getElementById('new-pass2').value='';
-};
-
-// CLOCK
-function updateClock(){document.getElementById('clock').textContent=new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});}
-setInterval(updateClock,1000);updateClock();
-
-// HELPERS
-function fd(d){return d.toISOString().split('T')[0];}
-function fdisp(ds){return new Date(ds+'T12:00').toLocaleDateString('tr-TR',{day:'numeric',month:'short',year:'numeric'});}
-function isToday(ds){return ds===fd(new Date());}
-function isPast(ds,time){return new Date(ds+'T'+time)<new Date();}
-function canCancel(a){const t=new Date(a.date+'T'+a.time);const lim=new Date();lim.setHours(lim.getHours()+5);return t>lim;}
-function getWeekDates(offset){
-  const today=new Date();today.setHours(0,0,0,0);
-  const day=today.getDay();const diff=day===0?-6:1-day;
-  const mon=new Date(today);mon.setDate(today.getDate()+diff+offset*7);
-  const days=[];for(let i=0;i<7;i++){const d=new Date(mon);d.setDate(mon.getDate()+i);days.push(d);}return days;
-}
-function statusBadge(a){
-  if(a.cancelled)return '<span class="badge badge-red">İptal</span>';
-  if(isPast(a.date,a.time))return '<span class="badge badge-muted">Tamamlandı</span>';
-  return '<span class="badge badge-green">Aktif</span>';
-}
-function toast(msg,type=''){
-  const t=document.getElementById('toast');t.textContent=msg;t.className=`toast show ${type}`;
-  setTimeout(()=>t.className='toast',2800);
-}
-window.openModal=function(id){document.getElementById(id).classList.add('open');}
-window.closeModal=function(id){document.getElementById(id).classList.remove('open');}
-
-// NAVIGATION
-const titles={dashboard:'Dashboard',randevular:'Randevular',takvim:'Haftalık Takvim',uzmanlar:'Uzman Yönetimi',ayarlar:'Ayarlar'};
-window.navigate=function(name){
-  currentPanel=name;
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  document.getElementById('panel-'+name).classList.add('active');
-  document.querySelectorAll('.nav-item').forEach(n=>{if(n.getAttribute('onclick')?.includes(name))n.classList.add('active');});
-  document.getElementById('topbar-title').textContent=titles[name];
-  renderPanel(name);
-};
-function renderPanel(name){
-  if(name==='dashboard')renderDashboard();
-  else if(name==='randevular')renderAllAppointments();
-  else if(name==='takvim')renderCalendar();
-  else if(name==='uzmanlar')renderSpecialistManager();
-}
-
-// DASHBOARD
-function renderDashboard(){
-  const today=fd(new Date());const now=new Date();
-  const in7=new Date();in7.setDate(in7.getDate()+7);
-  const todayAppts=ALL_APPOINTMENTS.filter(a=>!a.cancelled&&a.date===today);
-  const upcoming=ALL_APPOINTMENTS.filter(a=>!a.cancelled&&new Date(a.date+'T'+a.time)>now&&new Date(a.date+'T'+a.time)<=in7);
-  const revenue=ALL_APPOINTMENTS.filter(a=>!a.cancelled&&isPast(a.date,a.time)).reduce((s,a)=>s+(a.servicePrice||0),0);
-  const activeCount=ALL_APPOINTMENTS.filter(a=>!a.cancelled&&!isPast(a.date,a.time)).length;
-
-  document.getElementById('stats-grid').innerHTML=`
-    <div class="stat-card gold"><div class="stat-label">Bugünkü Randevular</div><div class="stat-value">${todayAppts.length}</div><div class="stat-sub">Bugün</div></div>
-    <div class="stat-card rose"><div class="stat-label">Aktif Randevular</div><div class="stat-value">${activeCount}</div><div class="stat-sub">Bekleyen</div></div>
-    <div class="stat-card green"><div class="stat-label">Toplam Gelir</div><div class="stat-value">${revenue.toLocaleString('tr-TR')}₺</div><div class="stat-sub">Tamamlanan</div></div>
-    <div class="stat-card warn"><div class="stat-label">Uzman Sayısı</div><div class="stat-value">${SPECIALISTS.length}</div><div class="stat-sub">Aktif uzman</div></div>`;
-
-  const renderTbody=(tbody,rows,showDate)=>{
-    if(!rows.length){document.getElementById(tbody).innerHTML=`<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:2rem">Randevu bulunmuyor.</td></tr>`;return;}
-    document.getElementById(tbody).innerHTML=rows.sort((a,b)=>new Date(a.date+'T'+a.time)-new Date(b.date+'T'+b.time)).slice(0,10).map(a=>{
-      const sp=SPECIALISTS.find(s=>s.id===a.specialistId);
-      return `<tr>
-        <td style="color:var(--text);font-weight:500">${a.customerName}</td>
-        <td>${sp?.name||'–'}</td><td>${a.serviceName}</td>
-        ${showDate?`<td>${fdisp(a.date)}</td>`:''}
-        <td><span class="badge badge-gold">${a.time}</span></td>
-        <td>${statusBadge(a)}</td>
-        <td><button class="btn btn-outline btn-sm" onclick="viewAppt('${a.firestoreId}')">Detay</button></td>
-      </tr>`;
-    }).join('');
-  };
-  renderTbody('today-tbody',todayAppts,false);
-  renderTbody('upcoming-tbody',upcoming,true);
-}
-
-// ALL APPOINTMENTS
-function renderAllAppointments(){
-  populateFilters();
-  const search=document.getElementById('filter-search')?.value?.toLowerCase()||'';
-  const spFilter=document.getElementById('filter-specialist')?.value||'';
-  const statusFilter=document.getElementById('filter-status')?.value||'';
-  let filtered=ALL_APPOINTMENTS.filter(a=>{
-    if(search&&!a.customerName.toLowerCase().includes(search)&&!a.customerPhone.includes(search))return false;
-    if(spFilter&&a.specialistId!=spFilter)return false;
-    if(statusFilter==='active'&&(a.cancelled||isPast(a.date,a.time)))return false;
-    if(statusFilter==='cancelled'&&!a.cancelled)return false;
-    if(statusFilter==='past'&&(a.cancelled||!isPast(a.date,a.time)))return false;
-    return true;
-  }).sort((a,b)=>new Date(b.date+'T'+b.time)-new Date(a.date+'T'+a.time));
-
-  const tbody=document.getElementById('all-tbody');
-  if(!filtered.length){tbody.innerHTML=`<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:2rem">Randevu bulunamadı.</td></tr>`;return;}
-  tbody.innerHTML=filtered.map(a=>{
-    const sp=SPECIALISTS.find(s=>s.id===a.specialistId);
-    return `<tr>
-      <td style="color:var(--text);font-weight:500">${a.customerName}</td>
-      <td style="font-size:0.78rem">${a.customerPhone}</td>
-      <td>${sp?.name||'–'}</td><td>${a.serviceName}</td>
-      <td>${fdisp(a.date)} ${a.time}</td>
-      <td>${statusBadge(a)}</td>
-      <td style="display:flex;gap:0.4rem">
-        <button class="btn btn-outline btn-sm" onclick="viewAppt('${a.firestoreId}')">Detay</button>
-        ${!a.cancelled?`<button class="btn btn-danger btn-sm" onclick="cancelApptById('${a.firestoreId}')">İptal</button>`:''}
-      </td>
-    </tr>`;
-  }).join('');
-}
-
-function populateFilters(){
-  ['filter-specialist','cal-sp-filter','ma-specialist'].forEach(id=>{
-    const el=document.getElementById(id);if(!el)return;
-    const val=el.value;
-    el.innerHTML=`<option value="">Tüm Uzmanlar</option>`+SPECIALISTS.map(s=>`<option value="${s.id}">${s.name}</option>`).join('');
-    if(val)el.value=val;
-  });
-}
-
-// VIEW APPOINTMENT
-window.viewAppt=function(fid){
-  const a=ALL_APPOINTMENTS.find(x=>x.firestoreId===fid);if(!a)return;
-  modalApptId=fid;
-  const sp=SPECIALISTS.find(s=>s.id===a.specialistId);
-  document.getElementById('modal-appt-body').innerHTML=`
-    <div style="display:grid;gap:0.7rem">
-      <div style="display:flex;justify-content:space-between"><span style="color:var(--muted);font-size:0.8rem">Müşteri</span><strong>${a.customerName}</strong></div>
-      <div style="display:flex;justify-content:space-between"><span style="color:var(--muted);font-size:0.8rem">Telefon</span><span>${a.customerPhone}</span></div>
-      <div style="display:flex;justify-content:space-between"><span style="color:var(--muted);font-size:0.8rem">Uzman</span><span>${sp?.name||'–'}</span></div>
-      <div style="display:flex;justify-content:space-between"><span style="color:var(--muted);font-size:0.8rem">Hizmet</span><span>${a.serviceName}</span></div>
-      <div style="display:flex;justify-content:space-between"><span style="color:var(--muted);font-size:0.8rem">Tarih & Saat</span><span>${fdisp(a.date)} — ${a.time}</span></div>
-      <div style="display:flex;justify-content:space-between"><span style="color:var(--muted);font-size:0.8rem">Ücret</span><span>${a.servicePrice?a.servicePrice+'₺':'–'}</span></div>
-      <div style="display:flex;justify-content:space-between"><span style="color:var(--muted);font-size:0.8rem">Durum</span>${statusBadge(a)}</div>
-    </div>`;
-  document.getElementById('modal-cancel-btn').style.display=a.cancelled?'none':'inline-flex';
-  openModal('modal-appt');
-};
-window.modalCancelAppt=async function(){if(modalApptId){await cancelApptById(modalApptId);closeModal('modal-appt');}};
-window.cancelApptById=async function(fid){
-  if(!confirm('Bu randevuyu iptal etmek istiyor musunuz?'))return;
-  await updateDoc(doc(db,'appointments',fid),{cancelled:true});
-  toast('Randevu iptal edildi.','success');
-};
-
-// CALENDAR
-window.calWeekChange=function(dir){calWeekOffset+=dir;renderCalendar();};
-function renderCalendar(){
-  populateFilters();
-  const spFilter=document.getElementById('cal-sp-filter')?.value||'';
-  const days=getWeekDates(calWeekOffset);
-  const todayStr=fd(new Date());
-  const first=days[0],last=days[6];
-  document.getElementById('cal-week-label').textContent=`${first.toLocaleDateString('tr-TR',{day:'numeric',month:'short'})} – ${last.toLocaleDateString('tr-TR',{day:'numeric',month:'short',year:'numeric'})}`;
-
-  const filteredSpecs=spFilter?SPECIALISTS.filter(s=>s.id==spFilter):SPECIALISTS;
-  const allHours=new Set();
-  filteredSpecs.forEach(sp=>{for(let h=sp.hours.start;h<sp.hours.end;h++){allHours.add(`${String(h).padStart(2,'0')}:00`);allHours.add(`${String(h).padStart(2,'0')}:30`);}});
-  const timeSlots=[...allHours].sort();
-  const DAY_NAMES=['Pzt','Sal','Çar','Per','Cum','Cmt','Paz'];
-
-  let html=`<div class="week-header"><div></div>${days.map((d,i)=>`<div class="week-day-header ${fd(d)===todayStr?'today-col':''}">${DAY_NAMES[i]}<br>${d.getDate()}</div>`).join('')}</div><div class="calendar-grid">`;
-  timeSlots.forEach(t=>{
-    html+=`<div class="time-label">${t}</div>`;
-    days.forEach(d=>{
-      const ds=fd(d);const now=new Date();const slotTime=new Date(ds+'T'+t);const past=slotTime<=now;
-      const booked=ALL_APPOINTMENTS.filter(a=>!a.cancelled&&a.date===ds&&a.time===t&&(!spFilter||a.specialistId==spFilter));
-      if(booked.length){
-        const a=booked[0];const sp=SPECIALISTS.find(s=>s.id===a.specialistId);
-        html+=`<div class="cal-cell booked ${past?'past':''}" onclick="viewAppt('${a.firestoreId}')">${a.customerName.split(' ')[0]}<br><span style="font-size:0.58rem;opacity:0.7">${sp?.name?.split(' ')[0]||''}</span></div>`;
-      } else {
-        html+=`<div class="cal-cell ${past?'past':''}"></div>`;
-      }
-    });
-  });
-  html+='</div>';
-  document.getElementById('calendar-container').innerHTML=html;
-}
-
-// SPECIALIST MANAGER
-function renderSpecialistManager(){
-  document.getElementById('spec-list-side').innerHTML=SPECIALISTS.map(s=>`
-    <div class="spec-list-item ${editingSpecId===s.firestoreId?'active':''}" onclick="editSpecialist('${s.firestoreId}')">
-      <span style="font-size:1.3rem">${s.avatar}</span>
-      <div><div class="spec-list-name">${s.name}</div><div class="spec-list-title">${s.title}</div></div>
-    </div>`).join('');
-  if(editingSpecId){
-    const sp=SPECIALISTS.find(s=>s.firestoreId===editingSpecId);
-    if(sp)renderSpecEditor(sp);
-  }
-}
-window.editSpecialist=function(fid){editingSpecId=fid;renderSpecialistManager();};
-
-function renderSpecEditor(sp){
-  document.getElementById('spec-editor-area').innerHTML=`
-    <div class="editor-card">
-      <div class="editor-section-title">Uzman Bilgileri</div>
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">Ad Soyad</label><input class="form-input" id="ed-name" value="${sp.name}"></div>
-        <div class="form-group"><label class="form-label">Unvan</label><input class="form-input" id="ed-title" value="${sp.title}"></div>
-      </div>
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">Emoji Avatar</label><input class="form-input" id="ed-avatar" value="${sp.avatar}"></div>
-        <div class="form-group"><label class="form-label">Kart Rengi</label><input class="form-input" id="ed-color" type="color" value="${sp.color}"></div>
-      </div>
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">Çalışma Başlangıcı</label><input class="form-input" id="ed-start" type="number" min="6" max="20" value="${sp.hours.start}"></div>
-        <div class="form-group"><label class="form-label">Çalışma Bitişi</label><input class="form-input" id="ed-end" type="number" min="10" max="23" value="${sp.hours.end}"></div>
-      </div>
-      <div class="editor-section-title" style="margin-top:1.5rem">Hizmetler</div>
-      <div style="display:grid;grid-template-columns:1fr 80px 90px 36px;gap:0.4rem;margin-bottom:0.5rem">
-        <span style="font-size:0.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;padding-left:2px">Hizmet Adı</span>
-        <span style="font-size:0.68rem;color:var(--muted);text-transform:uppercase;">Süre(dk)</span>
-        <span style="font-size:0.68rem;color:var(--muted);text-transform:uppercase;">Fiyat(₺)</span>
-        <span></span>
-      </div>
-      <div id="services-editor">${sp.services.map((s,i)=>serviceRowHTML(s,i)).join('')}</div>
-      <button class="btn btn-outline" style="margin-top:0.5rem;width:100%" onclick="addServiceRow()">+ Hizmet Ekle</button>
-      <div style="display:flex;gap:0.8rem;margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border)">
-        <button class="btn btn-gold" onclick="saveSpecialist()">Kaydet</button>
-        <button class="btn btn-danger" onclick="deleteSpecialist('${sp.firestoreId}')">Uzmanı Sil</button>
-      </div>
-    </div>`;
-}
-
-function serviceRowHTML(s,i){
-  return `<div class="service-row">
-    <input class="form-input srv-name" placeholder="Hizmet adı" value="${s.name}">
-    <input class="form-input srv-dur" type="number" placeholder="dk" value="${s.duration}">
-    <input class="form-input srv-price" type="number" placeholder="₺" value="${s.price}">
-    <button class="btn-icon" onclick="this.closest('.service-row').remove()">✕</button>
-  </div>`;
-}
-window.addServiceRow=function(){
-  const div=document.createElement('div');div.className='service-row';
-  div.innerHTML=`<input class="form-input srv-name" placeholder="Hizmet adı"><input class="form-input srv-dur" type="number" placeholder="dk"><input class="form-input srv-price" type="number" placeholder="₺"><button class="btn-icon" onclick="this.closest('.service-row').remove()">✕</button>`;
-  document.getElementById('services-editor').appendChild(div);
-};
-
-window.saveSpecialist=async function(){
-  const sp=SPECIALISTS.find(s=>s.firestoreId===editingSpecId);if(!sp)return;
-  const rows=document.querySelectorAll('#services-editor .service-row');
-  const services=[];
-  rows.forEach((r,i)=>{
-    const name=r.querySelector('.srv-name').value.trim();
-    const dur=parseInt(r.querySelector('.srv-dur').value)||0;
-    const price=parseInt(r.querySelector('.srv-price').value)||0;
-    if(name)services.push({id:'svc'+i+'_'+sp.id,name,duration:dur,price});
-  });
-  const updated={
-    name:document.getElementById('ed-name').value.trim()||sp.name,
-    title:document.getElementById('ed-title').value.trim(),
-    avatar:document.getElementById('ed-avatar').value.trim(),
-    color:document.getElementById('ed-color').value,
-    hours:{start:parseInt(document.getElementById('ed-start').value)||sp.hours.start,end:parseInt(document.getElementById('ed-end').value)||sp.hours.end},
-    services
-  };
-  await updateDoc(doc(db,'specialists',editingSpecId),updated);
-  toast('Uzman bilgileri kaydedildi ✓','success');
-};
-
-window.deleteSpecialist=async function(fid){
-  if(!confirm('Bu uzmanı silmek istiyor musunuz?'))return;
-  await deleteDoc(doc(db,'specialists',fid));
-  editingSpecId=null;
-  document.getElementById('spec-editor-area').innerHTML=`<div class="empty"><div class="empty-icon">👆</div><p>Bir uzman seçin veya yeni uzman ekleyin.</p></div>`;
-  toast('Uzman silindi.','success');
-};
-
-window.addNewSpecialist=async function(){
-  const newSpec={id:Date.now(),name:'Yeni Uzman',title:'Tırnak Uzmanı',avatar:'💅',color:'#f0e8e0',services:[],hours:{start:9,end:18}};
-  const ref=await addDoc(collection(db,'specialists'),newSpec);
-  editingSpecId=ref.id;
-  toast('Yeni uzman oluşturuldu, bilgileri doldurup kaydedin.','success');
-};
-
-// MANUEL RANDEVU
-window.openAddApptModal=function(){
-  populateFilters();
-  const maSpec=document.getElementById('ma-specialist');
-  maSpec.innerHTML=SPECIALISTS.map(s=>`<option value="${s.id}">${s.name}</option>`).join('');
-  updateMAServices();
-  document.getElementById('ma-date').value=fd(new Date());
-  document.getElementById('ma-date').min=fd(new Date());
-  openModal('modal-add-appt');
-};
-window.updateMAServices=function(){
-  const spId=parseInt(document.getElementById('ma-specialist').value);
-  const sp=SPECIALISTS.find(s=>s.id===spId);
-  document.getElementById('ma-service').innerHTML=(sp?.services||[]).map(s=>`<option value="${s.id}" data-price="${s.price}" data-dur="${s.duration}">${s.name} (${s.price}₺)</option>`).join('');
-  const slots=[];
-  if(sp){for(let h=sp.hours.start;h<sp.hours.end;h++){slots.push(`${String(h).padStart(2,'0')}:00`,`${String(h).padStart(2,'0')}:30`);}}
-  document.getElementById('ma-time').innerHTML=slots.map(t=>`<option value="${t}">${t}</option>`).join('');
-};
-window.saveManualAppt=async function(){
-  const name=document.getElementById('ma-name').value.trim();
-  const phone=document.getElementById('ma-phone').value.trim();
-  const spId=parseInt(document.getElementById('ma-specialist').value);
-  const svcEl=document.getElementById('ma-service');
-  const svcOpt=svcEl.options[svcEl.selectedIndex];
-  const date=document.getElementById('ma-date').value;
-  const time=document.getElementById('ma-time').value;
-  if(!name||!phone||!date||!time){toast('Tüm alanları doldurun.','error');return;}
-  await addDoc(collection(db,'appointments'),{
-    specialistId:spId,serviceId:svcEl.value,
-    serviceName:svcOpt?.text?.split(' (')[0]||'',
-    servicePrice:parseInt(svcOpt?.dataset?.price)||0,
-    serviceDuration:parseInt(svcOpt?.dataset?.dur)||0,
-    date,time,customerName:name,customerPhone:phone,
-    bookedAt:new Date().toISOString(),cancelled:false,manualEntry:true
-  });
-  closeModal('modal-add-appt');toast('Randevu oluşturuldu ✓','success');
-  document.getElementById('ma-name').value='';document.getElementById('ma-phone').value='';
-};
-
-// SETTINGS
-window.saveSettings=function(){
-  localStorage.setItem('nail_settings',JSON.stringify({
-    name:document.getElementById('setting-name').value,
-    addr:document.getElementById('setting-address').value,
-    phone:document.getElementById('setting-phone').value
-  }));toast('Ayarlar kaydedildi ✓','success');
-};
-
-window.exportData=function(){
-  let csv='Müşteri,Telefon,Uzman,Hizmet,Tarih,Saat,Ücret,Durum\n';
-  ALL_APPOINTMENTS.forEach(a=>{
-    const sp=SPECIALISTS.find(s=>s.id===a.specialistId);
-    const status=a.cancelled?'İptal':isPast(a.date,a.time)?'Tamamlandı':'Aktif';
-    csv+=`"${a.customerName}","${a.customerPhone}","${sp?.name||''}","${a.serviceName}","${a.date}","${a.time}","${a.servicePrice||0}₺","${status}"\n`;
-  });
-  const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'});
-  const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;
-  a.download=`randevular_${fd(new Date())}.csv`;a.click();URL.revokeObjectURL(url);
-  toast('Dışa aktarıldı ✓','success');
-};
-
-window.clearCancelled=async function(){
-  if(!confirm('İptal edilen tüm randevular silinsin mi?'))return;
-  const toDelete=ALL_APPOINTMENTS.filter(a=>a.cancelled);
-  for(const a of toDelete){await deleteDoc(doc(db,'appointments',a.firestoreId));}
-  toast('İptal edilen randevular temizlendi.','success');
-};
-
-// REALTIME LISTENERS
-function listenSpecialists(){
-  onSnapshot(collection(db,'specialists'),snap=>{
-    SPECIALISTS=snap.docs.map(d=>({firestoreId:d.id,...d.data()}));
-    if(currentPanel==='uzmanlar')renderSpecialistManager();
-    if(currentPanel==='dashboard')renderDashboard();
-    populateFilters();
-  });
-}
-function listenAppointments(){
-  onSnapshot(collection(db,'appointments'),snap=>{
-    ALL_APPOINTMENTS=snap.docs.map(d=>({firestoreId:d.id,...d.data()}));
-    renderPanel(currentPanel);
-  });
-}
-
-async function initApp(){
-  listenSpecialists();
-  listenAppointments();
-  const s=localStorage.getItem('nail_settings');
-  if(s){const{name,addr,phone}=JSON.parse(s);document.getElementById('setting-name').value=name||'';document.getElementById('setting-address').value=addr||'';document.getElementById('setting-phone').value=phone||'';}
-}
-
-// BOOT
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import{getFirestore,collection,doc,addDoc,updateDoc,deleteDoc,onSnapshot}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+const cfg={apiKey:"AIzaSyBL4bH5VBu2bxuT4QzCLhy8pdUM-s9ZfQ0",authDomain:"tirnak-studyo.firebaseapp.com",projectId:"tirnak-studyo",storageBucket:"tirnak-studyo.firebasestorage.app",messagingSenderId:"241007669140",appId:"1:241007669140:web:a2d9f7b1249773c2a0e981"};
+const db=getFirestore(initializeApp(cfg));
+let BR=[],SP=[],AP=[],eBrId=null,eSpId=null,calOff=0,panel='dashboard',mApptId=null;
+const AK='onail_admin_creds';
+function gc(){const c=localStorage.getItem(AK);return c?JSON.parse(c):{user:'admin',pass:'admin123'};}
+window.doLogin=function(){const u=document.getElementById('login-user').value.trim(),p=document.getElementById('login-pass').value,c=gc();if(u===c.user&&p===c.pass){document.getElementById('login-screen').style.display='none';document.getElementById('app').style.display='flex';document.getElementById('admin-label').textContent=u;initApp();}else document.getElementById('login-err').style.display='block';};
+window.doLogout=function(){document.getElementById('app').style.display='none';document.getElementById('login-screen').style.display='flex';};
+window.changePassword=function(){const p1=document.getElementById('new-pass').value,p2=document.getElementById('new-pass2').value;if(!p1)return toast('Şifre boş olamaz.','error');if(p1!==p2)return toast('Şifreler eşleşmiyor.','error');const c=gc();c.pass=p1;localStorage.setItem(AK,JSON.stringify(c));toast('Şifre güncellendi ✓','success');document.getElementById('new-pass').value='';document.getElementById('new-pass2').value='';};
+function uc(){document.getElementById('clock').textContent=new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});}setInterval(uc,1000);uc();
+const fd=d=>d.toISOString().split('T')[0];
+const fdisp=ds=>new Date(ds+'T12:00').toLocaleDateString('tr-TR',{day:'numeric',month:'short',year:'numeric'});
+const isPast=(ds,t)=>new Date(ds+'T'+t)<new Date();
+const t2m=t=>{const[h,m]=t.split(':').map(Number);return h*60+m;};
+function isBlocked(sid,ds,t){const sm=t2m(t);for(const a of AP.filter(a=>!a.cancelled&&String(a.specialistId)===String(sid)&&a.date===ds)){const s=t2m(a.time),e=s+(a.serviceDuration||30);if(sm>s&&sm<e)return true;}return false;}
+function gwk(o){const t=new Date();t.setHours(0,0,0,0);const d=t.getDay(),df=d===0?-6:1-d,m=new Date(t);m.setDate(t.getDate()+df+o*7);const r=[];for(let i=0;i<7;i++){const dd=new Date(m);dd.setDate(m.getDate()+i);r.push(dd);}return r;}
+function sb(a){if(a.cancelled)return'<span class="badge badge-red">İptal</span>';if(a.completed||isPast(a.date,a.time))return'<span class="badge badge-muted">Tamamlandı</span>';return'<span class="badge badge-green">Aktif</span>';}
+function toast(msg,type=''){const t=document.getElementById('toast');t.textContent=msg;t.className=`toast show ${type}`;setTimeout(()=>t.className='toast',2800);}
+window.openModal=function(id){if(id==='modal-add-appt'){pf();const mb=document.getElementById('ma-branch');mb.innerHTML=BR.map(b=>`<option value="${b.fid}">${b.name}</option>`).join('');updateMASpecialists();document.getElementById('ma-date').value=fd(new Date());document.getElementById('ma-date').min=fd(new Date());}document.getElementById(id).classList.add('open');};
+window.closeModal=function(id){document.getElementById(id).classList.remove('open');};
+const titles={dashboard:'Dashboard',randevular:'Randevular',takvim:'Haftalık Takvim',subeler:'Şube Yönetimi',uzmanlar:'Uzman Yönetimi',ayarlar:'Ayarlar'};
+window.navigate=function(n){panel=n;document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));document.getElementById('panel-'+n).classList.add('active');document.querySelectorAll('.nav-item').forEach(x=>{if(x.getAttribute('onclick')?.includes(n))x.classList.add('active');});document.getElementById('topbar-title').textContent=titles[n];rp(n);};
+function rp(n){if(n==='dashboard')renderDashboard();else if(n==='randevular')renderAllAppts();else if(n==='takvim')renderCalendar();else if(n==='subeler')renderBranchManager();else if(n==='uzmanlar')renderSpecialistManager();}
+function pf(){['f-branch','cal-branch','dash-branch-filter','sp-branch-filter'].forEach(id=>{const el=document.getElementById(id);if(!el)return;const v=el.value;el.innerHTML='<option value="">Tüm Şubeler</option>'+BR.map(b=>`<option value="${b.fid}">${b.name}</option>`).join('');if(v)el.value=v;});['f-specialist','cal-sp'].forEach(id=>{const el=document.getElementById(id);if(!el)return;const v=el.value;el.innerHTML='<option value="">Tüm Uzmanlar</option>'+SP.map(s=>`<option value="${s.fid}">${s.name}</option>`).join('');if(v)el.value=v;});}
+function renderDashboard(){pf();const bf=document.getElementById('dash-branch-filter')?.value||'',td=fd(new Date()),now=new Date(),in7=new Date();in7.setDate(in7.getDate()+7);const ap=bf?AP.filter(a=>a.branchId===bf):AP;const ta=ap.filter(a=>!a.cancelled&&a.date===td),up=ap.filter(a=>!a.cancelled&&new Date(a.date+'T'+a.time)>now&&new Date(a.date+'T'+a.time)<=in7),rev=ap.filter(a=>!a.cancelled&&(a.completed||isPast(a.date,a.time))).reduce((s,a)=>s+(a.servicePrice||0),0),ac=ap.filter(a=>!a.cancelled&&!isPast(a.date,a.time)).length;
+document.getElementById('stats-grid').innerHTML=`<div class="stat-card gold"><div class="stat-label">Bugünkü</div><div class="stat-value">${ta.length}</div><div class="stat-sub">randevu</div></div><div class="stat-card rose"><div class="stat-label">Aktif</div><div class="stat-value">${ac}</div><div class="stat-sub">bekleyen</div></div><div class="stat-card green"><div class="stat-label">Tamamlanan Gelir</div><div class="stat-value">${rev.toLocaleString('tr-TR')}₺</div><div class="stat-sub">tamamlanan randevulardan</div></div><div class="stat-card warn"><div class="stat-label">Şube/Uzman</div><div class="stat-value">${BR.length}/${SP.length}</div><div class="stat-sub">aktif</div></div>`;
+const rt=(id,rows,sd)=>{const el=document.getElementById(id);if(!rows.length){el.innerHTML='<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:1.5rem">Randevu yok.</td></tr>';return;}el.innerHTML=rows.sort((a,b)=>new Date(a.date+'T'+a.time)-new Date(b.date+'T'+b.time)).slice(0,15).map(a=>{const sp=SP.find(s=>String(s.id)===String(a.specialistId)||s.fid===String(a.specialistId)),br=BR.find(b=>b.fid===String(a.branchId));return`<tr><td style="color:var(--text);font-weight:600">${a.customerName}</td><td style="font-size:0.75rem">${br?.name||a.branchName||'–'}</td><td>${sp?.name||a.specialistName||'–'}</td><td>${a.serviceName}</td>${sd?`<td>${fdisp(a.date)}</td>`:''}<td><span class="badge badge-gold">${a.time}</span></td><td>${sb(a)}</td><td><button class="btn btn-outline btn-sm" onclick="viewAppt('${a.fid}')">Detay</button></td></tr>`;}).join('');};rt('today-tbody',ta,false);rt('upcoming-tbody',up,true);}
+function renderAllAppts(){pf();const s=document.getElementById('f-search')?.value?.toLowerCase()||'',bf=document.getElementById('f-branch')?.value||'',sf=document.getElementById('f-specialist')?.value||'',stf=document.getElementById('f-status')?.value||'';let f=AP.filter(a=>{if(s&&!a.customerName?.toLowerCase().includes(s)&&!a.customerPhone?.includes(s))return false;if(bf&&a.branchId!==bf)return false;if(sf&&String(a.specialistId)!==sf&&a.fid!==sf)return false;if(stf==='active'&&(a.cancelled||a.completed||isPast(a.date,a.time)))return false;if(stf==='completed'&&!(a.completed||(!a.cancelled&&isPast(a.date,a.time))))return false;if(stf==='cancelled'&&!a.cancelled)return false;return true;}).sort((a,b)=>new Date(b.date+'T'+b.time)-new Date(a.date+'T'+a.time));
+const tb=document.getElementById('all-tbody');if(!f.length){tb.innerHTML='<tr><td colspan="9" style="text-align:center;color:var(--muted);padding:1.5rem">Bulunamadı.</td></tr>';return;}tb.innerHTML=f.map(a=>{const sp=SP.find(s=>String(s.id)===String(a.specialistId)||s.fid===String(a.specialistId)),br=BR.find(b=>b.fid===String(a.branchId));return`<tr><td style="color:var(--text);font-weight:600">${a.customerName}</td><td style="font-size:0.73rem">${a.customerPhone}</td><td style="font-size:0.77rem">${br?.name||a.branchName||'–'}</td><td>${sp?.name||a.specialistName||'–'}</td><td>${a.serviceName}</td><td style="font-size:0.77rem">${fdisp(a.date)} ${a.time}</td><td>${a.servicePrice?a.servicePrice+'₺':'–'}</td><td>${sb(a)}</td><td style="display:flex;gap:0.35rem;flex-wrap:wrap"><button class="btn btn-outline btn-sm" onclick="viewAppt('${a.fid}')">Detay</button>${!a.cancelled&&!a.completed&&isPast(a.date,a.time)?`<button class="btn btn-success btn-sm" onclick="mc('${a.fid}')">✓</button>`:''} ${!a.cancelled?`<button class="btn btn-danger btn-sm" onclick="ca('${a.fid}')">İptal</button>`:''}</td></tr>`;}).join('');}
+window.viewAppt=function(fid){const a=AP.find(x=>x.fid===fid);if(!a)return;mApptId=fid;const sp=SP.find(s=>String(s.id)===String(a.specialistId)||s.fid===String(a.specialistId)),br=BR.find(b=>b.fid===String(a.branchId));document.getElementById('modal-appt-body').innerHTML=`<div style="display:grid;gap:0.65rem">${[['Müşteri',a.customerName],['Telefon',a.customerPhone],['Şube',br?.name||a.branchName||'–'],['Uzman',sp?.name||a.specialistName||'–'],['Hizmet',a.serviceName],['Süre',(a.serviceDuration||0)+'dk'],['Ücret',(a.servicePrice||0)+'₺'],['Tarih & Saat',fdisp(a.date)+' — '+a.time],['Durum',sb(a)]].map(([l,v])=>`<div style="display:flex;justify-content:space-between;align-items:center"><span style="color:var(--muted);font-size:0.78rem">${l}</span><span>${v}</span></div>`).join('')}</div>`;document.getElementById('modal-cancel-btn').style.display=a.cancelled?'none':'inline-flex';document.getElementById('modal-complete-btn').style.display=(a.cancelled||a.completed)?'none':'inline-flex';window.openModal('modal-appt');};
+window.modalCancelAppt=async function(){if(mApptId){await ca(mApptId);window.closeModal('modal-appt');}};
+window.modalCompleteAppt=async function(){if(mApptId){await mc(mApptId);window.closeModal('modal-appt');}};
+window.ca=async function(fid){if(!confirm('İptal edilsin mi?'))return;await updateDoc(doc(db,'appointments',fid),{cancelled:true});toast('İptal edildi.','success');};
+window.mc=async function(fid){await updateDoc(doc(db,'appointments',fid),{completed:true});toast('Tamamlandı ✓','success');};
+window.calWkChange=function(d){calOff+=d;renderCalendar();};
+function renderCalendar(){pf();const bf=document.getElementById('cal-branch')?.value||'',sf=document.getElementById('cal-sp')?.value||'',days=gwk(calOff),ts=fd(new Date());document.getElementById('cal-wk-label').textContent=`${days[0].toLocaleDateString('tr-TR',{day:'numeric',month:'short'})} – ${days[6].toLocaleDateString('tr-TR',{day:'numeric',month:'short',year:'numeric'})}`;let fS=bf?SP.filter(s=>s.branchId===bf):SP;if(sf)fS=fS.filter(s=>s.fid===sf);const aH=new Set();fS.forEach(s=>{for(let h=s.hours?.start||9;h<(s.hours?.end||18);h++){aH.add(`${String(h).padStart(2,'0')}:00`);aH.add(`${String(h).padStart(2,'0')}:30`);}});const sl=[...aH].sort(),DAY=['Pzt','Sal','Çar','Per','Cum','Cmt','Paz'];let html=`<div class="week-header"><div></div>${days.map((d,i)=>`<div class="wdh ${fd(d)===ts?'today-col':''}">${DAY[i]}<br>${d.getDate()}</div>`).join('')}</div><div class="cal-grid">`;sl.forEach(t=>{html+=`<div class="t-label">${t}</div>`;days.forEach(d=>{const ds=fd(d),past=new Date(ds+'T'+t)<=new Date(),bk=AP.filter(a=>!a.cancelled&&a.date===ds&&a.time===t&&(!bf||a.branchId===bf)&&(!sf||String(a.specialistId)===sf));const anyBl=!bk.length&&fS.some(s=>isBlocked(s.id||s.fid,ds,t));if(bk.length){const a=bk[0],sp=SP.find(s=>String(s.id)===String(a.specialistId)||s.fid===String(a.specialistId));html+=`<div class="cal-cell booked ${past?'past':''}" onclick="viewAppt('${a.fid}')">${a.customerName.split(' ')[0]}<br><span style="font-size:0.55rem;opacity:0.7">${sp?.name?.split(' ')[0]||''}</span></div>`;}else if(anyBl){html+=`<div class="cal-cell blocked ${past?'past':''}">·</div>`;}else{html+=`<div class="cal-cell ${past?'past':''}"></div>`;}});});html+='</div>';document.getElementById('cal-container').innerHTML=html;}
+function renderBranchManager(){document.getElementById('branch-list-side').innerHTML=BR.map(b=>`<div class="list-item ${eBrId===b.fid?'active':''}" onclick="eb('${b.fid}')"><span style="font-size:1.2rem">${b.icon||'🏪'}</span><div><div class="list-item-name">${b.name}</div><div class="list-item-sub">${b.city} · ${b.district}</div></div></div>`).join('');if(eBrId){const b=BR.find(x=>x.fid===eBrId);if(b)renderBranchEditor(b);}}
+window.eb=function(id){eBrId=id;renderBranchManager();};
+function renderBranchEditor(b){const cats=['tırnak','güzellik','kuaför','masaj','kalıcı makyaj'];document.getElementById('branch-editor-area').innerHTML=`<div class="editor-card"><div class="ed-title">Şube Bilgileri</div><div class="form-row"><div class="form-group"><label class="form-label">Şube Adı</label><input class="form-input" id="be-name" value="${b.name}"></div><div class="form-group"><label class="form-label">Emoji İkon</label><input class="form-input" id="be-icon" value="${b.icon||'🏪'}"></div></div><div class="form-row"><div class="form-group"><label class="form-label">Şehir</label><input class="form-input" id="be-city" value="${b.city}"></div><div class="form-group"><label class="form-label">İlçe</label><input class="form-input" id="be-district" value="${b.district}"></div></div><div class="form-row"><div class="form-group"><label class="form-label">Enlem</label><input class="form-input" id="be-lat" type="number" step="0.0001" value="${b.lat||0}"></div><div class="form-group"><label class="form-label">Boylam</label><input class="form-input" id="be-lng" type="number" step="0.0001" value="${b.lng||0}"></div></div><div class="form-group"><label class="form-label">Kategoriler</label><div class="cats-checkboxes">${cats.map(c=>`<label class="cat-check"><input type="checkbox" value="${c}" ${(b.categories||[]).includes(c)?'checked':''}> ${c}</label>`).join('')}</div></div><div style="display:flex;gap:0.7rem;margin-top:1.2rem;padding-top:1rem;border-top:1px solid var(--border)"><button class="btn btn-gold" onclick="saveBr('${b.fid}')">Kaydet</button><button class="btn btn-danger" onclick="delBr('${b.fid}')">Şubeyi Sil</button></div></div>`;}
+window.saveBr=async function(fid){const cats=[...document.querySelectorAll('.cats-checkboxes input:checked')].map(el=>el.value);await updateDoc(doc(db,'branches',fid),{name:document.getElementById('be-name').value.trim(),icon:document.getElementById('be-icon').value.trim(),city:document.getElementById('be-city').value.trim(),district:document.getElementById('be-district').value.trim(),lat:parseFloat(document.getElementById('be-lat').value)||0,lng:parseFloat(document.getElementById('be-lng').value)||0,categories:cats});toast('Kaydedildi ✓','success');};
+window.delBr=async function(fid){if(!confirm('Şubeyi sil?'))return;await deleteDoc(doc(db,'branches',fid));eBrId=null;document.getElementById('branch-editor-area').innerHTML='<div class="empty">Bir şube seçin.</div>';toast('Silindi.','success');};
+window.addNewBranch=async function(){const r=await addDoc(collection(db,'branches'),{name:"Yeni Şube",icon:"🏪",city:"İstanbul",district:"",lat:41.015,lng:28.979,categories:[]});eBrId=r.id;toast('Yeni şube oluşturuldu.','success');};
+function renderSpecialistManager(){pf();const bf=document.getElementById('sp-branch-filter')?.value||'',specs=bf?SP.filter(s=>s.branchId===bf):SP;document.getElementById('sp-list-side').innerHTML=specs.map(s=>`<div class="list-item ${eSpId===s.fid?'active':''}" onclick="esp('${s.fid}')"><span style="font-size:1.2rem">${s.avatar}</span><div><div class="list-item-name">${s.name}</div><div class="list-item-sub">${s.title}</div></div></div>`).join('');if(eSpId){const sp=SP.find(s=>s.fid===eSpId);if(sp)renderSpEditor(sp);}}
+window.esp=function(fid){eSpId=fid;renderSpecialistManager();};
+const CATS=['tırnak','güzellik','kuaför','masaj','kalıcı makyaj'];
+function renderSpEditor(sp){document.getElementById('sp-editor-area').innerHTML=`<div class="editor-card"><div class="ed-title">Uzman Bilgileri</div><div class="form-row"><div class="form-group"><label class="form-label">Ad Soyad</label><input class="form-input" id="se-name" value="${sp.name}"></div><div class="form-group"><label class="form-label">Unvan</label><input class="form-input" id="se-title" value="${sp.title}"></div></div><div class="form-row"><div class="form-group"><label class="form-label">Emoji</label><input class="form-input" id="se-avatar" value="${sp.avatar}"></div><div class="form-group"><label class="form-label">Renk</label><input class="form-input" id="se-color" type="color" value="${sp.color}"></div></div><div class="form-group"><label class="form-label">Şube</label><select class="form-input" id="se-branch">${BR.map(b=>`<option value="${b.fid}" ${sp.branchId===b.fid?'selected':''}>${b.name}</option>`).join('')}</select></div><div class="form-group"><label class="form-label">Kategori</label><select class="form-input" id="se-cat">${CATS.map(c=>`<option value="${c}" ${sp.category===c?'selected':''}>${c}</option>`).join('')}</select></div><div class="form-row"><div class="form-group"><label class="form-label">Başlangıç</label><input class="form-input" id="se-start" type="number" min="6" max="20" value="${sp.hours?.start||9}"></div><div class="form-group"><label class="form-label">Bitiş</label><input class="form-input" id="se-end" type="number" min="10" max="23" value="${sp.hours?.end||18}"></div></div><div class="ed-title" style="margin-top:1.2rem">Hizmetler</div><div style="display:grid;grid-template-columns:1fr 80px 85px 36px;gap:0.4rem;margin-bottom:0.4rem"><span style="font-size:0.65rem;color:var(--muted);text-transform:uppercase">Ad</span><span style="font-size:0.65rem;color:var(--muted);text-transform:uppercase">Süre</span><span style="font-size:0.65rem;color:var(--muted);text-transform:uppercase">Fiyat</span><span></span></div><div id="svc-editor">${(sp.services||[]).map((s,i)=>`<div class="svc-row"><input class="form-input svc-name" value="${s.name}"><input class="form-input svc-dur" type="number" value="${s.duration}"><input class="form-input svc-price" type="number" value="${s.price}"><button class="btn-icon" onclick="this.closest('.svc-row').remove()">✕</button></div>`).join('')}</div><button class="btn btn-outline" style="width:100%;margin-top:0.4rem" onclick="addSvcRow()">+ Ekle</button><div style="display:flex;gap:0.7rem;margin-top:1.2rem;padding-top:1rem;border-top:1px solid var(--border)"><button class="btn btn-gold" onclick="saveSp()">Kaydet</button><button class="btn btn-danger" onclick="delSp('${sp.fid}')">Sil</button></div></div>`;}
+window.addSvcRow=function(){const div=document.createElement('div');div.className='svc-row';div.innerHTML='<input class="form-input svc-name" placeholder="Hizmet adı"><input class="form-input svc-dur" type="number" placeholder="dk"><input class="form-input svc-price" type="number" placeholder="₺"><button class="btn-icon" onclick="this.closest('.svc-row').remove()">✕</button>';document.getElementById('svc-editor').appendChild(div);};
+window.saveSp=async function(){const sp=SP.find(s=>s.fid===eSpId);if(!sp)return;const rows=document.querySelectorAll('#svc-editor .svc-row'),svcs=[];rows.forEach((r,i)=>{const n=r.querySelector('.svc-name').value.trim(),d=parseInt(r.querySelector('.svc-dur').value)||0,p=parseInt(r.querySelector('.svc-price').value)||0;if(n)svcs.push({id:'s'+i,name:n,duration:d,price:p});});await updateDoc(doc(db,'specialists',eSpId),{name:document.getElementById('se-name').value.trim()||sp.name,title:document.getElementById('se-title').value.trim(),avatar:document.getElementById('se-avatar').value.trim(),color:document.getElementById('se-color').value,branchId:document.getElementById('se-branch').value,category:document.getElementById('se-cat').value,hours:{start:parseInt(document.getElementById('se-start').value)||9,end:parseInt(document.getElementById('se-end').value)||18},services:svcs});toast('Kaydedildi ✓','success');};
+window.delSp=async function(fid){if(!confirm('Uzmanı sil?'))return;await deleteDoc(doc(db,'specialists',fid));eSpId=null;document.getElementById('sp-editor-area').innerHTML='<div class="empty">Bir uzman seçin.</div>';toast('Silindi.','success');};
+window.addNewSpecialist=async function(){const bf=document.getElementById('sp-branch-filter')?.value||BR[0]?.fid||'';const r=await addDoc(collection(db,'specialists'),{id:Date.now(),name:'Yeni Uzman',title:'Uzman',avatar:'💅',color:'#f0e8e0',branchId:bf,category:'tırnak',services:[],hours:{start:9,end:18}});eSpId=r.id;toast('Yeni uzman oluşturuldu.','success');};
+window.updateMASpecialists=function(){const bId=document.getElementById('ma-branch')?.value||'',specs=bId?SP.filter(s=>s.branchId===bId):SP;document.getElementById('ma-specialist').innerHTML=specs.map(s=>`<option value="${s.fid}">${s.name}</option>`).join('');updateMAServices();};
+window.updateMAServices=function(){const fid=document.getElementById('ma-specialist')?.value||'',sp=SP.find(s=>s.fid===fid);document.getElementById('ma-service').innerHTML=(sp?.services||[]).map(s=>`<option value="${s.id}" data-price="${s.price}" data-dur="${s.duration}" data-name="${s.name}">${s.name} (${s.price}₺)</option>`).join('');const sl=[];if(sp){for(let h=sp.hours.start;h<sp.hours.end;h++){sl.push(`${String(h).padStart(2,'0')}:00`,`${String(h).padStart(2,'0')}:30`);}}document.getElementById('ma-time').innerHTML=sl.map(t=>`<option value="${t}">${t}</option>`).join('');};
+window.saveManualAppt=async function(){const name=document.getElementById('ma-name').value.trim(),phone=document.getElementById('ma-phone').value.trim(),bId=document.getElementById('ma-branch').value,spFid=document.getElementById('ma-specialist').value,se=document.getElementById('ma-service'),so=se.options[se.selectedIndex],date=document.getElementById('ma-date').value,time=document.getElementById('ma-time').value;if(!name||!phone||!date||!time)return toast('Tüm alanları doldurun.','error');const sp=SP.find(s=>s.fid===spFid),br=BR.find(b=>b.fid===bId);await addDoc(collection(db,'appointments'),{branchId:bId,branchName:br?.name||'',specialistId:sp?.id||spFid,specialistName:sp?.name||'',serviceId:se.value,serviceName:so?.dataset?.name||'',servicePrice:parseInt(so?.dataset?.price)||0,serviceDuration:parseInt(so?.dataset?.dur)||0,date,time,customerName:name,customerPhone:phone,customerUid:null,bookedAt:new Date().toISOString(),cancelled:false,completed:false,manualEntry:true});window.closeModal('modal-add-appt');toast('Oluşturuldu ✓','success');document.getElementById('ma-name').value='';document.getElementById('ma-phone').value='';};
+window.exportData=function(){let csv='Müşteri,Telefon,Şube,Uzman,Hizmet,Tarih,Saat,Ücret,Durum\n';AP.forEach(a=>{const st=a.cancelled?'İptal':a.completed||isPast(a.date,a.time)?'Tamamlandı':'Aktif';csv+=`"${a.customerName}","${a.customerPhone}","${a.branchName||''}","${a.specialistName||''}","${a.serviceName}","${a.date}","${a.time}","${a.servicePrice||0}₺","${st}"\n`;});const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`onail_${fd(new Date())}.csv`;a.click();URL.revokeObjectURL(url);toast('Dışa aktarıldı ✓','success');};
+window.clearCancelled=async function(){if(!confirm('İptal edilenler silinsin mi?'))return;for(const a of AP.filter(a=>a.cancelled))await deleteDoc(doc(db,'appointments',a.fid));toast('Temizlendi.','success');};
+function listen(){onSnapshot(collection(db,'branches'),snap=>{BR=snap.docs.map(d=>({fid:d.id,...d.data()}));pf();if(panel==='subeler')renderBranchManager();if(panel==='dashboard')renderDashboard();});onSnapshot(collection(db,'specialists'),snap=>{SP=snap.docs.map(d=>({fid:d.id,...d.data()}));pf();if(panel==='uzmanlar')renderSpecialistManager();});onSnapshot(collection(db,'appointments'),snap=>{AP=snap.docs.map(d=>({fid:d.id,...d.data()}));rp(panel);});}
+async function initApp(){listen();}
 document.getElementById('loading-overlay').style.display='none';
 document.getElementById('login-screen').style.display='flex';
 </script>
