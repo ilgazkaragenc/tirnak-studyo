@@ -318,6 +318,11 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--deep);}
     <div class="a-sec" id="as-register">
       <input type="text" class="ai" id="r-nm" placeholder="Ad Soyad" autocomplete="name">
       <input type="email" class="ai" id="r-em" placeholder="E-posta adresiniz" autocomplete="email">
+      <div style="display:flex;gap:.38rem;">
+        <input type="text" class="ai" id="r-ph-code" value="+90" style="width:68px;flex-shrink:0;margin-bottom:0">
+        <input type="tel" class="ai" id="r-ph-num" placeholder="5XX XXX XX XX" autocomplete="tel" style="margin-bottom:0;flex:1">
+      </div>
+      <div style="height:.6rem"></div>
       <input type="password" class="ai" id="r-p1" placeholder="Şifre (en az 6 karakter)" autocomplete="new-password">
       <input type="password" class="ai" id="r-p2" placeholder="Şifreyi tekrar girin" autocomplete="new-password" onkeydown="if(event.key==='Enter')doRegister()">
       <button class="a-btn" onclick="doRegister()">Kayıt Ol</button>
@@ -363,6 +368,11 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--deep);}
     <div class="app-hdr-in">
       <div class="brand">O'<b>Nail</b></div>
       <div class="hdr-right">
+        <select id="lang-sel" onchange="changeLang(this.value)" style="background:none;border:1px solid var(--border);border-radius:7px;padding:.18rem .35rem;font-size:.68rem;color:var(--muted);font-family:'Nunito',sans-serif;cursor:pointer;outline:none">
+          <option value="tr">🇹🇷 TR</option>
+          <option value="en">🇬🇧 EN</option>
+          <option value="ru">🇷🇺 RU</option>
+        </select>
         <div class="pts-badge" id="hdr-pts" style="display:none" onclick="goPage('profile')">⭐ <span id="hdr-pts-val">0</span></div>
         <button class="uav" id="uav" onclick="goPage('profile')">?</button>
       </div>
@@ -417,6 +427,13 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--deep);}
     <div id="favs-body"></div>
   </div>
 
+  <!-- MARKET -->
+  <div class="pg" id="pg-market">
+    <div class="stl" style="margin-top:.3rem">O'Nail Market 🛍️</div>
+    <p style="font-size:.75rem;color:var(--muted);margin-bottom:1rem">Tırnak bakım ürünleri, setler ve daha fazlası</p>
+    <div id="market-body"></div>
+  </div>
+
   <!-- PROFILE -->
   <div class="pg" id="pg-profile">
     <div class="pc">
@@ -430,6 +447,10 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--deep);}
         </div>
         <div style="font-size:.68rem;opacity:.8;margin-top:.4rem" id="p-pts-next"></div>
         <div style="margin-top:.7rem;font-size:.65rem;opacity:.65;line-height:1.6">🥉 Bronze: 0–499 · 🥈 Silver: 500–1999 · 🥇 Gold: 2000+</div>
+        <div style="margin-top:.9rem;border-top:1px solid rgba(255,255,255,.12);padding-top:.75rem">
+          <div style="font-size:.68rem;opacity:.8;margin-bottom:.5rem">🎟️ İndirim Kuponu Dönüştür</div>
+          <div id="coupon-opts"></div>
+        </div>
       </div>
       <button class="btn-out" onclick="doLogout()">Çıkış Yap</button>
     </div>
@@ -437,6 +458,10 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--deep);}
       <div class="pstat"><div class="pstat-v" id="ps-tot">0</div><div class="pstat-l">Toplam</div></div>
       <div class="pstat"><div class="pstat-v" id="ps-up">0</div><div class="pstat-l">Yaklaşan</div></div>
       <div class="pstat"><div class="pstat-v" id="ps-spent">0₺</div><div class="pstat-l">Harcama</div></div>
+    </div>
+    <div id="my-coupons-wrap" style="display:none;margin-bottom:.8rem">
+      <div class="stl" style="font-size:.82rem;margin-bottom:.6rem">🎟️ Kuponlarım</div>
+      <div id="my-coupons"></div>
     </div>
     <div class="pmenu">
       <div class="pmi" onclick="goPage('appts')"><span>📅 Randevularım</span><span style="color:var(--muted)">›</span></div>
@@ -449,6 +474,7 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--deep);}
   <nav class="bnav">
     <button class="nb on" id="nb-book" onclick="goPage('book')"><span class="nb-ic">📅</span>Randevu<span class="nb-dot" id="dot-book"></span></button>
     <button class="nb" id="nb-appts" onclick="goPage('appts')"><span class="nb-ic">🗂</span>Randevularım<span class="nb-dot" id="dot-appts"></span></button>
+    <button class="nb" id="nb-market" onclick="goPage('market')"><span class="nb-ic">🛍️</span>Market</button>
     <button class="nb" id="nb-favs" onclick="goPage('favs')"><span class="nb-ic">❤️</span>Favoriler<span class="nb-dot" id="dot-favs"></span></button>
     <button class="nb" id="nb-profile" onclick="goPage('profile')"><span class="nb-ic">👤</span>Profil</button>
   </nav>
@@ -514,7 +540,7 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--deep);}
 
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import{getFirestore,collection,doc,addDoc,getDocs,updateDoc,onSnapshot,getDoc,setDoc}
+import{getFirestore,collection,doc,addDoc,getDocs,updateDoc,onSnapshot,getDoc,setDoc,query,where}
   from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import{getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,signInWithPopup,
   signInWithRedirect,getRedirectResult,GoogleAuthProvider,signOut,onAuthStateChanged,
@@ -601,8 +627,9 @@ window.goPage=function(name){
   document.getElementById('pg-'+name)?.classList.add('on');
   document.getElementById('nb-'+name)?.classList.add('on');
   if(name==='appts')renderAppts();
-  if(name==='profile')updateStats();
+  if(name==='profile'){updateStats();renderCoupons();}
   if(name==='favs')renderFavs();
+  if(name==='market')renderMarket();
 };
 window.aTab=function(t){
   const labels=['login','register','phone'];
@@ -628,15 +655,21 @@ window.doLogin=async function(){
 window.doRegister=async function(){
   const nm=document.getElementById('r-nm').value.trim(),em=document.getElementById('r-em').value.trim();
   const p1=document.getElementById('r-p1').value,p2=document.getElementById('r-p2').value;
+  const phCode=(document.getElementById('r-ph-code').value||'+90').trim();
+  const phNum=document.getElementById('r-ph-num').value.trim().replace(/\s/g,'');
   if(!nm)return showErr('r-err','Adınızı girin.');
   if(!em)return showErr('r-err','E-posta adresinizi girin.');
+  if(!phNum||phNum.length<10)return showErr('r-err','Geçerli bir telefon numarası girin.');
   if(!p1)return showErr('r-err','Şifre girin.');
   if(p1.length<6)return showErr('r-err','Şifre en az 6 karakter olmalı.');
   if(p1!==p2)return showErr('r-err','Şifreler eşleşmiyor.');
+  let phone=phNum.startsWith('0')?phNum.slice(1):phNum;
+  if(!phone.startsWith('+'))phone=phCode+phone;
   const btn=document.querySelector('#as-register .a-btn');if(btn){btn.disabled=true;btn.textContent='Kayıt olunuyor...';}
   try{
     const uc=await createUserWithEmailAndPassword(auth,em,p1);
     await updateProfile(uc.user,{displayName:nm});
+    await setDoc(doc(db,'users',uc.user.uid),{displayName:nm,email:em,phone:phone,points:0,createdAt:new Date().toISOString()},{merge:true});
   }catch(e){
     const M={'auth/email-already-in-use':'Bu e-posta zaten kayıtlı. Giriş yapmayı deneyin.','auth/invalid-email':'Geçersiz e-posta formatı.','auth/weak-password':'Şifre çok zayıf.','auth/network-request-failed':'İnternet bağlantısını kontrol edin.'};
     showErr('r-err',M[e.code]||('Hata: '+e.message));
@@ -1045,6 +1078,18 @@ window.confirmBk=async function(){
   if(!phone)return toast('Telefon numaranızı girin.','err');
   if(!selSlot)return toast('Bir saat seçin.','err');
   if(!curBranch)return toast('Şube seçilmedi.','err');
+  // Müşteri çakışma kontrolü
+  const custId=CU?.uid||phone;
+  const slotM=t2m(selSlot.time);
+  const slotEnd=slotM+(selSvc.duration||30);
+  const conflict=AP.find(a=>{
+    if(a.cancelled||a.date!==selSlot.date)return false;
+    const isOwn=CU?(a.customerUid===CU.uid):(a.customerPhone===phone);
+    if(!isOwn)return false;
+    const aS=t2m(a.time),aE=aS+(a.serviceDuration||30);
+    return slotM<aE&&slotEnd>aS;
+  });
+  if(conflict)return toast(`⚠️ ${selSlot.time} saatinde zaten "${conflict.serviceName}" randevunuz var!`,'err');
   const btn=document.getElementById('btn-cnf');btn.disabled=true;btn.textContent='Kaydediliyor...';
   try{
     const earnPts=Math.floor((selSvc.price||0)*PTS_PER_TL);
@@ -1055,15 +1100,11 @@ window.confirmBk=async function(){
       date:selSlot.date,time:selSlot.time,
       customerName:name,customerPhone:phone,customerUid:CU?.uid||null,
       bookedAt:new Date().toISOString(),cancelled:false,completed:false,
-      pointsEarned:earnPts,rated:false
+      pointsEarned:earnPts,pointsAwarded:false,rated:false
     });
-    if(CU&&earnPts>0){
-      USER_PTS+=earnPts;
-      await setDoc(doc(db,'users',CU.uid),{points:USER_PTS,updatedAt:new Date().toISOString()},{merge:true});
-      updatePtsBadge();
-    }
+    // PUAN: Sadece randevu tamamlandığında admin onaylamasıyla verilir
+    // Şimdi sadece "kazanacaksınız" bilgisi gösteriliyor
     localStorage.setItem('onail_ph',phone);
-    // Show success overlay
     showSuccess(name,earnPts);
     clearFlow();
   }catch(e){toast('Hata: '+e.message,'err');btn.disabled=false;btn.textContent='✓ Randevuyu Onayla';}
@@ -1279,8 +1320,91 @@ function updateStats(){
     document.getElementById('p-pts').textContent=USER_PTS;
     document.getElementById('p-lvl').textContent=lvl.name;
     document.getElementById('p-pts-next').textContent=lvl.next?`${lvl.next-USER_PTS} puan daha → ${lvl.name.includes('Bronze')?'Silver 🥈':'Gold 🥇'}`:'Maksimum seviye! 🎉';
+    // Kupon dönüştür butonları
+    const opts=document.getElementById('coupon-opts');
+    if(opts){
+      const available=[];
+      if(USER_PTS>=4000)available.push({pts:4000,tl:400,label:'4000 puan → 400₺ kupon'});
+      if(USER_PTS>=1000)available.push({pts:1000,tl:100,label:'1000 puan → 100₺ kupon'});
+      if(available.length){
+        opts.innerHTML=available.map(o=>`<button onclick="redeemCoupon(${o.pts},${o.tl})" style="background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:.4rem .75rem;color:white;font-size:.66rem;font-family:'Nunito',sans-serif;cursor:pointer;margin:.2rem .2rem 0 0">${o.label}</button>`).join('');
+      }else{
+        opts.innerHTML=`<div style="font-size:.65rem;opacity:.6">1000 puanda 100₺ kupon kazanırsınız. Şu an: ${USER_PTS} puan</div>`;
+      }
+    }
   }
 }
+
+async function redeemCoupon(pts,tl){
+  if(USER_PTS<pts)return toast(`Yetersiz puan. ${pts} puan gerekli.`,'err');
+  if(!confirm(`${pts} puanınız ${tl}₺ indirim kuponu olacak. Onaylıyor musunuz?`))return;
+  try{
+    const code='ONL'+Date.now().toString(36).toUpperCase();
+    await addDoc(collection(db,'coupons'),{uid:CU.uid,code,value:tl,pts,used:false,createdAt:new Date().toISOString()});
+    USER_PTS-=pts;
+    await setDoc(doc(db,'users',CU.uid),{points:USER_PTS,updatedAt:new Date().toISOString()},{merge:true});
+    updatePtsBadge();
+    updateStats();
+    renderCoupons();
+    toast(`🎟️ ${tl}₺ kuponunuz oluşturuldu! Kod: ${code}`,'ok');
+  }catch(e){toast('Hata: '+e.message,'err');}
+}
+window.redeemCoupon=redeemCoupon;
+
+async function renderCoupons(){
+  if(!CU)return;
+  const wrap=document.getElementById('my-coupons-wrap');
+  const el=document.getElementById('my-coupons');
+  if(!wrap||!el)return;
+  try{
+    const q=await getDocs(query(collection(db,'coupons'),where('uid','==',CU.uid)));
+    const coupons=[];q.forEach(d=>coupons.push({fid:d.id,...d.data()}));
+    if(!coupons.length){wrap.style.display='none';return;}
+    wrap.style.display='block';
+    el.innerHTML=coupons.map(c=>`
+      <div style="background:var(--white);border:${c.used?'1.5px dashed var(--border)':'1.5px solid var(--gold)'};border-radius:12px;padding:.82rem 1rem;margin-bottom:.5rem;display:flex;align-items:center;justify-content:space-between;opacity:${c.used?'.5':'1'}">
+        <div>
+          <div style="font-family:'Tenor Sans',serif;font-size:1.1rem;color:var(--gold)">${c.value}₺ İndirim</div>
+          <div style="font-size:.65rem;color:var(--muted);margin-top:.15rem;letter-spacing:.05em">${c.code}</div>
+        </div>
+        <div style="font-size:.68rem;font-weight:700;color:${c.used?'var(--muted)':'var(--ok)'}">${c.used?'Kullanıldı':'Aktif ✓'}</div>
+      </div>`).join('');
+  }catch(e){}
+}
+
+// MARKET
+const MARKET_ITEMS=[
+  {id:'m1',name:'Tırnak Güçlendirici Serum',price:249,cat:'Bakım',emoji:'💅',desc:'Kırılgan tırnakları güçlendirir, 30ml'},
+  {id:'m2',name:'Nail Art Fırça Seti',price:189,cat:'Araçlar',emoji:'🖌️',desc:'10 farklı fırça, profesyonel kalite'},
+  {id:'m3',name:'Jel Oje Seti (12 Renk)',price:420,cat:'Oje',emoji:'🎨',desc:'UV/LED uyumlu, uzun kalıcı formül'},
+  {id:'m4',name:'Kürür Lambası',price:350,cat:'Araçlar',emoji:'💡',desc:'36W LED/UV, tüm jel ojelerle uyumlu'},
+  {id:'m5',name:'Tırnak Dolgu Kiti',price:280,cat:'Bakım',emoji:'✨',desc:'Çatlak ve kırıklar için profesyonel kit'},
+  {id:'m6',name:'El Kremi Seti (3lü)',price:165,cat:'Bakım',emoji:'🧴',desc:'Nemlendirici, besleyici, onarıcı'},
+];
+function renderMarket(){
+  const el=document.getElementById('market-body');if(!el)return;
+  const cats=[...new Set(MARKET_ITEMS.map(i=>i.cat))];
+  el.innerHTML=cats.map(cat=>`
+    <div style="margin-bottom:1.1rem">
+      <div style="font-size:.72rem;font-weight:700;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.6rem">${cat}</div>
+      ${MARKET_ITEMS.filter(i=>i.cat===cat).map(i=>`
+        <div style="background:var(--white);border:1.5px solid var(--border);border-radius:13px;padding:.88rem 1rem;margin-bottom:.5rem;display:flex;align-items:center;gap:.9rem;box-shadow:var(--sh)">
+          <div style="font-size:2rem;flex-shrink:0">${i.emoji}</div>
+          <div style="flex:1">
+            <div style="font-weight:700;font-size:.84rem">${i.name}</div>
+            <div style="font-size:.68rem;color:var(--muted);margin-top:.1rem">${i.desc}</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            <div style="font-family:'Tenor Sans',serif;font-size:1rem;color:var(--rose)">${i.price}₺</div>
+            <button onclick="addToCart('${i.id}')" style="margin-top:.3rem;background:var(--rose);color:white;border:none;border-radius:7px;padding:.28rem .65rem;font-size:.65rem;font-weight:700;font-family:'Nunito',sans-serif;cursor:pointer">Sepete Ekle</button>
+          </div>
+        </div>`).join('')}
+    </div>`).join('');
+}
+window.addToCart=function(id){
+  const item=MARKET_ITEMS.find(i=>i.id===id);
+  if(item)toast(`🛍️ "${item.name}" sepete eklendi! (Ödeme yakında aktif olacak)`,'ok');
+};
 
 // PWA
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferInstall=e;if(CU)showInstBanner();});
@@ -1292,6 +1416,70 @@ function showInstBanner(){
 window.instApp=async function(){if(!deferInstall)return;deferInstall.prompt();await deferInstall.userChoice;deferInstall=null;document.getElementById('inst-area').innerHTML='';};
 window.disInst=function(){localStorage.setItem('onail_no_inst','1');document.getElementById('inst-area').innerHTML='';};
 window.addEventListener('appinstalled',()=>{document.getElementById('inst-area').innerHTML='';});
+
+// ======== DİL DESTEĞİ ========
+const TRANSLATIONS={
+  tr:{
+    book:'Randevu',appts:'Randevularım',market:'Market',favs:'Favoriler',profile:'Profil',
+    selectExpert:'Uzmaninizi seçin,',bookInstant:'anında rezerve edin',
+    heroSub:'Dilediğiniz hizmeti kolayca rezerve edin.',
+    searchPh:'Uzman veya hizmet ara...',
+    allCats:'Tümü',selectExpertTitle:'Uzman Seçin',
+    confirm:'✓ Randevuyu Onayla',cancel:'İptal Et',close:'Kapat',
+    logout:'Çıkış Yap',totalPts:'Toplam Puan',
+    todayLabel:'Bugün',tomorrowLabel:'Yarın',
+  },
+  en:{
+    book:'Book',appts:'My Bookings',market:'Market',favs:'Favorites',profile:'Profile',
+    selectExpert:'Choose your expert,',bookInstant:'book instantly',
+    heroSub:'Easily reserve the service you want.',
+    searchPh:'Search expert or service...',
+    allCats:'All',selectExpertTitle:'Select Expert',
+    confirm:'✓ Confirm Booking',cancel:'Cancel',close:'Close',
+    logout:'Sign Out',totalPts:'Total Points',
+    todayLabel:'Today',tomorrowLabel:'Tomorrow',
+  },
+  ru:{
+    book:'Запись',appts:'Мои записи',market:'Магазин',favs:'Избранное',profile:'Профиль',
+    selectExpert:'Выберите мастера,',bookInstant:'мгновенная запись',
+    heroSub:'Легко запишитесь на нужную услугу.',
+    searchPh:'Поиск мастера или услуги...',
+    allCats:'Все',selectExpertTitle:'Выбор мастера',
+    confirm:'✓ Подтвердить запись',cancel:'Отмена',close:'Закрыть',
+    logout:'Выйти',totalPts:'Баллы',
+    todayLabel:'Сегодня',tomorrowLabel:'Завтра',
+  }
+};
+let CUR_LANG=localStorage.getItem('onail_lang')||'tr';
+window.changeLang=function(l){
+  CUR_LANG=l;localStorage.setItem('onail_lang',l);
+  applyLang();
+};
+function applyLang(){
+  const T=TRANSLATIONS[CUR_LANG]||TRANSLATIONS.tr;
+  const sel=document.getElementById('lang-sel');if(sel)sel.value=CUR_LANG;
+  // Nav labels
+  const nbBook=document.getElementById('nb-book');if(nbBook)nbBook.childNodes[0].after(document.createTextNode(''));
+  document.querySelectorAll('.nb').forEach(b=>{
+    const id=b.id?.replace('nb-','');if(id&&T[id]){
+      const ic=b.querySelector('.nb-ic');const dot=b.querySelector('.nb-dot');
+      b.innerHTML='';
+      const icEl=document.createElement('span');icEl.className='nb-ic';icEl.textContent=({book:'📅',appts:'🗂',market:'🛍️',favs:'❤️',profile:'👤'}[id]||'');
+      b.appendChild(icEl);b.appendChild(document.createTextNode(T[id]));
+      if(dot)b.appendChild(dot);
+    }
+  });
+  // Search placeholder
+  const si=document.querySelector('.search-in');if(si)si.placeholder=T.searchPh;
+  // Hero
+  const h1=document.querySelector('.hero h1');
+  if(h1)h1.innerHTML=`${T.selectExpert}<br><em>${T.bookInstant}</em>`;
+  const hp=document.querySelector('.hero p');if(hp)hp.textContent=T.heroSub;
+  // Confirm button
+  const cnf=document.getElementById('btn-cnf');if(cnf&&!cnf.disabled)cnf.textContent=T.confirm;
+}
+// Init lang on load
+setTimeout(applyLang,500);
 
 // SERVICE WORKER
 if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});

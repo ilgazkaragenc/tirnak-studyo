@@ -481,7 +481,7 @@ tr:hover td{background:rgba(201,151,90,.02);}
 
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import{getFirestore,collection,doc,addDoc,updateDoc,deleteDoc,onSnapshot}
+import{getFirestore,collection,doc,addDoc,updateDoc,deleteDoc,onSnapshot,getDoc,setDoc,getDocs,query,where}
   from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import{getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,signInWithPopup,
   signInWithRedirect,getRedirectResult,GoogleAuthProvider,signOut,onAuthStateChanged,
@@ -648,7 +648,7 @@ onSnapshot(collection(db,'appointments'),s=>{
     AP=s.docs.map(d=>{
       const a={fid:d.id,...d.data()};
       if(!a.specialistFid)a.specialistFid=a.spFid||a.specialistId||"";
-      if(!a.customerUid)a.customerUid=a.userId||null';
+      if(!a.customerUid)a.customerUid=a.userId||null;
       return a;
     });
     rPanel(curPanel);
@@ -805,7 +805,23 @@ window.showDetail=function(fid){
 };
 window.mdComplete=async function(){if(mApptId){await mkComplete(mApptId);closeMo('mo-detail');}};
 window.mdCancel=async function(){if(mApptId){await cnclAppt(mApptId);closeMo('mo-detail');}};
-window.mkComplete=async function(fid){await updateDoc(doc(db,'appointments',fid),{completed:true});toast('Tamamlandı ✓','ok');};
+window.mkComplete=async function(fid){
+  const appt=AP.find(a=>a.fid===fid);
+  await updateDoc(doc(db,'appointments',fid),{completed:true});
+  // Puan ödülü: Daha önce verilmediyse ver
+  if(appt&&appt.customerUid&&appt.pointsEarned>0&&!appt.pointsAwarded){
+    try{
+      const uref=doc(db,'users',appt.customerUid);
+      const usnap=await getDoc(uref);
+      const curPts=usnap.exists()?(usnap.data().points||0):0;
+      await setDoc(uref,{points:curPts+appt.pointsEarned,updatedAt:new Date().toISOString()},{merge:true});
+      await updateDoc(doc(db,'appointments',fid),{pointsAwarded:true});
+      toast(`Tamamlandı ✓ (+${appt.pointsEarned} puan müşteriye eklendi)`,'ok');
+    }catch(e){toast('Tamamlandı ✓ (puan eklenemedi)','ok');}
+  }else{
+    toast('Tamamlandı ✓','ok');
+  }
+};
 window.cnclAppt=async function(fid){if(!confirm('İptal edilsin mi?'))return;await updateDoc(doc(db,'appointments',fid),{cancelled:true});toast('İptal edildi.','ok');};
 
 // CALENDAR
