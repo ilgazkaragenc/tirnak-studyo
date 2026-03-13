@@ -1254,14 +1254,15 @@ function buildDatePicker(){
     const isToday=ds===now.toISOString().slice(0,10);
     const isTomorrow=ds===new Date(now.getTime()+86400000).toISOString().slice(0,10);
     const isPastDay=d<new Date(now.toDateString());
-    return `<div class="day-chip ${selDay===ds?'on':''} ${isToday?'today':''} ${isPastDay?'':'cursor-pointer'}" 
-      onclick="${isPastDay?'':'setDay(\"'+ds+'\")'}" style="${isPastDay?'opacity:.4;cursor:not-allowed':''}">
+    return `<div class="day-chip ${selDay===ds?'on':''} ${isToday?'today':''}" data-ds="${ds}"
+      onclick="${isPastDay?'':'window._pickD(this)'}" style="${isPastDay?'opacity:.4;cursor:not-allowed':'cursor:pointer'}">
       <div class="day-nm">${isToday?(tx('todayLbl').slice(0,3)):isTomorrow?(tx('tomorrowLbl').slice(0,3)):dnames[i]}</div>
       <div class="day-num">${d.getDate()}</div>
     </div>`;
   }).join('');
   renderTimeGrid();
 }
+window._pickD=function(el){setDay(el.dataset.ds);};
 window.setDay=function(ds){selDay=ds;selSlot=null;buildDatePicker();};
 window.shiftWk=function(d){wkOff+=d;buildDatePicker();};
 function renderTimeGrid(){
@@ -1281,7 +1282,7 @@ function renderTimeGrid(){
     const isNow=new Date(selDay+'T'+ts)<now;
     const busy=isBusy||isNow;
     const on=selSlot?.time===ts&&selSlot?.date===selDay;
-    return `<div class="t-chip ${on?'on':''} ${busy?'busy':''}" onclick="${busy?'':'pickTime(\"'+ts+'\")'}">${ts}</div>`;
+    return `<div class="t-chip ${on?'on':''} ${busy?'busy':''}" data-ts="${ts}" onclick="${busy?'':'window._pickT(this)'}">${ts}</div>`;
   }).join('');
 }
 function isBkd(fid,ds,t){return AP.some(a=>!a.cancelled&&a.specialistFid===fid&&a.date===ds&&a.time===t);}
@@ -1290,7 +1291,9 @@ function isBlk(fid,ds,t){
   for(const a of AP){if(a.cancelled||a.specialistFid!==fid||a.date!==ds)continue;const s=t2m(a.time),e=s+(a.serviceDuration||30);if(sm>s&&sm<e)return true;}
   return false;
 }
+window._pickT=function(el){pickTime(el.dataset.ts);};
 window.pickTime=function(ts){
+  if(!selSp||!selSvc||!selDay){toast('Lütfen uzman ve hizmet seçin.','err');showStep('step-sp');return;}
   selSlot={date:selDay,time:ts};
   renderTimeGrid();
   buildConfirmSummary();
