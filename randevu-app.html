@@ -2,350 +2,495 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="O'Nail">
 <meta name="theme-color" content="#c4725a">
 <title>O'Nail · Randevu</title>
 <link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon-192.png">
-<link href="https://fonts.googleapis.com/css2?family=Tenor+Sans&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#fdf9f6;--white:#fff;--blush:#f0e0d6;--rose:#c4725a;
-  --deep:#2c1810;--muted:#9a7a6e;--light:#faf3ef;--border:#ead8cf;
-  --ok:#6a9e7a;--err:#c45a5a;--gold:#c49a4a;
-  --sh:0 2px 16px rgba(44,24,16,.07);
-  --safe-bot:env(safe-area-inset-bottom,0px);
-  --safe-top:env(safe-area-inset-top,0px);
+  --bg:#faf8f6;--white:#fff;--blush:#f5e6df;--rose:#c4725a;--rose2:#b8614a;
+  --deep:#1a0f0a;--muted:#9a8075;--light:#fef9f7;--border:#e8d5cc;
+  --ok:#4a9e6a;--err:#c45a5a;--gold:#c49a3a;--gold2:#e8b84a;
+  --sh:0 2px 16px rgba(44,24,16,.08);--sh2:0 8px 32px rgba(44,24,16,.14);
+  --safe-bot:env(safe-area-inset-bottom,0px);--safe-top:env(safe-area-inset-top,0px);
+  --nav-h:62px;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html,body{height:100%;overflow:hidden;}
-body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--deep);}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--deep);}
 .scr{position:fixed;inset:0;display:none;flex-direction:column;background:var(--bg);overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-top:var(--safe-top);}
 .scr.on{display:flex;}
+
 /* SPLASH */
-#s-splash{background:var(--deep);align-items:center;justify-content:center;gap:.3rem;}
-.sp-logo{font-family:'Tenor Sans',serif;font-size:3rem;color:#fff;letter-spacing:.1em;}
-.sp-sub{color:var(--muted);font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;margin-bottom:1.4rem;}
-.ring{width:28px;height:28px;border:2px solid rgba(255,255,255,.15);border-top-color:var(--rose);border-radius:50%;animation:spin .8s linear infinite;}
+#s-splash{background:linear-gradient(160deg,#1a0f0a 0%,#3d1a10 100%);align-items:center;justify-content:center;gap:.4rem;}
+.sp-logo{font-family:'Playfair Display',serif;font-size:3.4rem;color:#fff;letter-spacing:.06em;}
+.sp-logo b{color:var(--rose);}
+.sp-sub{color:rgba(255,255,255,.35);font-size:.63rem;letter-spacing:.28em;text-transform:uppercase;margin-bottom:2rem;}
+.sp-ring{width:30px;height:30px;border:2px solid rgba(255,255,255,.1);border-top-color:var(--rose);border-radius:50%;animation:spin .9s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg);}}
+
 /* AUTH */
-#s-auth{background:var(--deep);align-items:center;justify-content:center;padding:1.2rem;}
-.a-card{background:#1e1a18;border:1px solid #3a302a;border-radius:22px;padding:1.8rem 1.6rem;width:100%;max-width:380px;}
-.a-logo{font-family:'Tenor Sans',serif;font-size:2rem;color:#c9975a;letter-spacing:.08em;text-align:center;margin-bottom:.15rem;}
-.a-sub{color:#7a6e66;font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;text-align:center;margin-bottom:1.6rem;}
-.a-tabs{display:flex;background:#141210;border-radius:11px;padding:3px;margin-bottom:1.3rem;}
-.a-tab{flex:1;text-align:center;padding:.46rem .2rem;border-radius:9px;cursor:pointer;font-size:.76rem;color:#7a6e66;transition:all .18s;border:none;background:none;font-family:'Nunito',sans-serif;font-weight:700;white-space:nowrap;}
-.a-tab.on{background:#c9975a;color:#1a1410;}
+#s-auth{background:linear-gradient(160deg,#1a0f0a 0%,#2e1510 100%);align-items:center;justify-content:center;padding:1.5rem 1.2rem;}
+.a-card{background:rgba(255,255,255,.05);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.09);border-radius:24px;padding:2rem 1.8rem;width:100%;max-width:390px;}
+.a-logo{font-family:'Playfair Display',serif;font-size:2.2rem;color:#e8c49a;letter-spacing:.06em;text-align:center;margin-bottom:.2rem;}
+.a-sub{color:rgba(255,255,255,.3);font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;text-align:center;margin-bottom:2rem;}
+.a-tabs{display:flex;background:rgba(0,0,0,.3);border-radius:14px;padding:4px;margin-bottom:1.5rem;gap:3px;}
+.a-tab{flex:1;text-align:center;padding:.5rem .2rem;border-radius:10px;cursor:pointer;font-size:.73rem;color:rgba(255,255,255,.4);transition:all .2s;border:none;background:none;font-family:'Inter',sans-serif;font-weight:600;white-space:nowrap;}
+.a-tab.on{background:var(--rose);color:#fff;box-shadow:0 2px 8px rgba(196,114,90,.4);}
 .a-sec{display:none;}.a-sec.on{display:block;}
-.ai{width:100%;background:#141210;border:1px solid #3a302a;border-radius:10px;padding:.66rem .95rem;color:#f0ebe4;font-family:'Nunito',sans-serif;font-size:.84rem;outline:none;margin-bottom:.6rem;transition:border-color .18s;}
-.ai:focus{border-color:#c9975a;}
-.ai::placeholder{color:#5a4e46;}
-.a-btn{width:100%;background:#c9975a;color:#1a1410;border:none;border-radius:11px;padding:.76rem;font-size:.88rem;font-weight:700;font-family:'Nunito',sans-serif;cursor:pointer;transition:all .18s;margin-top:.2rem;}
-.a-btn:hover{background:#e8b87a;}
-.a-btn:disabled{opacity:.5;cursor:not-allowed;}
-.a-div{display:flex;align-items:center;gap:.8rem;margin:.8rem 0;}
-.a-div::before,.a-div::after{content:'';flex:1;height:1px;background:#3a302a;}
-.a-div span{color:#5a4e46;font-size:.68rem;}
-.a-goog{width:100%;background:none;border:1px solid #3a302a;border-radius:11px;padding:.66rem;font-size:.8rem;color:#f0ebe4;font-family:'Nunito',sans-serif;cursor:pointer;transition:all .18s;display:flex;align-items:center;justify-content:center;gap:.5rem;margin-bottom:.45rem;}
-.a-goog:hover{border-color:#c9975a;background:rgba(201,151,90,.06);}
-.a-err{color:#c46a6a;font-size:.72rem;text-align:center;margin-top:.4rem;display:none;padding:.42rem;background:rgba(196,106,106,.08);border-radius:8px;}
-.otp-row{display:flex;gap:.38rem;justify-content:center;margin-bottom:.65rem;}
-.otp-i{width:40px;height:44px;text-align:center;font-size:1.1rem;font-weight:700;background:#141210;border:1px solid #3a302a;border-radius:9px;color:#f0ebe4;font-family:'Nunito',sans-serif;outline:none;}
-.otp-i:focus{border-color:#c9975a;}
-/* APP */
-#s-app{background:var(--bg);padding-bottom:calc(62px + var(--safe-bot));}
-.app-hdr{background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;box-shadow:0 1px 6px rgba(44,24,16,.04);}
-.app-hdr-in{display:flex;align-items:center;justify-content:space-between;padding:0 1rem;height:52px;}
-.brand{font-family:'Tenor Sans',serif;font-size:1.3rem;color:var(--deep);letter-spacing:.06em;}
+.ai{width:100%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:.72rem 1rem;color:#f0e8e0;font-family:'Inter',sans-serif;font-size:.85rem;outline:none;margin-bottom:.65rem;transition:all .2s;}
+.ai:focus{border-color:var(--rose);background:rgba(255,255,255,.11);}
+.ai::placeholder{color:rgba(255,255,255,.25);}
+.a-ph-row{display:flex;gap:.5rem;margin-bottom:.65rem;}
+.a-ph-row .ai{margin-bottom:0;}
+.a-ph-code{width:72px;flex-shrink:0;}
+.a-btn{width:100%;background:linear-gradient(135deg,var(--rose),var(--rose2));color:#fff;border:none;border-radius:13px;padding:.82rem;font-size:.88rem;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s;margin-top:.3rem;letter-spacing:.02em;}
+.a-btn:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(196,114,90,.4);}
+.a-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+.a-div{display:flex;align-items:center;gap:.8rem;margin:.9rem 0;}
+.a-div::before,.a-div::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.08);}
+.a-div span{color:rgba(255,255,255,.25);font-size:.68rem;}
+.a-goog{width:100%;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.12);border-radius:13px;padding:.72rem;font-size:.82rem;color:#f0e8e0;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:.6rem;}
+.a-goog:hover{border-color:var(--rose);background:rgba(196,114,90,.1);}
+.a-err{color:#e88a8a;font-size:.72rem;text-align:center;margin-top:.5rem;display:none;padding:.45rem;background:rgba(196,90,90,.1);border-radius:9px;}
+.a-link{text-align:center;margin-top:1rem;font-size:.72rem;color:rgba(255,255,255,.35);cursor:pointer;}
+.a-link b{color:var(--rose);}
+.otp-row{display:flex;gap:.4rem;justify-content:center;margin-bottom:.7rem;}
+.otp-i{width:42px;height:48px;text-align:center;font-size:1.2rem;font-weight:700;background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.1);border-radius:10px;color:#f0e8e0;font-family:'Inter',sans-serif;outline:none;}
+.otp-i:focus{border-color:var(--rose);}
+
+/* APP SHELL */
+#s-app{background:var(--bg);padding-bottom:calc(var(--nav-h) + var(--safe-bot));}
+.app-hdr{background:rgba(255,255,255,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200;}
+.app-hdr-in{display:flex;align-items:center;justify-content:space-between;padding:0 1.1rem;height:54px;}
+.brand{font-family:'Playfair Display',serif;font-size:1.45rem;color:var(--deep);letter-spacing:.04em;}
 .brand b{color:var(--rose);}
-.hdr-right{display:flex;align-items:center;gap:.5rem;}
-.pts-badge{background:var(--gold);color:white;font-size:.62rem;font-weight:700;padding:.18rem .5rem;border-radius:10px;display:flex;align-items:center;gap:.2rem;cursor:pointer;}
-.uav{width:32px;height:32px;border-radius:50%;background:var(--rose);color:white;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;cursor:pointer;border:none;flex-shrink:0;}
-.bnav{position:fixed;bottom:0;left:0;right:0;background:var(--white);border-top:1px solid var(--border);display:flex;z-index:100;padding-bottom:var(--safe-bot);}
-.nb{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:.44rem .2rem;cursor:pointer;color:var(--muted);font-size:.56rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;border:none;background:none;font-family:'Nunito',sans-serif;transition:color .15s;gap:.13rem;position:relative;}
+.hdr-right{display:flex;align-items:center;gap:.55rem;}
+.pts-badge{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#fff;font-size:.63rem;font-weight:700;padding:.22rem .6rem;border-radius:20px;display:flex;align-items:center;gap:.25rem;cursor:pointer;}
+.pts-badge svg{width:11px;height:11px;}
+.uav{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--rose),var(--rose2));color:white;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;cursor:pointer;border:none;flex-shrink:0;}
+.lang-sel{background:none;border:1.5px solid var(--border);border-radius:8px;padding:.2rem .4rem;font-size:.68rem;color:var(--muted);font-family:'Inter',sans-serif;cursor:pointer;outline:none;}
+.hdr-cart{background:none;border:none;cursor:pointer;padding:.2rem;position:relative;display:flex;align-items:center;}
+.hdr-cart svg{width:22px;height:22px;stroke:var(--muted);stroke-width:1.8;fill:none;}
+.cart-dot{position:absolute;top:0;right:0;background:var(--err);color:#fff;font-size:.5rem;font-weight:700;min-width:15px;height:15px;border-radius:8px;display:none;align-items:center;justify-content:center;border:2px solid var(--white);}
+.cart-dot.on{display:flex;}
+
+/* BOTTOM NAV */
+.bnav{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.97);backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;z-index:200;padding-bottom:var(--safe-bot);height:var(--nav-h);}
+.nb{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:.3rem .1rem;cursor:pointer;color:var(--muted);font-size:.51rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;border:none;background:none;font-family:'Inter',sans-serif;transition:all .18s;gap:.18rem;position:relative;}
 .nb.on{color:var(--rose);}
-.nb-ic{font-size:1.1rem;}
-.nb-dot{position:absolute;top:.35rem;right:calc(50% - 14px);width:7px;height:7px;background:var(--err);border-radius:50%;border:2px solid var(--white);display:none;}
+.nb-ic{width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:8px;transition:all .18s;}
+.nb.on .nb-ic{background:var(--blush);}
+.nb svg{width:19px;height:19px;stroke-width:1.8;fill:none;}
+.nb-dot{position:absolute;top:.15rem;right:calc(50% - 18px);width:7px;height:7px;background:var(--err);border-radius:50%;border:2px solid #fff;display:none;}
 .nb-dot.on{display:block;}
-.pg{display:none;padding:1rem;animation:fu .2s ease;}
+
+/* PAGES */
+.pg{display:none;padding:1rem 1rem 1.5rem;animation:fu .22s ease;}
 .pg.on{display:block;}
-@keyframes fu{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fu{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.stl{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:600;margin-bottom:.75rem;}
+
 /* BRANCH BAR */
-.br-bar{background:var(--white);border:1.5px solid var(--border);border-radius:13px;padding:.82rem 1rem;display:flex;align-items:center;justify-content:space-between;margin-bottom:1.1rem;box-shadow:var(--sh);}
-.br-bar-l{display:flex;align-items:center;gap:.58rem;}
-.br-ic{font-size:1.35rem;}
-.br-nm{font-family:'Tenor Sans',serif;font-size:.9rem;}
-.br-ct{font-size:.68rem;color:var(--muted);}
-.btn-chg{background:none;border:1.5px solid var(--border);border-radius:8px;padding:.26rem .62rem;font-size:.68rem;color:var(--muted);cursor:pointer;font-family:'Nunito',sans-serif;transition:all .15s;}
+.br-bar{background:var(--white);border:1.5px solid var(--border);border-radius:16px;padding:.88rem 1.1rem;display:flex;align-items:center;justify-content:space-between;margin-bottom:1.1rem;box-shadow:var(--sh);}
+.br-left{display:flex;align-items:center;gap:.65rem;}
+.br-ic{width:38px;height:38px;background:var(--blush);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.br-ic svg{width:18px;height:18px;stroke:var(--rose);fill:none;stroke-width:1.8;}
+.br-nm{font-weight:700;font-size:.88rem;}
+.br-ct{font-size:.65rem;color:var(--muted);margin-top:.1rem;}
+.btn-chg{background:none;border:1.5px solid var(--border);border-radius:9px;padding:.3rem .7rem;font-size:.68rem;color:var(--muted);cursor:pointer;font-family:'Inter',sans-serif;font-weight:600;transition:all .18s;flex-shrink:0;}
 .btn-chg:hover{border-color:var(--rose);color:var(--rose);}
+
 /* CAMPAIGN BANNER */
-.camp-ban{background:linear-gradient(135deg,var(--deep),#5a2e1a);color:white;border-radius:13px;padding:.95rem 1.1rem;margin-bottom:.9rem;display:flex;align-items:center;gap:.75rem;position:relative;overflow:hidden;}
-.camp-ban::before{content:'✦';position:absolute;right:1rem;top:50%;transform:translateY(-50%);font-size:2.5rem;opacity:.08;}
-.camp-ic{font-size:1.5rem;flex-shrink:0;}
-.camp-ttl{font-family:'Tenor Sans',serif;font-size:.9rem;margin-bottom:.1rem;}
-.camp-txt{font-size:.68rem;opacity:.8;line-height:1.5;}
-.camp-x{position:absolute;top:.5rem;right:.5rem;background:none;border:none;color:rgba(255,255,255,.4);cursor:pointer;font-size:.9rem;padding:.1rem;}
+.camp-ban{background:linear-gradient(135deg,#3d1a10,var(--deep));color:#fff;border-radius:16px;padding:.95rem 1.1rem;margin-bottom:1rem;display:flex;gap:.75rem;align-items:center;position:relative;overflow:hidden;}
+.camp-ban::after{content:'✦';position:absolute;right:1rem;top:50%;transform:translateY(-50%);font-size:3rem;opacity:.07;}
+.camp-ic{font-size:1.6rem;flex-shrink:0;}
+.camp-ttl{font-family:'Playfair Display',serif;font-size:.9rem;margin-bottom:.12rem;}
+.camp-txt{font-size:.67rem;opacity:.75;line-height:1.5;}
+.camp-x{position:absolute;top:.4rem;right:.5rem;background:none;border:none;color:rgba(255,255,255,.3);cursor:pointer;font-size:1rem;line-height:1;}
+
 /* HERO */
 .hero{text-align:center;padding:.9rem .5rem .75rem;}
-.h-badge{display:inline-flex;align-items:center;gap:.3rem;background:var(--blush);color:var(--rose);font-size:.64rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.24rem .82rem;border-radius:20px;margin-bottom:.65rem;}
-.hero h1{font-family:'Tenor Sans',serif;font-size:clamp(1.45rem,4.5vw,1.9rem);line-height:1.22;margin-bottom:.42rem;}
+.h-badge{display:inline-flex;align-items:center;gap:.35rem;background:var(--blush);color:var(--rose);font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.26rem .9rem;border-radius:20px;margin-bottom:.75rem;}
+.h-badge svg{width:10px;height:10px;fill:var(--rose);}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,5vw,2rem);line-height:1.22;margin-bottom:.45rem;}
 .hero h1 em{color:var(--rose);font-style:italic;}
-.hero p{color:var(--muted);font-size:.78rem;line-height:1.65;}
+.hero p{color:var(--muted);font-size:.78rem;line-height:1.7;}
+
 /* SEARCH */
-.search-wrap{position:relative;margin-bottom:.9rem;}
-.search-ic{position:absolute;left:.75rem;top:50%;transform:translateY(-50%);font-size:.9rem;pointer-events:none;}
-.search-in{width:100%;background:var(--white);border:1.5px solid var(--border);border-radius:12px;padding:.6rem .75rem .6rem 2.2rem;font-family:'Nunito',sans-serif;font-size:.82rem;color:var(--deep);outline:none;transition:border-color .18s;}
-.search-in:focus{border-color:var(--rose);}
-.search-in::placeholder{color:var(--muted);}
-.search-clear{position:absolute;right:.75rem;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted);cursor:pointer;font-size:.9rem;display:none;}
-/* CATEGORIES */
-.stl{font-family:'Tenor Sans',serif;font-size:1.02rem;margin-bottom:.68rem;display:flex;align-items:center;gap:.42rem;color:var(--deep);}
-.stl::after{content:'';flex:1;height:1px;background:var(--border);}
-.cat-row{display:flex;gap:.4rem;margin-bottom:.85rem;overflow-x:auto;padding-bottom:.12rem;scrollbar-width:none;}
-.cat-row::-webkit-scrollbar{display:none;}
-.cat-chip{background:var(--white);border:1.5px solid var(--border);border-radius:20px;padding:.28rem .82rem;font-size:.72rem;color:var(--muted);cursor:pointer;transition:all .14s;white-space:nowrap;font-family:'Nunito',sans-serif;font-weight:600;}
-.cat-chip.on,.cat-chip:hover{background:var(--rose);border-color:var(--rose);color:white;}
-/* SPECIALIST GRID */
-.sp-grid{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;margin-bottom:1.25rem;}
-@media(min-width:480px){.sp-grid{grid-template-columns:repeat(3,1fr);}}
-.spc{background:var(--white);border:1.5px solid var(--border);border-radius:13px;padding:.88rem;cursor:pointer;transition:all .18s;position:relative;overflow:hidden;}
-.spc::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:transparent;transition:background .18s;}
-.spc.on{border-color:var(--rose);}.spc.on::after{background:var(--rose);}
-.spc-chk{position:absolute;top:.52rem;right:.52rem;width:18px;height:18px;background:var(--rose);border-radius:50%;display:none;align-items:center;justify-content:center;color:white;font-size:.58rem;}
-.spc.on .spc-chk{display:flex;}
-.fav-btn{position:absolute;top:.52rem;left:.52rem;background:none;border:none;font-size:.9rem;cursor:pointer;padding:0;line-height:1;z-index:2;}
-.spc-av{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:.5rem;overflow:hidden;}
-.spc-av img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
-.spc-nm{font-family:'Tenor Sans',serif;font-size:.88rem;margin-bottom:.07rem;}
-.spc-tl{font-size:.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.25rem;}
-.spc-stars{display:flex;align-items:center;gap:.08rem;margin-bottom:.25rem;}
-.spc-star{font-size:.65rem;color:#e0d0c0;}
-.spc-star.on{color:var(--gold);}
-.spc-tags{display:flex;gap:.2rem;flex-wrap:wrap;margin-top:.2rem;}
-.spc-tag{background:var(--blush);color:var(--rose);font-size:.52rem;padding:.06rem .32rem;border-radius:4px;}
-.spc-info-btn{width:100%;background:none;border:1px solid var(--border);border-radius:7px;font-size:.64rem;color:var(--muted);padding:.24rem;cursor:pointer;font-family:'Nunito',sans-serif;margin-top:.38rem;transition:all .15s;}
-.spc-info-btn:hover{border-color:var(--rose);color:var(--rose);}
-/* BOOKING FLOW */
-.bk-box{background:var(--white);border:1.5px solid var(--border);border-radius:16px;padding:1.05rem;margin-bottom:.9rem;box-shadow:var(--sh);animation:fu .2s ease;}
-.bk-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:.85rem;}
-.bk-hd-nm{font-family:'Tenor Sans',serif;font-size:1rem;}
-.bk-x{background:none;border:none;color:var(--muted);font-size:1rem;cursor:pointer;padding:.1rem;}
-.bk-bd{display:flex;flex-direction:column;gap:.55rem;}
-.fl{font-size:.68rem;color:var(--muted);font-weight:700;letter-spacing:.05em;text-transform:uppercase;display:block;margin-bottom:.3rem;}
-.svc-opts{display:flex;flex-direction:column;gap:.35rem;}
-.svc-opt{background:var(--light);border:1.5px solid var(--border);border-radius:10px;padding:.65rem .82rem;cursor:pointer;transition:all .16s;display:flex;justify-content:space-between;align-items:center;}
-.svc-opt:hover{border-color:var(--rose);}
-.svc-opt.on{background:var(--blush);border-color:var(--rose);}
-.svc-dur{font-size:.68rem;color:var(--muted);}
-.wk-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:.52rem;}
-.wk-arr{background:none;border:1.5px solid var(--border);border-radius:8px;width:30px;height:30px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all .15s;}
-.wk-arr:hover{border-color:var(--rose);color:var(--rose);}
-.wk-lbl{font-size:.78rem;font-weight:700;}
-.days-scroll{overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
-.days-scroll::-webkit-scrollbar{display:none;}
-.days-row{display:flex;gap:.28rem;min-width:max-content;padding-bottom:.2rem;}
-.d-col{display:flex;flex-direction:column;gap:.16rem;min-width:38px;}
-.d-nm{font-size:.55rem;color:var(--muted);text-align:center;font-weight:700;text-transform:uppercase;}
-.d-dt{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;margin:0 auto .12rem;}
-.d-dt.today{background:var(--rose);color:white;}
-.slots{display:flex;flex-direction:column;gap:.12rem;}
-.sl{background:var(--light);border:1px solid var(--border);border-radius:6px;font-size:.58rem;text-align:center;padding:.22rem .1rem;cursor:pointer;transition:all .14s;color:var(--deep);}
-.sl:hover{background:var(--blush);border-color:var(--rose);}
-.sl.sel{background:var(--rose);border-color:var(--rose);color:white;}
-.sl.bk{background:#f5eded;border-color:#e8d0d0;color:#cbb8b8;cursor:not-allowed;font-size:.52rem;}
-.sl.blk{background:#f5f0ed;border-color:#e8e0d8;color:#c8b8b0;cursor:not-allowed;}
-.sl.pst{opacity:.32;cursor:not-allowed;}
-.cf{display:none;padding-top:.7rem;border-top:1px solid var(--border);}
-.cf.on{display:block;}
-.u-hint{font-size:.7rem;color:var(--ok);background:rgba(106,158,122,.1);border-radius:8px;padding:.32rem .62rem;margin-bottom:.62rem;}
-.pts-earn{font-size:.72rem;color:var(--gold);background:rgba(196,154,74,.1);border-radius:8px;padding:.32rem .62rem;margin-bottom:.62rem;display:flex;align-items:center;gap:.3rem;}
-.fi{width:100%;background:var(--light);border:1.5px solid var(--border);border-radius:10px;padding:.62rem .82rem;color:var(--deep);font-family:'Nunito',sans-serif;font-size:.84rem;outline:none;margin-bottom:.52rem;transition:border-color .18s;}
-.fi:focus{border-color:var(--rose);}
-.fi::placeholder{color:var(--muted);}
-.btn-cnf{width:100%;background:var(--rose);color:white;border:none;border-radius:12px;padding:.82rem;font-size:.9rem;font-weight:700;font-family:'Nunito',sans-serif;cursor:pointer;transition:all .18s;letter-spacing:.03em;}
-.btn-cnf:hover{background:#b3614a;}
-.btn-cnf:disabled{opacity:.5;cursor:not-allowed;}
-.btn-pr{background:var(--deep);color:white;border:none;border-radius:12px;padding:.72rem 1.8rem;font-size:.84rem;font-weight:700;font-family:'Nunito',sans-serif;cursor:pointer;margin-top:.8rem;}
+.search-wrap{position:relative;margin-bottom:.95rem;}
+.search-ic{position:absolute;left:.85rem;top:50%;transform:translateY(-50%);pointer-events:none;}
+.search-ic svg{width:16px;height:16px;stroke:var(--muted);fill:none;stroke-width:2;}
+.search-in{width:100%;background:var(--white);border:1.5px solid var(--border);border-radius:14px;padding:.65rem .85rem .65rem 2.4rem;font-family:'Inter',sans-serif;font-size:.83rem;color:var(--deep);outline:none;transition:all .2s;box-shadow:var(--sh);}
+.search-in:focus{border-color:var(--rose);box-shadow:0 0 0 3px rgba(196,114,90,.1);}
+
+/* CHIPS */
+.chips{display:flex;gap:.5rem;overflow-x:auto;padding-bottom:.3rem;margin-bottom:1rem;scrollbar-width:none;}
+.chips::-webkit-scrollbar{display:none;}
+.chip{flex-shrink:0;padding:.38rem .88rem;border-radius:20px;font-size:.73rem;font-weight:600;border:1.5px solid var(--border);background:var(--white);color:var(--muted);cursor:pointer;transition:all .18s;font-family:'Inter',sans-serif;}
+.chip.on{background:var(--rose);color:#fff;border-color:var(--rose);}
+
+/* SPECIALIST CARDS */
+.sp-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;}
+.sp-card{background:var(--white);border:1.5px solid var(--border);border-radius:18px;overflow:hidden;cursor:pointer;transition:all .2s;box-shadow:var(--sh);position:relative;}
+.sp-card:active{transform:scale(.98);}
+.sp-img{width:100%;aspect-ratio:1;background:linear-gradient(135deg,var(--blush),#f0d5c8);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.sp-img img{width:100%;height:100%;object-fit:cover;}
+.sp-img-ph{font-size:2.8rem;}
+.sp-fav{position:absolute;top:.5rem;right:.5rem;background:rgba(255,255,255,.92);border:none;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2;}
+.sp-fav svg{width:14px;height:14px;stroke:var(--muted);fill:none;transition:all .18s;stroke-width:2;}
+.sp-fav.on svg{stroke:var(--err);fill:var(--err);}
+.sp-avail{position:absolute;top:.5rem;left:.5rem;background:rgba(74,158,106,.9);color:#fff;font-size:.55rem;font-weight:700;padding:.18rem .5rem;border-radius:6px;}
+.sp-body{padding:.75rem .75rem .8rem;}
+.sp-name{font-weight:700;font-size:.85rem;margin-bottom:.12rem;}
+.sp-title{font-size:.64rem;color:var(--muted);margin-bottom:.45rem;}
+.sp-tags{display:flex;flex-wrap:wrap;gap:.25rem;margin-bottom:.5rem;}
+.sp-tag{font-size:.57rem;background:var(--blush);color:var(--rose);padding:.17rem .45rem;border-radius:6px;font-weight:600;}
+.sp-row{display:flex;align-items:center;justify-content:space-between;}
+.sp-rating{display:flex;align-items:center;gap:.25rem;font-size:.68rem;font-weight:700;}
+.sp-rating svg{width:11px;height:11px;fill:var(--gold);stroke:none;}
+.sp-btn{background:var(--rose);color:#fff;border:none;border-radius:9px;padding:.3rem .7rem;font-size:.67rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;}
+
+/* SKELETON */
+.skel{background:linear-gradient(90deg,#ede4df 25%,#f8f1ee 50%,#ede4df 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:10px;}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.skel-card{background:var(--white);border:1.5px solid var(--border);border-radius:18px;overflow:hidden;box-shadow:var(--sh);}
+.skel-img{width:100%;aspect-ratio:1;}
+.skel-line{height:12px;margin:.4rem .75rem;}
+.skel-line.short{width:60%;}
+
+/* BACK BUTTON */
+.back-btn{display:flex;align-items:center;gap:.4rem;background:none;border:none;color:var(--muted);font-size:.78rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;padding:.3rem 0;margin-bottom:.9rem;}
+.back-btn svg{width:16px;height:16px;stroke:var(--muted);fill:none;stroke-width:2.5;}
+
+/* SP INFO BAR */
+.sp-info-bar{background:var(--white);border:1.5px solid var(--border);border-radius:14px;padding:.75rem 1rem;margin-bottom:1rem;box-shadow:var(--sh);display:flex;align-items:center;gap:.75rem;}
+.sp-info-img{width:46px;height:46px;border-radius:12px;background:var(--blush);display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;overflow:hidden;}
+.sp-info-img img{width:100%;height:100%;object-fit:cover;}
+.sp-info-name{font-weight:700;font-size:.88rem;}
+.sp-info-title{font-size:.66rem;color:var(--muted);margin-top:.1rem;}
+
+/* SERVICE LIST */
+.svc-list{display:flex;flex-direction:column;gap:.5rem;}
+.svc-item{background:var(--white);border:1.5px solid var(--border);border-radius:14px;padding:.88rem 1rem;display:flex;align-items:center;gap:.75rem;cursor:pointer;transition:all .18s;box-shadow:var(--sh);}
+.svc-item.on{border-color:var(--rose);background:rgba(196,114,90,.04);}
+.svc-item:hover{border-color:var(--rose);}
+.svc-check{width:22px;height:22px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .18s;}
+.svc-item.on .svc-check{background:var(--rose);border-color:var(--rose);}
+.svc-item.on .svc-check svg{display:block;}
+.svc-check svg{width:12px;height:12px;stroke:#fff;stroke-width:2.5;fill:none;display:none;}
+.svc-left{flex:1;}
+.svc-name{font-weight:600;font-size:.88rem;}
+.svc-dur{font-size:.67rem;color:var(--muted);margin-top:.15rem;}
+.svc-price{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--rose);}
+.svc-pts{font-size:.6rem;color:var(--gold);margin-top:.08rem;text-align:right;}
+
+/* DATE/TIME */
+.wk-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;}
+.wk-btn{background:var(--white);border:1.5px solid var(--border);border-radius:10px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.wk-btn svg{width:16px;height:16px;stroke:var(--deep);fill:none;stroke-width:2;}
+.wk-lbl{font-weight:600;font-size:.82rem;color:var(--muted);}
+.day-row{display:flex;gap:.4rem;overflow-x:auto;padding-bottom:.3rem;margin-bottom:1rem;scrollbar-width:none;}
+.day-row::-webkit-scrollbar{display:none;}
+.day-chip{flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:.18rem;padding:.48rem .72rem;border-radius:14px;cursor:pointer;border:1.5px solid var(--border);background:var(--white);transition:all .2s;min-width:50px;}
+.day-chip.on{background:var(--rose);border-color:var(--rose);}
+.day-chip.today{border-color:var(--rose);}
+.day-nm{font-size:.58rem;font-weight:600;color:var(--muted);text-transform:uppercase;}
+.day-chip.on .day-nm,.day-chip.on .day-num{color:#fff;}
+.day-num{font-size:.95rem;font-weight:700;}
+.time-label{font-size:.72rem;color:var(--muted);font-weight:600;margin-bottom:.55rem;}
+.time-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.42rem;margin-bottom:1rem;}
+.t-chip{padding:.6rem .3rem;text-align:center;border-radius:11px;cursor:pointer;border:1.5px solid var(--border);background:var(--white);font-size:.76rem;font-weight:600;font-family:'Inter',sans-serif;transition:all .18s;}
+.t-chip.on{background:var(--rose);color:#fff;border-color:var(--rose);}
+.t-chip.busy{background:#f5f0ee;color:#c4b0a8;cursor:not-allowed;text-decoration:line-through;}
+.t-chip:not(.busy):not(.on):hover{border-color:var(--rose);color:var(--rose);}
+
+/* CONFIRM */
+.conf-card{background:var(--white);border:1.5px solid var(--border);border-radius:16px;padding:1rem 1.1rem;margin-bottom:.9rem;box-shadow:var(--sh);}
+.conf-row{display:flex;justify-content:space-between;align-items:center;padding:.42rem 0;border-bottom:1px solid var(--border);}
+.conf-row:last-child{border-bottom:none;}
+.conf-lbl{font-size:.72rem;color:var(--muted);}
+.conf-val{font-size:.8rem;font-weight:600;text-align:right;max-width:60%;}
+.pts-earn-banner{background:linear-gradient(135deg,rgba(196,154,58,.1),rgba(232,184,74,.07));border:1.5px solid rgba(196,154,58,.25);border-radius:12px;padding:.65rem 1rem;display:flex;align-items:center;gap:.6rem;margin-bottom:.85rem;}
+.pts-earn-banner svg{width:18px;height:18px;fill:var(--gold);flex-shrink:0;}
+.inp-field{width:100%;background:var(--white);border:1.5px solid var(--border);border-radius:12px;padding:.7rem 1rem;font-family:'Inter',sans-serif;font-size:.85rem;color:var(--deep);outline:none;margin-bottom:.6rem;transition:all .2s;}
+.inp-field:focus{border-color:var(--rose);box-shadow:0 0 0 3px rgba(196,114,90,.1);}
+.btn-confirm{width:100%;background:linear-gradient(135deg,var(--rose),var(--rose2));color:#fff;border:none;border-radius:14px;padding:.9rem;font-size:.92rem;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s;box-shadow:0 4px 16px rgba(196,114,90,.3);}
+.btn-confirm:hover{transform:translateY(-1px);}
+.btn-confirm:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+
+/* SUCCESS */
+.success-ov{position:fixed;inset:0;background:#fff;z-index:500;display:none;flex-direction:column;align-items:center;justify-content:center;padding:2rem;animation:fu .3s ease;}
+.success-ov.on{display:flex;}
+.success-circle{width:88px;height:88px;background:linear-gradient(135deg,var(--ok),#6ab882);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:1.5rem;box-shadow:0 8px 32px rgba(74,158,106,.3);}
+.success-circle svg{width:44px;height:44px;stroke:#fff;fill:none;stroke-width:2.2;}
+.success-ttl{font-family:'Playfair Display',serif;font-size:1.8rem;margin-bottom:.5rem;}
+.success-sub{color:var(--muted);font-size:.82rem;text-align:center;line-height:1.7;max-width:280px;}
+.success-pts{background:rgba(196,154,58,.1);border:1.5px solid rgba(196,154,58,.25);border-radius:12px;padding:.65rem 1.2rem;font-size:.82rem;color:var(--gold);font-weight:700;margin:1.2rem 0;}
+.success-btn{background:linear-gradient(135deg,var(--rose),var(--rose2));color:#fff;border:none;border-radius:14px;padding:.9rem 2.5rem;font-size:.9rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;margin-top:.5rem;}
+.cf-wrap{position:fixed;inset:0;pointer-events:none;z-index:499;overflow:hidden;}
+.cf{position:absolute;width:8px;height:8px;border-radius:2px;animation:cfall linear forwards;}
+@keyframes cfall{0%{transform:translateY(-20px) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+
 /* APPOINTMENTS */
-.ac{background:var(--white);border:1.5px solid var(--border);border-radius:13px;padding:.95rem 1rem;margin-bottom:.65rem;box-shadow:var(--sh);}
-.ac-row{display:flex;justify-content:space-between;margin-bottom:.62rem;}
-.ac-dot{width:10px;height:10px;background:var(--rose);border-radius:50%;margin-top:.22rem;flex-shrink:0;}
-.ac-dot.past{background:var(--muted);}
-.ac-nm{font-family:'Tenor Sans',serif;font-size:.92rem;margin-bottom:.15rem;}
-.ac-dt{font-size:.7rem;color:var(--muted);line-height:1.6;}
-.ac-tc{text-align:right;flex-shrink:0;}
-.ac-tm{font-family:'Tenor Sans',serif;font-size:1.1rem;color:var(--rose);}
-.ac-d{font-size:.62rem;color:var(--muted);margin-top:.08rem;}
-.ac-actions{display:flex;gap:.38rem;flex-wrap:wrap;}
-.btn-cx{background:none;border:1.5px solid var(--border);border-radius:8px;padding:.3rem .65rem;font-size:.7rem;color:var(--muted);cursor:pointer;font-family:'Nunito',sans-serif;transition:all .15s;}
+.appt-card{background:var(--white);border:1.5px solid var(--border);border-radius:16px;padding:1rem;margin-bottom:.7rem;box-shadow:var(--sh);}
+.appt-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:.75rem;}
+.appt-sp{font-weight:700;font-size:.9rem;}
+.appt-svc{font-size:.71rem;color:var(--muted);margin-top:.12rem;}
+.appt-badge{font-size:.62rem;font-weight:700;padding:.22rem .6rem;border-radius:8px;flex-shrink:0;margin-left:.5rem;}
+.badge-up{background:rgba(196,114,90,.1);color:var(--rose);}
+.badge-done{background:rgba(74,158,106,.1);color:var(--ok);}
+.badge-cx{background:rgba(196,90,90,.1);color:var(--err);}
+.appt-meta{display:flex;flex-wrap:wrap;gap:.5rem 1rem;margin-bottom:.75rem;}
+.appt-mi{display:flex;align-items:center;gap:.3rem;font-size:.72rem;color:var(--muted);}
+.appt-mi svg{width:13px;height:13px;stroke:var(--muted);fill:none;flex-shrink:0;}
+/* Timeline */
+.tl{display:flex;align-items:center;gap:0;margin-bottom:.75rem;}
+.tl-step{display:flex;flex-direction:column;align-items:center;gap:.18rem;}
+.tl-dot{width:20px;height:20px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;background:var(--white);flex-shrink:0;}
+.tl-dot.on{background:var(--rose);border-color:var(--rose);}
+.tl-dot.done{background:var(--ok);border-color:var(--ok);}
+.tl-dot svg{width:10px;height:10px;stroke:#fff;fill:none;stroke-width:2.5;}
+.tl-lbl{font-size:.52rem;color:var(--muted);text-align:center;white-space:nowrap;}
+.tl-line{flex:1;height:2px;background:var(--border);margin-bottom:14px;}
+.tl-line.done{background:var(--ok);}
+.appt-actions{display:flex;gap:.5rem;}
+.btn-cx{flex:1;background:none;border:1.5px solid var(--border);border-radius:10px;padding:.5rem;font-size:.72rem;font-weight:600;color:var(--muted);cursor:pointer;font-family:'Inter',sans-serif;transition:all .18s;}
 .btn-cx:hover:not(:disabled){border-color:var(--err);color:var(--err);}
-.btn-cx:disabled{opacity:.5;cursor:not-allowed;}
-.btn-rebook{background:var(--blush);border:1.5px solid var(--border);border-radius:8px;padding:.3rem .65rem;font-size:.7rem;color:var(--rose);cursor:pointer;font-family:'Nunito',sans-serif;transition:all .15s;font-weight:700;}
-.btn-rebook:hover{background:var(--rose);color:white;border-color:var(--rose);}
-.btn-rate{background:rgba(196,154,74,.12);border:1.5px solid rgba(196,154,74,.3);border-radius:8px;padding:.3rem .65rem;font-size:.7rem;color:var(--gold);cursor:pointer;font-family:'Nunito',sans-serif;transition:all .15s;font-weight:700;}
-.btn-rate:hover{background:var(--gold);color:white;}
-.cx-note{font-size:.62rem;color:var(--muted);display:block;margin-top:.35rem;}
-.ph-lookup{display:flex;gap:.5rem;margin-bottom:.75rem;flex-wrap:wrap;}
-/* FAVORITES */
-.fav-card{background:var(--white);border:1.5px solid var(--border);border-radius:13px;padding:.88rem 1rem;margin-bottom:.55rem;display:flex;align-items:center;gap:.72rem;cursor:pointer;transition:all .18s;box-shadow:var(--sh);}
-.fav-card:hover{border-color:var(--rose);}
-.fav-av{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;overflow:hidden;}
-.fav-av img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
-.fav-info{flex:1;}
-.fav-nm{font-weight:700;font-size:.84rem;}
-.fav-tl{font-size:.68rem;color:var(--muted);}
+.btn-cx:disabled{opacity:.4;cursor:not-allowed;}
+.btn-rebook{flex:1;background:var(--blush);border:none;border-radius:10px;padding:.5rem;font-size:.72rem;font-weight:700;color:var(--rose);cursor:pointer;font-family:'Inter',sans-serif;}
+.btn-rate{flex:1;background:rgba(196,154,58,.1);border:none;border-radius:10px;padding:.5rem;font-size:.72rem;font-weight:700;color:var(--gold);cursor:pointer;font-family:'Inter',sans-serif;}
+.appt-pts{font-size:.67rem;color:var(--gold);font-weight:600;margin-top:.35rem;}
+.sec-ttl{font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin:.9rem 0 .5rem;}
+.empty-state{text-align:center;padding:3rem 1.5rem;}
+.empty-ic{font-size:3.5rem;margin-bottom:.9rem;opacity:.55;}
+.empty-ttl{font-family:'Playfair Display',serif;font-size:1.1rem;margin-bottom:.4rem;}
+.empty-sub{font-size:.78rem;color:var(--muted);line-height:1.7;}
+.empty-btn{display:inline-block;margin-top:1rem;background:var(--rose);color:#fff;border:none;border-radius:12px;padding:.65rem 1.5rem;font-size:.82rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;}
+
+/* MARKET */
+.mkt-banner{border-radius:18px;overflow:hidden;margin-bottom:1.1rem;background:linear-gradient(135deg,#2c1810,#5a2e1a);padding:1.4rem 1.3rem;position:relative;min-height:130px;display:flex;align-items:center;}
+.mkt-banner-deco{position:absolute;right:1.2rem;font-size:4.5rem;opacity:.2;}
+.mkt-banner-badge{background:var(--rose);color:#fff;font-size:.64rem;font-weight:700;padding:.2rem .65rem;border-radius:8px;display:inline-block;margin-bottom:.5rem;}
+.mkt-banner h2{font-family:'Playfair Display',serif;font-size:1.2rem;color:#fff;margin-bottom:.3rem;}
+.mkt-banner p{font-size:.7rem;color:rgba(255,255,255,.6);}
+.mkt-cats{display:flex;gap:.5rem;overflow-x:auto;padding-bottom:.3rem;margin-bottom:1.1rem;scrollbar-width:none;}
+.mkt-cats::-webkit-scrollbar{display:none;}
+.mkt-cat{flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:.28rem;padding:.52rem .8rem;border-radius:14px;cursor:pointer;border:1.5px solid var(--border);background:var(--white);transition:all .18s;min-width:58px;}
+.mkt-cat.on{background:var(--rose);border-color:var(--rose);}
+.mkt-cat-ic{font-size:1.25rem;}
+.mkt-cat-nm{font-size:.57rem;font-weight:700;color:var(--muted);}
+.mkt-cat.on .mkt-cat-nm{color:#fff;}
+.mkt-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;}
+.mkt-card{background:var(--white);border:1.5px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:var(--sh);cursor:pointer;transition:all .2s;position:relative;}
+.mkt-card:active{transform:scale(.98);}
+.mkt-img{width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:3.8rem;position:relative;}
+.mkt-dis-badge{position:absolute;top:.5rem;left:.5rem;background:var(--err);color:#fff;font-size:.54rem;font-weight:700;padding:.15rem .42rem;border-radius:6px;}
+.mkt-body{padding:.65rem .72rem .8rem;}
+.mkt-name{font-weight:700;font-size:.78rem;line-height:1.3;margin-bottom:.22rem;}
+.mkt-desc{font-size:.62rem;color:var(--muted);line-height:1.5;margin-bottom:.55rem;}
+.mkt-foot{display:flex;align-items:center;justify-content:space-between;}
+.mkt-prices{display:flex;align-items:baseline;gap:.3rem;}
+.mkt-price{font-family:'Playfair Display',serif;font-size:1.02rem;color:var(--rose);}
+.mkt-old{font-size:.63rem;color:var(--muted);text-decoration:line-through;}
+.mkt-add{background:var(--rose);color:#fff;border:none;border-radius:9px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}
+.mkt-add svg{width:16px;height:16px;stroke:#fff;fill:none;stroke-width:2.5;}
+.mkt-pts-opt{font-size:.58rem;color:var(--gold);margin-top:.18rem;}
+
 /* PROFILE */
-.pc{background:var(--white);border-radius:18px;border:1.5px solid var(--border);padding:1.5rem;margin-bottom:.9rem;text-align:center;box-shadow:var(--sh);}
-.pav{width:64px;height:64px;border-radius:50%;background:var(--rose);color:white;display:flex;align-items:center;justify-content:center;font-family:'Tenor Sans',serif;font-size:1.5rem;margin:0 auto .62rem;}
-.pnm{font-family:'Tenor Sans',serif;font-size:1.05rem;margin-bottom:.18rem;}
-.pem{font-size:.72rem;color:var(--muted);margin-bottom:.88rem;}
-.pts-card{background:linear-gradient(135deg,var(--deep) 0%,#4a2010 100%);color:white;border-radius:13px;padding:.95rem 1.1rem;margin-bottom:.88rem;text-align:left;}
-.pts-card-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.28rem;}
-.pts-card-l{font-size:.62rem;opacity:.7;text-transform:uppercase;letter-spacing:.08em;}
-.pts-card-v{font-family:'Tenor Sans',serif;font-size:2rem;color:var(--gold);}
-.pts-card-lvl{background:var(--gold);color:var(--deep);font-size:.65rem;font-weight:700;padding:.22rem .65rem;border-radius:12px;letter-spacing:.05em;}
-.btn-out{background:none;border:1.5px solid var(--border);border-radius:10px;padding:.46rem 1.2rem;font-size:.78rem;color:var(--muted);cursor:pointer;font-family:'Nunito',sans-serif;transition:all .15s;}
-.btn-out:hover{border-color:var(--err);color:var(--err);}
-.pstats{display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin-bottom:.9rem;}
-.pstat{background:var(--white);border:1.5px solid var(--border);border-radius:12px;padding:.72rem;text-align:center;box-shadow:var(--sh);}
-.pstat-v{font-family:'Tenor Sans',serif;font-size:1.35rem;color:var(--rose);margin-bottom:.18rem;}
-.pstat-l{font-size:.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;}
-.pmenu{background:var(--white);border-radius:13px;border:1.5px solid var(--border);overflow:hidden;box-shadow:var(--sh);}
-.pmi{display:flex;align-items:center;justify-content:space-between;padding:.88rem 1rem;border-bottom:1px solid var(--border);cursor:pointer;font-size:.84rem;transition:background .15s;}
+.pc{background:linear-gradient(160deg,var(--deep) 0%,#3a1a10 100%);border-radius:18px;padding:1.5rem 1.2rem;margin-bottom:1rem;text-align:center;}
+.pav{width:68px;height:68px;border-radius:50%;background:linear-gradient(135deg,var(--rose),var(--rose2));color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.4rem;font-weight:700;margin:0 auto .7rem;border:3px solid rgba(255,255,255,.15);}
+.pnm{font-family:'Playfair Display',serif;font-size:1.2rem;color:#fff;margin-bottom:.2rem;}
+.pem{font-size:.7rem;color:rgba(255,255,255,.4);margin-bottom:1.2rem;}
+.pts-card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:1rem;margin-bottom:1rem;text-align:left;}
+.pts-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:.7rem;}
+.pts-lbl{font-size:.6rem;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.2rem;}
+.pts-val{font-family:'Playfair Display',serif;font-size:2.2rem;color:var(--gold2);}
+.pts-lvl{background:var(--gold);color:var(--deep);font-size:.6rem;font-weight:700;padding:.2rem .65rem;border-radius:10px;}
+.pts-bar-wrap{background:rgba(255,255,255,.1);border-radius:10px;height:5px;margin-bottom:.5rem;overflow:hidden;}
+.pts-bar-fill{background:linear-gradient(90deg,var(--gold),var(--gold2));height:100%;border-radius:10px;transition:width .6s ease;}
+.pts-next-txt{font-size:.6rem;color:rgba(255,255,255,.4);}
+.pts-coupon-sec{border-top:1px solid rgba(255,255,255,.1);padding-top:.85rem;margin-top:.85rem;}
+.pts-coupon-lbl{font-size:.6rem;color:rgba(255,255,255,.5);margin-bottom:.55rem;}
+.coupon-btns{display:flex;flex-wrap:wrap;gap:.35rem;}
+.coupon-opt-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:9px;padding:.4rem .8rem;color:#fff;font-size:.67rem;font-family:'Inter',sans-serif;cursor:pointer;font-weight:600;transition:all .18s;}
+.coupon-opt-btn:hover{background:rgba(255,255,255,.18);}
+.btn-out{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.7);border-radius:10px;padding:.5rem 1.5rem;font-size:.78rem;font-family:'Inter',sans-serif;cursor:pointer;}
+.pstats{display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin-bottom:1rem;}
+.pstat{background:var(--white);border:1.5px solid var(--border);border-radius:14px;padding:.82rem .5rem;text-align:center;box-shadow:var(--sh);}
+.pstat-v{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:600;}
+.pstat-l{font-size:.59rem;color:var(--muted);margin-top:.15rem;}
+.pmenu{background:var(--white);border:1.5px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:var(--sh);margin-bottom:1rem;}
+.pmi{display:flex;align-items:center;justify-content:space-between;padding:.85rem 1.1rem;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s;}
 .pmi:last-child{border-bottom:none;}
 .pmi:hover{background:var(--light);}
+.pmi-l{display:flex;align-items:center;gap:.75rem;font-size:.83rem;font-weight:500;}
+.pmi-l svg{width:17px;height:17px;stroke:var(--rose);fill:none;stroke-width:1.8;}
+.pmi-arr{color:var(--muted);}
+/* Coupon cards */
+.coupon-card{background:var(--white);border-radius:14px;padding:.85rem 1rem;margin-bottom:.5rem;display:flex;align-items:center;justify-content:space-between;position:relative;overflow:hidden;}
+.coupon-card::before{content:'';position:absolute;left:-8px;top:50%;transform:translateY(-50%);width:16px;height:16px;border-radius:50%;background:var(--bg);}
+.coupon-card::after{content:'';position:absolute;right:-8px;top:50%;transform:translateY(-50%);width:16px;height:16px;border-radius:50%;background:var(--bg);}
+.coupon-card.active{border:1.5px solid var(--gold);}
+.coupon-card.used{border:1.5px dashed var(--border);opacity:.55;}
+.coupon-val{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--gold);}
+.coupon-code{font-size:.61rem;color:var(--muted);letter-spacing:.08em;margin-top:.15rem;}
+.coupon-st{font-size:.64rem;font-weight:700;}
+.coupon-st.active{color:var(--ok);}
+.coupon-st.used{color:var(--muted);}
+
+/* FAVORITES */
+.fav-card{background:var(--white);border:1.5px solid var(--border);border-radius:16px;padding:.88rem 1rem;margin-bottom:.6rem;display:flex;align-items:center;gap:.9rem;box-shadow:var(--sh);}
+.fav-img{width:52px;height:52px;border-radius:13px;background:var(--blush);display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;overflow:hidden;}
+.fav-img img{width:100%;height:100%;object-fit:cover;}
+.fav-nm{font-weight:700;font-size:.88rem;}
+.fav-title{font-size:.67rem;color:var(--muted);margin-top:.12rem;}
+.fav-book{background:var(--rose);color:#fff;border:none;border-radius:9px;padding:.3rem .7rem;font-size:.68rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;margin-left:auto;flex-shrink:0;}
+
 /* MODALS */
-.mo{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;display:none;align-items:flex-end;justify-content:center;}
+.mo{position:fixed;inset:0;z-index:300;display:none;flex-direction:column;justify-content:flex-end;}
 .mo.on{display:flex;}
-.mo-sh{background:var(--white);border-radius:20px 20px 0 0;padding:1.35rem;width:100%;max-width:480px;max-height:88vh;overflow-y:auto;animation:su .25s ease;padding-bottom:calc(1.35rem + var(--safe-bot));}
-@keyframes su{from{transform:translateY(100%)}to{transform:translateY(0)}}
-.mo-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 1.05rem;}
-.mo-title{font-family:'Tenor Sans',serif;font-size:1.08rem;margin-bottom:1.05rem;}
-.br-opt{background:var(--light);border:1.5px solid var(--border);border-radius:11px;padding:.88rem .95rem;margin-bottom:.52rem;cursor:pointer;transition:all .14s;display:flex;align-items:center;justify-content:space-between;}
-.br-opt:hover,.br-opt.on{border-color:var(--rose);background:white;}
-.br-opt-l{display:flex;align-items:center;gap:.62rem;}
-.br-opt-nm{font-weight:700;font-size:.84rem;}
-.br-opt-ct{font-size:.68rem;color:var(--muted);}
-.br-tags{display:flex;gap:.22rem;flex-wrap:wrap;margin-top:.18rem;}
-.br-tag{background:var(--blush);color:var(--rose);font-size:.56rem;padding:.06rem .36rem;border-radius:5px;font-weight:600;}
-.near-bdg{background:var(--rose);color:white;font-size:.56rem;font-weight:700;padding:.1rem .42rem;border-radius:6px;flex-shrink:0;}
-/* SP PROFILE MODAL */
-.sp-prof-hdr{display:flex;align-items:center;gap:1rem;margin-bottom:1.1rem;}
-.sp-prof-av{width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.8rem;overflow:hidden;flex-shrink:0;}
-.sp-prof-av img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
-.sp-prof-nm{font-family:'Tenor Sans',serif;font-size:1.1rem;margin-bottom:.18rem;}
-.sp-prof-tl{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.35rem;}
-.sp-prof-svc{background:var(--light);border-radius:10px;padding:.72rem .88rem;display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem;font-size:.82rem;}
-.sp-prof-svc-price{font-weight:700;color:var(--rose);}
-.sp-prof-svc-dur{font-size:.68rem;color:var(--muted);margin-top:.08rem;}
-.rv-item{border-bottom:1px solid var(--border);padding:.65rem 0;}
-.rv-item:last-child{border-bottom:none;}
-.rv-stars-sm{font-size:.75rem;color:var(--gold);}
-.rv-cust{font-size:.72rem;color:var(--muted);margin:.1rem 0;}
-.rv-comment{font-size:.78rem;line-height:1.55;}
-/* INSTALL BANNER */
-.inst-ban{background:var(--deep);color:white;border-radius:13px;padding:.88rem 1.05rem;margin-bottom:.88rem;display:flex;align-items:center;justify-content:space-between;gap:.65rem;}
-.inst-txt strong{display:block;font-family:'Tenor Sans',serif;font-size:.88rem;margin-bottom:.05rem;}
-.inst-txt{font-size:.75rem;line-height:1.5;}
-.btn-inst{background:var(--rose);color:white;border:none;border-radius:9px;padding:.42rem .88rem;font-size:.74rem;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;white-space:nowrap;flex-shrink:0;}
-.btn-dis{background:none;border:none;color:rgba(255,255,255,.35);font-size:.9rem;cursor:pointer;margin-left:.18rem;}
-/* SUCCESS OVERLAY */
-.success-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:900;display:none;align-items:center;justify-content:center;flex-direction:column;gap:.5rem;}
-.success-overlay.on{display:flex;}
-.success-card{background:white;border-radius:22px;padding:2rem 1.8rem;max-width:320px;width:90%;text-align:center;animation:pop .3s cubic-bezier(.2,1.4,.6,1);}
-@keyframes pop{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
-.success-ic{font-size:3.5rem;margin-bottom:.5rem;}
-.success-ttl{font-family:'Tenor Sans',serif;font-size:1.3rem;margin-bottom:.35rem;}
-.success-sub{font-size:.78rem;color:var(--muted);line-height:1.6;margin-bottom:.9rem;}
-.success-pts{background:rgba(196,154,74,.12);border:1.5px solid rgba(196,154,74,.25);border-radius:10px;padding:.55rem .88rem;font-size:.78rem;color:var(--gold);font-weight:700;margin-bottom:.9rem;}
+.mo-bg{position:absolute;inset:0;background:rgba(26,15,10,.55);backdrop-filter:blur(4px);}
+.mo-sheet{background:var(--white);border-radius:24px 24px 0 0;padding:1.2rem 1.2rem calc(1.2rem + var(--safe-bot));position:relative;z-index:1;max-height:90vh;overflow-y:auto;}
+.mo-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:0 auto .9rem;}
+.mo-ttl{font-family:'Playfair Display',serif;font-size:1.1rem;margin-bottom:1rem;}
+.mo-close{position:absolute;top:1.1rem;right:1.1rem;background:var(--light);border:none;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.mo-close svg{width:14px;height:14px;stroke:var(--muted);fill:none;stroke-width:2.5;}
+
+/* Branch Modal Items */
+.br-item{background:var(--white);border:1.5px solid var(--border);border-radius:14px;padding:.85rem 1rem;margin-bottom:.5rem;cursor:pointer;transition:all .18s;display:flex;align-items:center;justify-content:space-between;}
+.br-item.on{border-color:var(--rose);}
+.br-item-l{display:flex;align-items:center;gap:.75rem;}
+.br-item-ic{width:38px;height:38px;background:var(--blush);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.br-item-ic svg{width:18px;height:18px;stroke:var(--rose);fill:none;stroke-width:1.8;}
+.br-item-nm{font-weight:600;font-size:.85rem;}
+.br-item-ct{font-size:.64rem;color:var(--muted);margin-top:.1rem;}
+.br-item-chk svg{width:18px;height:18px;stroke:var(--rose);fill:none;stroke-width:2.5;display:none;}
+.br-item.on .br-item-chk svg{display:block;}
+
+/* SP Profile Modal */
+.sp-mo-hdr{display:flex;gap:1rem;align-items:center;margin-bottom:1.1rem;}
+.sp-mo-img{width:70px;height:70px;border-radius:16px;background:var(--blush);display:flex;align-items:center;justify-content:center;font-size:2rem;flex-shrink:0;overflow:hidden;}
+.sp-mo-img img{width:100%;height:100%;object-fit:cover;}
+.sp-mo-nm{font-family:'Playfair Display',serif;font-size:1.1rem;}
+.sp-mo-title{font-size:.71rem;color:var(--muted);margin:.15rem 0 .4rem;}
+.sp-mo-rat{display:flex;align-items:center;gap:.3rem;font-size:.75rem;font-weight:700;}
+.sp-mo-rat svg{width:13px;height:13px;fill:var(--gold);}
+
+/* Notifications Modal */
+.notif-row{display:flex;align-items:center;justify-content:space-between;padding:.75rem 0;border-bottom:1px solid var(--border);}
+.notif-row:last-child{border-bottom:none;}
+.notif-lbl{font-size:.82rem;font-weight:500;}
+.notif-sub{font-size:.64rem;color:var(--muted);margin-top:.1rem;}
+.toggle{position:relative;width:44px;height:24px;cursor:pointer;display:inline-block;}
+.toggle input{opacity:0;width:0;height:0;}
+.tog-sl{position:absolute;inset:0;background:var(--border);border-radius:12px;transition:all .2s;}
+.tog-sl::before{content:'';position:absolute;width:20px;height:20px;left:2px;top:2px;background:#fff;border-radius:50%;transition:all .2s;box-shadow:0 1px 4px rgba(0,0,0,.15);}
+input:checked+.tog-sl{background:var(--rose);}
+input:checked+.tog-sl::before{transform:translateX(20px);}
+
+/* Review */
+.stars-row{display:flex;gap:.4rem;margin-bottom:1rem;}
+.star-btn{background:none;border:none;cursor:pointer;padding:.1rem;}
+.star-btn svg{width:28px;height:28px;stroke:var(--gold);fill:none;stroke-width:1.5;transition:all .15s;}
+.star-btn.on svg{fill:var(--gold);}
+.rev-ta{width:100%;border:1.5px solid var(--border);border-radius:12px;padding:.75rem 1rem;font-family:'Inter',sans-serif;font-size:.83rem;color:var(--deep);outline:none;resize:none;height:90px;transition:border-color .2s;}
+.rev-ta:focus{border-color:var(--rose);}
+
+/* Cart */
+.cart-item{display:flex;align-items:center;gap:.75rem;padding:.75rem 0;border-bottom:1px solid var(--border);}
+.cart-item:last-child{border-bottom:none;}
+.cart-item-ic{font-size:1.6rem;flex-shrink:0;}
+.cart-item-nm{font-weight:600;font-size:.83rem;flex:1;}
+.cart-item-pr{font-family:'Playfair Display',serif;font-size:.95rem;color:var(--rose);}
+.cart-item-rm{background:none;border:none;cursor:pointer;color:var(--muted);font-size:.75rem;padding:.2rem;}
+.cart-total{display:flex;justify-content:space-between;align-items:center;padding:.85rem 0 .6rem;font-weight:700;}
+.cart-total-lbl{font-size:.85rem;}
+.cart-total-val{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--rose);}
+
 /* TOAST */
-.toast{position:fixed;bottom:calc(70px + var(--safe-bot));left:50%;transform:translateX(-50%) translateY(46px);background:var(--deep);color:white;padding:.62rem 1.15rem;border-radius:11px;font-size:.76rem;z-index:999;transition:transform .25s ease,opacity .25s ease;opacity:0;white-space:nowrap;font-weight:500;pointer-events:none;max-width:90vw;overflow:hidden;text-overflow:ellipsis;}
-.toast.on{transform:translateX(-50%) translateY(0);opacity:1;}
+.toast{position:fixed;bottom:calc(var(--nav-h) + var(--safe-bot) + .8rem);left:50%;transform:translateX(-50%) translateY(8px);background:var(--deep);color:#fff;padding:.62rem 1.2rem;border-radius:12px;font-size:.78rem;font-weight:600;z-index:400;pointer-events:none;opacity:0;transition:all .25s;white-space:nowrap;max-width:88vw;text-align:center;}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0);}
 .toast.ok{background:var(--ok);}
 .toast.err{background:var(--err);}
-/* MISC */
-.empty{text-align:center;padding:2.5rem 1rem;color:var(--muted);}
-.empty-ic{font-size:2rem;margin-bottom:.55rem;}
-.star-row{display:flex;gap:.3rem;justify-content:center;margin:.7rem 0;}
-.big-star{font-size:2rem;cursor:pointer;color:#e0d0c0;transition:all .15s;}
-.big-star.on,.big-star:hover{color:var(--gold);transform:scale(1.15);}
-.notif-toggle{display:flex;align-items:center;justify-content:space-between;padding:.7rem 0;border-bottom:1px solid var(--border);}
-.toggle-sw{width:42px;height:24px;border-radius:12px;background:#ddd;position:relative;cursor:pointer;transition:background .2s;flex-shrink:0;}
-.toggle-sw.on{background:var(--rose);}
-.toggle-sw::after{content:'';position:absolute;width:18px;height:18px;border-radius:50%;background:white;top:3px;left:3px;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.2);}
-.toggle-sw.on::after{left:21px;}
-.no-br{text-align:center;padding:2.5rem 1rem;}
-.no-br h3{font-family:'Tenor Sans',serif;font-size:1.2rem;margin-bottom:.5rem;}
-.no-br p{font-size:.8rem;color:var(--muted);line-height:1.65;margin-bottom:1rem;}
-/* CONFETTI */
-.confetti-container{position:fixed;inset:0;pointer-events:none;z-index:950;overflow:hidden;}
-.confetti-piece{position:absolute;width:8px;height:8px;border-radius:2px;animation:fall linear forwards;}
-@keyframes fall{0%{transform:translateY(-20px) rotate(0);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+
+/* PWA Install */
+.inst-ban{background:linear-gradient(135deg,var(--deep),#3a1a10);color:#fff;border-radius:14px;padding:.88rem 1rem;display:flex;align-items:center;gap:.75rem;margin:.6rem 0 0;}
+.inst-txt{flex:1;font-size:.76rem;line-height:1.5;}
+.inst-txt strong{display:block;font-size:.82rem;margin-bottom:.1rem;}
+.btn-inst{background:var(--rose);color:#fff;border:none;border-radius:9px;padding:.4rem .88rem;font-size:.72rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;flex-shrink:0;}
+.btn-dis{background:none;border:none;color:rgba(255,255,255,.4);cursor:pointer;font-size:1rem;}
+
+::-webkit-scrollbar{width:3px;height:3px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
 </style>
 </head>
 <body>
 
+<!-- SPLASH -->
 <div class="scr on" id="s-splash">
-  <div class="sp-logo">O'Nail</div>
-  <div class="sp-sub">Randevu Sistemi</div>
-  <div class="ring"></div>
+  <div class="sp-logo">O'<b>Nail</b></div>
+  <div class="sp-sub">Beauty Studio</div>
+  <div class="sp-ring"></div>
 </div>
 
+<!-- AUTH -->
 <div class="scr" id="s-auth">
   <div class="a-card">
     <div class="a-logo">O'Nail</div>
-    <div class="a-sub">Randevu Sistemi</div>
+    <div class="a-sub" id="a-sub-txt">Randevu Sistemi</div>
     <div class="a-tabs">
       <button class="a-tab on" onclick="aTab('login')">Giriş</button>
       <button class="a-tab" onclick="aTab('register')">Kayıt</button>
       <button class="a-tab" onclick="aTab('phone')">📱 SMS</button>
     </div>
     <div class="a-sec on" id="as-login">
-      <input type="email" class="ai" id="l-em" placeholder="E-posta adresiniz" autocomplete="email">
-      <input type="password" class="ai" id="l-ps" placeholder="Şifreniz" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
-      <button class="a-btn" onclick="doLogin()">Giriş Yap</button>
+      <input type="email" class="ai" id="l-em" placeholder="E-posta" autocomplete="email" onkeydown="if(event.key==='Enter')doLogin()">
+      <input type="password" class="ai" id="l-ps" placeholder="Şifre" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+      <button class="a-btn" id="btn-login" onclick="doLogin()">Giriş Yap</button>
       <div class="a-div"><span>veya</span></div>
       <button class="a-goog" onclick="doGoogle()">
-        <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-        Google ile Giriş
+        <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        <span id="google-txt">Google ile Giriş</span>
       </button>
       <div class="a-err" id="l-err"></div>
-      <p style="text-align:center;margin-top:.85rem;font-size:.7rem;color:#7a6e66">Hesabın yok mu? <span onclick="aTab('register')" style="color:#c9975a;cursor:pointer;font-weight:700">Kayıt Ol</span></p>
+      <div class="a-link" onclick="aTab('register')" id="no-acc-lnk">Hesabın yok mu? <b>Kayıt Ol</b></div>
     </div>
     <div class="a-sec" id="as-register">
       <input type="text" class="ai" id="r-nm" placeholder="Ad Soyad" autocomplete="name">
-      <input type="email" class="ai" id="r-em" placeholder="E-posta adresiniz" autocomplete="email">
-      <div style="display:flex;gap:.38rem;">
-        <input type="text" class="ai" id="r-ph-code" value="+90" style="width:68px;flex-shrink:0;margin-bottom:0">
-        <input type="tel" class="ai" id="r-ph-num" placeholder="5XX XXX XX XX" autocomplete="tel" style="margin-bottom:0;flex:1">
+      <input type="email" class="ai" id="r-em" placeholder="E-posta" autocomplete="email">
+      <div class="a-ph-row">
+        <input type="text" class="ai a-ph-code" id="r-ph-code" value="+90">
+        <input type="tel" class="ai" id="r-ph-num" placeholder="5XX XXX XX XX" autocomplete="tel">
       </div>
-      <div style="height:.6rem"></div>
-      <input type="password" class="ai" id="r-p1" placeholder="Şifre (en az 6 karakter)" autocomplete="new-password">
+      <input type="password" class="ai" id="r-p1" placeholder="Şifre (min 6 karakter)" autocomplete="new-password">
       <input type="password" class="ai" id="r-p2" placeholder="Şifreyi tekrar girin" autocomplete="new-password" onkeydown="if(event.key==='Enter')doRegister()">
-      <button class="a-btn" onclick="doRegister()">Kayıt Ol</button>
+      <button class="a-btn" id="btn-register" onclick="doRegister()">Kayıt Ol</button>
       <div class="a-div"><span>veya</span></div>
       <button class="a-goog" onclick="doGoogle()">
-        <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
         Google ile Kayıt Ol
       </button>
       <div class="a-err" id="r-err"></div>
-      <p style="text-align:center;margin-top:.85rem;font-size:.7rem;color:#7a6e66">Hesabın var mı? <span onclick="aTab('login')" style="color:#c9975a;cursor:pointer;font-weight:700">Giriş Yap</span></p>
+      <div class="a-link" onclick="aTab('login')">Hesabın var mı? <b>Giriş Yap</b></div>
     </div>
     <div class="a-sec" id="as-phone">
       <div id="ph-s1">
-        <p style="color:#b0a89e;font-size:.76rem;margin-bottom:.88rem;line-height:1.6">Telefon numaranıza SMS doğrulama kodu göndereceğiz.</p>
-        <div style="display:flex;gap:.38rem;margin-bottom:.55rem;">
-          <input type="text" class="ai" id="ph-code" value="+90" style="width:68px;flex-shrink:0;margin-bottom:0">
-          <input type="tel" class="ai" id="ph-num" placeholder="5XX XXX XX XX" autocomplete="tel" style="margin-bottom:0;flex:1">
+        <p style="color:rgba(255,255,255,.5);font-size:.76rem;margin-bottom:1rem;line-height:1.6" id="ph-s1-txt">Telefon numaranıza SMS doğrulama kodu göndereceğiz.</p>
+        <div class="a-ph-row">
+          <input type="text" class="ai a-ph-code" id="ph-code" value="+90">
+          <input type="tel" class="ai" id="ph-num" placeholder="5XX XXX XX XX" autocomplete="tel">
         </div>
-        <div id="recap-wrap" style="margin:.45rem 0;min-height:78px;display:flex;align-items:center;justify-content:center"></div>
+        <div id="recap-wrap" style="margin:.5rem 0;min-height:78px;display:flex;align-items:center;justify-content:center"></div>
         <button class="a-btn" onclick="sendOTP()" id="btn-otp-send">Kod Gönder</button>
       </div>
       <div id="ph-s2" style="display:none">
-        <p style="color:#b0a89e;font-size:.76rem;margin-bottom:.88rem">Telefonunuza gelen 6 haneli kodu girin:</p>
+        <p style="color:rgba(255,255,255,.5);font-size:.76rem;margin-bottom:.9rem" id="ph-s2-txt">6 haneli kodu girin:</p>
         <div class="otp-row">
           <input type="tel" class="otp-i" maxlength="1" inputmode="numeric" oninput="otpNext(this,0)" onkeydown="otpBack(event,0)">
           <input type="tel" class="otp-i" maxlength="1" inputmode="numeric" oninput="otpNext(this,1)" onkeydown="otpBack(event,1)">
@@ -354,189 +499,253 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--deep);}
           <input type="tel" class="otp-i" maxlength="1" inputmode="numeric" oninput="otpNext(this,4)" onkeydown="otpBack(event,4)">
           <input type="tel" class="otp-i" maxlength="1" inputmode="numeric" oninput="otpNext(this,5)" onkeydown="otpBack(event,5)">
         </div>
-        <button class="a-btn" onclick="verifyOTP()">Doğrula ve Giriş Yap</button>
-        <button class="a-goog" style="margin-top:.55rem" onclick="resetOTPForm()">← Geri</button>
+        <button class="a-btn" onclick="verifyOTP()" id="btn-otp-verify">Doğrula</button>
+        <button onclick="resetOTPForm()" style="width:100%;background:none;border:none;color:rgba(255,255,255,.35);font-size:.74rem;cursor:pointer;font-family:'Inter',sans-serif;margin-top:.6rem" id="back-email-btn">← E-posta ile Giriş</button>
       </div>
       <div class="a-err" id="ph-err"></div>
-      <button class="a-goog" style="margin-top:.75rem" onclick="aTab('login')">← E-posta ile Giriş</button>
     </div>
   </div>
 </div>
 
+<!-- APP -->
 <div class="scr" id="s-app">
   <div class="app-hdr">
     <div class="app-hdr-in">
       <div class="brand">O'<b>Nail</b></div>
       <div class="hdr-right">
-        <select id="lang-sel" onchange="changeLang(this.value)" style="background:none;border:1px solid var(--border);border-radius:7px;padding:.18rem .35rem;font-size:.68rem;color:var(--muted);font-family:'Nunito',sans-serif;cursor:pointer;outline:none">
+        <select class="lang-sel" id="lang-sel" onchange="changeLang(this.value)">
           <option value="tr">🇹🇷 TR</option>
           <option value="en">🇬🇧 EN</option>
           <option value="ru">🇷🇺 RU</option>
         </select>
-        <div class="pts-badge" id="hdr-pts" style="display:none" onclick="goPage('profile')">⭐ <span id="hdr-pts-val">0</span></div>
+        <button class="hdr-cart" onclick="openMo('mo-cart')">
+          <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+          <div class="cart-dot" id="cart-dot">0</div>
+        </button>
+        <div class="pts-badge" id="hdr-pts" style="display:none" onclick="goPage('profile')">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <span id="hdr-pts-val">0</span>
+        </div>
         <button class="uav" id="uav" onclick="goPage('profile')">?</button>
       </div>
     </div>
   </div>
+  <div id="inst-area" style="padding:.5rem 1rem 0"></div>
 
   <!-- BOOK PAGE -->
   <div class="pg on" id="pg-book">
-    <div id="inst-area"></div>
-    <div id="camp-area"></div>
-    <div id="no-br-page" class="no-br">
-      <div style="font-size:2.8rem;margin-bottom:.85rem">📍</div>
-      <h3>Şube Seçin</h3>
-      <p>Randevu almak için önce size en yakın O'Nail şubesini seçin.</p>
-      <button class="btn-pr" onclick="openBranchModal()">Şube Seç</button>
-    </div>
-    <div id="book-page" style="display:none">
+    <div id="step-sp">
       <div class="br-bar">
-        <div class="br-bar-l">
-          <div class="br-ic" id="bb-ic">🏪</div>
-          <div><div class="br-nm" id="bb-nm">Şube</div><div class="br-ct" id="bb-ct">Şehir</div></div>
+        <div class="br-left">
+          <div class="br-ic"><svg viewBox="0 0 24 24" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+          <div><div class="br-nm" id="br-nm">Şube Seçin</div><div class="br-ct" id="br-ct">Henüz şube seçilmedi</div></div>
         </div>
-        <button class="btn-chg" onclick="openBranchModal()">Değiştir</button>
+        <button class="btn-chg" onclick="openBranchModal()" id="btn-chg-br">Değiştir</button>
       </div>
+      <div id="camp-wrap"></div>
       <div class="hero">
-        <div class="h-badge">✦ Online Randevu</div>
-        <h1>Uzmanınızı seçin,<br><em>anında rezerve edin</em></h1>
-        <p>Dilediğiniz hizmeti kolayca rezerve edin.</p>
+        <div class="h-badge"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><span id="hero-badge">Online Randevu</span></div>
+        <h1 id="hero-h1">Uzmanınızı seçin,<br><em>anında rezerve edin</em></h1>
+        <p id="hero-p">Dilediğiniz hizmeti kolayca rezerve edin.</p>
       </div>
-      <!-- SEARCH -->
       <div class="search-wrap">
-        <span class="search-ic">🔍</span>
-        <input type="search" class="search-in" id="sp-search" placeholder="Uzman veya hizmet ara..." oninput="filterSearch(this.value)">
-        <button class="search-clear" id="search-clear" onclick="clearSearch()">✕</button>
+        <div class="search-ic"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+        <input type="text" class="search-in" id="search-in" placeholder="Uzman veya hizmet ara..." oninput="filterSp(this.value)">
       </div>
-      <div class="cat-row" id="cat-row"></div>
-      <div class="stl">Uzman Seçin</div>
-      <div class="sp-grid" id="sp-grid"></div>
-      <div id="bk-flow"></div>
+      <div class="chips" id="cat-chips"></div>
+      <div class="stl" id="pick-sp-ttl">Uzman Seçin</div>
+      <div id="sp-list"></div>
+    </div>
+    <div id="step-svc" style="display:none">
+      <button class="back-btn" onclick="backTo('sp')"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg><span id="back-sp-lbl">Uzmana Dön</span></button>
+      <div class="sp-info-bar" id="sp-info-bar"></div>
+      <div class="stl" id="pick-svc-ttl">Hizmet Seçin</div>
+      <div class="svc-list" id="svc-list"></div>
+    </div>
+    <div id="step-dt" style="display:none">
+      <button class="back-btn" onclick="backTo('svc')"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg><span id="back-svc-lbl">Hizmete Dön</span></button>
+      <div class="stl" id="pick-dt-ttl">Tarih & Saat Seçin</div>
+      <div class="wk-nav">
+        <button class="wk-btn" onclick="shiftWk(-1)"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <span class="wk-lbl" id="wk-lbl">Bu Hafta</span>
+        <button class="wk-btn" onclick="shiftWk(1)"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
+      </div>
+      <div class="day-row" id="day-row"></div>
+      <div class="time-label" id="time-lbl"></div>
+      <div class="time-grid" id="time-grid"></div>
+    </div>
+    <div id="step-conf" style="display:none">
+      <button class="back-btn" onclick="backTo('dt')"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg><span id="back-dt-lbl">Saate Dön</span></button>
+      <div class="stl" id="conf-ttl">Randevuyu Onayla</div>
+      <div class="conf-card" id="conf-summary"></div>
+      <div class="pts-earn-banner" id="pts-earn-banner" style="display:none">
+        <svg viewBox="0 0 24 24" fill="currentColor" style="color:var(--gold)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <span id="pts-earn-txt" style="font-size:.78rem;font-weight:600;color:var(--gold)"></span>
+      </div>
+      <input type="text" class="inp-field" id="inp-nm" placeholder="Adınız Soyadınız">
+      <input type="tel" class="inp-field" id="inp-ph" placeholder="Telefon numaranız">
+      <button class="btn-confirm" id="btn-cnf" onclick="confirmBk()">✓ Randevuyu Onayla</button>
     </div>
   </div>
 
-  <!-- APPOINTMENTS -->
-  <div class="pg" id="pg-appts">
-    <div class="stl" style="margin-top:.3rem">Randevularım</div>
-    <div id="appts-body"></div>
+  <!-- APPOINTMENTS PAGE -->
+  <div class="pg" id="pg-appts"><div id="appts-body"></div></div>
+
+  <!-- MARKET PAGE -->
+  <div class="pg" id="pg-market">
+    <div class="mkt-banner">
+      <div>
+        <div class="mkt-banner-badge" id="mkt-badge-txt">Yeni Ürünler</div>
+        <h2 id="mkt-h2-txt">O'Nail Market</h2>
+        <p id="mkt-sub-txt">Profesyonel tırnak bakım ürünleri</p>
+      </div>
+      <div class="mkt-banner-deco">💅</div>
+    </div>
+    <div class="mkt-cats" id="mkt-cats"></div>
+    <div class="mkt-grid" id="mkt-grid"></div>
   </div>
 
-  <!-- FAVORITES -->
+  <!-- FAVORITES PAGE -->
   <div class="pg" id="pg-favs">
-    <div class="stl" style="margin-top:.3rem">Favorilerim</div>
+    <div class="stl" id="favs-ttl">Favorilerim</div>
     <div id="favs-body"></div>
   </div>
 
-  <!-- MARKET -->
-  <div class="pg" id="pg-market">
-    <div class="stl" style="margin-top:.3rem">O'Nail Market 🛍️</div>
-    <p style="font-size:.75rem;color:var(--muted);margin-bottom:1rem">Tırnak bakım ürünleri, setler ve daha fazlası</p>
-    <div id="market-body"></div>
-  </div>
-
-  <!-- PROFILE -->
+  <!-- PROFILE PAGE -->
   <div class="pg" id="pg-profile">
     <div class="pc">
       <div class="pav" id="p-av">?</div>
       <div class="pnm" id="p-nm">Kullanıcı</div>
       <div class="pem" id="p-em"></div>
       <div class="pts-card" id="pts-card" style="display:none">
-        <div class="pts-card-row">
-          <div><div class="pts-card-l">Toplam Puan</div><div class="pts-card-v" id="p-pts">0</div></div>
-          <div class="pts-card-lvl" id="p-lvl">Bronze</div>
+        <div class="pts-top">
+          <div><div class="pts-lbl" id="pts-lbl-txt">Toplam Puan</div><div class="pts-val" id="p-pts">0</div></div>
+          <div class="pts-lvl" id="p-lvl">Bronze</div>
         </div>
-        <div style="font-size:.68rem;opacity:.8;margin-top:.4rem" id="p-pts-next"></div>
-        <div style="margin-top:.7rem;font-size:.65rem;opacity:.65;line-height:1.6">🥉 Bronze: 0–499 · 🥈 Silver: 500–1999 · 🥇 Gold: 2000+</div>
-        <div style="margin-top:.9rem;border-top:1px solid rgba(255,255,255,.12);padding-top:.75rem">
-          <div style="font-size:.68rem;opacity:.8;margin-bottom:.5rem">🎟️ İndirim Kuponu Dönüştür</div>
-          <div id="coupon-opts"></div>
+        <div class="pts-bar-wrap"><div class="pts-bar-fill" id="pts-bar" style="width:0%"></div></div>
+        <div class="pts-next-txt" id="p-pts-next"></div>
+        <div class="pts-coupon-sec">
+          <div class="pts-coupon-lbl" id="coupon-lbl-txt">🎟️ Puan ile Kupon Al</div>
+          <div class="coupon-btns" id="coupon-opts"></div>
         </div>
       </div>
-      <button class="btn-out" onclick="doLogout()">Çıkış Yap</button>
+      <button class="btn-out" onclick="doLogout()" id="btn-out">Çıkış Yap</button>
     </div>
     <div class="pstats">
-      <div class="pstat"><div class="pstat-v" id="ps-tot">0</div><div class="pstat-l">Toplam</div></div>
-      <div class="pstat"><div class="pstat-v" id="ps-up">0</div><div class="pstat-l">Yaklaşan</div></div>
-      <div class="pstat"><div class="pstat-v" id="ps-spent">0₺</div><div class="pstat-l">Harcama</div></div>
+      <div class="pstat"><div class="pstat-v" id="ps-tot">0</div><div class="pstat-l" id="ps-tot-lbl">Toplam</div></div>
+      <div class="pstat"><div class="pstat-v" id="ps-up">0</div><div class="pstat-l" id="ps-up-lbl">Yaklaşan</div></div>
+      <div class="pstat"><div class="pstat-v" id="ps-spent">0₺</div><div class="pstat-l" id="ps-spent-lbl">Harcama</div></div>
     </div>
     <div id="my-coupons-wrap" style="display:none;margin-bottom:.8rem">
-      <div class="stl" style="font-size:.82rem;margin-bottom:.6rem">🎟️ Kuponlarım</div>
+      <div class="stl" style="font-size:.88rem;margin-bottom:.6rem" id="my-coupons-ttl">🎟️ Kuponlarım</div>
       <div id="my-coupons"></div>
     </div>
     <div class="pmenu">
-      <div class="pmi" onclick="goPage('appts')"><span>📅 Randevularım</span><span style="color:var(--muted)">›</span></div>
-      <div class="pmi" onclick="goPage('favs')"><span>❤️ Favorilerim</span><span style="color:var(--muted)">›</span></div>
-      <div class="pmi" onclick="openMo('mo-notifs')"><span>🔔 Bildirim Tercihleri</span><span style="color:var(--muted)">›</span></div>
-      <div class="pmi" onclick="openBranchModal()"><span>📍 Şube Değiştir</span><span style="color:var(--muted)">›</span></div>
+      <div class="pmi" onclick="goPage('appts')"><div class="pmi-l"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span id="pmi-appts">Randevularım</span></div><span class="pmi-arr">›</span></div>
+      <div class="pmi" onclick="goPage('favs')"><div class="pmi-l"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg><span id="pmi-favs">Favorilerim</span></div><span class="pmi-arr">›</span></div>
+      <div class="pmi" onclick="openMo('mo-notifs')"><div class="pmi-l"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg><span id="pmi-notifs">Bildirim Tercihleri</span></div><span class="pmi-arr">›</span></div>
+      <div class="pmi" onclick="openBranchModal()"><div class="pmi-l"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg><span id="pmi-branch">Şube Değiştir</span></div><span class="pmi-arr">›</span></div>
     </div>
   </div>
 
+  <!-- NAV -->
   <nav class="bnav">
-    <button class="nb on" id="nb-book" onclick="goPage('book')"><span class="nb-ic">📅</span>Randevu<span class="nb-dot" id="dot-book"></span></button>
-    <button class="nb" id="nb-appts" onclick="goPage('appts')"><span class="nb-ic">🗂</span>Randevularım<span class="nb-dot" id="dot-appts"></span></button>
-    <button class="nb" id="nb-market" onclick="goPage('market')"><span class="nb-ic">🛍️</span>Market</button>
-    <button class="nb" id="nb-favs" onclick="goPage('favs')"><span class="nb-ic">❤️</span>Favoriler<span class="nb-dot" id="dot-favs"></span></button>
-    <button class="nb" id="nb-profile" onclick="goPage('profile')"><span class="nb-ic">👤</span>Profil</button>
+    <button class="nb on" id="nb-book" onclick="goPage('book')">
+      <div class="nb-ic"><svg viewBox="0 0 24 24" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+      <span id="nb-book-lbl">Randevu</span><div class="nb-dot" id="dot-book"></div>
+    </button>
+    <button class="nb" id="nb-appts" onclick="goPage('appts')">
+      <div class="nb-ic"><svg viewBox="0 0 24 24" stroke="currentColor"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+      <span id="nb-appts-lbl">Randevularım</span><div class="nb-dot" id="dot-appts"></div>
+    </button>
+    <button class="nb" id="nb-market" onclick="goPage('market')">
+      <div class="nb-ic"><svg viewBox="0 0 24 24" stroke="currentColor"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>
+      <span id="nb-market-lbl">Market</span>
+    </button>
+    <button class="nb" id="nb-favs" onclick="goPage('favs')">
+      <div class="nb-ic"><svg viewBox="0 0 24 24" stroke="currentColor"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div>
+      <span id="nb-favs-lbl">Favoriler</span><div class="nb-dot" id="dot-favs"></div>
+    </button>
+    <button class="nb" id="nb-profile" onclick="goPage('profile')">
+      <div class="nb-ic"><svg viewBox="0 0 24 24" stroke="currentColor"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+      <span id="nb-profile-lbl">Profil</span>
+    </button>
   </nav>
 </div>
 
+<!-- SUCCESS OVERLAY -->
+<div class="success-ov" id="success-ov">
+  <div class="cf-wrap" id="cf-wrap"></div>
+  <div class="success-circle"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12" stroke-width="2.2"/></svg></div>
+  <div class="success-ttl" id="suc-ttl">Randevunuz Alındı!</div>
+  <div class="success-sub" id="suc-sub"></div>
+  <div class="success-pts" id="suc-pts" style="display:none"></div>
+  <button class="success-btn" onclick="closeSuccess()" id="suc-btn">Harika! 🎉</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
 <!-- MODALS -->
-<div class="mo" id="mo-branch" onclick="if(event.target===this)closeMo('mo-branch')">
-  <div class="mo-sh">
+<div class="mo" id="mo-branch">
+  <div class="mo-bg" onclick="closeMo('mo-branch')"></div>
+  <div class="mo-sheet">
     <div class="mo-handle"></div>
-    <div class="mo-title">📍 Şube Seçin</div>
-    <p id="br-hint" style="font-size:.71rem;color:var(--muted);margin-bottom:.75rem"></p>
+    <div class="mo-ttl" id="branch-mo-ttl">Şube Seçin</div>
+    <button class="mo-close" onclick="closeMo('mo-branch')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     <div id="br-list"></div>
   </div>
 </div>
-
-<div class="mo" id="mo-rate" onclick="if(event.target===this)closeMo('mo-rate')">
-  <div class="mo-sh">
+<div class="mo" id="mo-sp">
+  <div class="mo-bg" onclick="closeMo('mo-sp')"></div>
+  <div class="mo-sheet">
     <div class="mo-handle"></div>
-    <div class="mo-title">⭐ Randevunuzu Değerlendirin</div>
-    <p id="rate-desc" style="font-size:.78rem;color:var(--muted);margin-bottom:.5rem"></p>
-    <div class="star-row" id="star-row">
-      <span class="big-star" onclick="setStar(1)">★</span>
-      <span class="big-star" onclick="setStar(2)">★</span>
-      <span class="big-star" onclick="setStar(3)">★</span>
-      <span class="big-star" onclick="setStar(4)">★</span>
-      <span class="big-star" onclick="setStar(5)">★</span>
+    <button class="mo-close" onclick="closeMo('mo-sp')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    <div id="mo-sp-body"></div>
+  </div>
+</div>
+<div class="mo" id="mo-review">
+  <div class="mo-bg" onclick="closeMo('mo-review')"></div>
+  <div class="mo-sheet">
+    <div class="mo-handle"></div>
+    <div class="mo-ttl" id="review-ttl">Değerlendirin</div>
+    <button class="mo-close" onclick="closeMo('mo-review')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    <input type="hidden" id="rv-appt-id">
+    <input type="hidden" id="rv-sp-fid">
+    <div class="stars-row" id="stars-row"></div>
+    <textarea class="rev-ta" id="rv-text" placeholder="Yorumunuz (isteğe bağlı)..."></textarea>
+    <button class="btn-confirm" style="margin-top:.75rem" onclick="submitRate()" id="send-review-btn">Değerlendirmeyi Gönder</button>
+  </div>
+</div>
+<div class="mo" id="mo-notifs">
+  <div class="mo-bg" onclick="closeMo('mo-notifs')"></div>
+  <div class="mo-sheet">
+    <div class="mo-handle"></div>
+    <div class="mo-ttl" id="notifs-ttl">Bildirim Tercihleri</div>
+    <button class="mo-close" onclick="closeMo('mo-notifs')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    <div class="notif-row">
+      <div><div class="notif-lbl" id="notif-day-lbl">1 gün önce hatırlatma</div><div class="notif-sub" id="notif-day-sub">Randevunuzdan 1 gün önce bildirim</div></div>
+      <label class="toggle"><input type="checkbox" id="notif-day" checked><span class="tog-sl"></span></label>
     </div>
-    <textarea class="fi" id="rate-txt" placeholder="Yorumunuz (isteğe bağlı)..." rows="3" style="resize:none;margin-bottom:.6rem"></textarea>
-    <button class="btn-cnf" onclick="submitRate()">Değerlendirmeyi Gönder</button>
+    <div class="notif-row">
+      <div><div class="notif-lbl" id="notif-hr-lbl">1 saat önce hatırlatma</div><div class="notif-sub" id="notif-hr-sub">Randevunuzdan 1 saat önce bildirim</div></div>
+      <label class="toggle"><input type="checkbox" id="notif-hr" checked><span class="tog-sl"></span></label>
+    </div>
+    <div class="notif-row">
+      <div><div class="notif-lbl" id="notif-promo-lbl">Kampanya bildirimleri</div><div class="notif-sub">Özel teklifler ve indirimler</div></div>
+      <label class="toggle"><input type="checkbox" id="notif-promo"><span class="tog-sl"></span></label>
+    </div>
+    <button class="btn-confirm" style="margin-top:1.2rem" onclick="saveNotifPrefs()" id="save-notifs-btn">Kaydet</button>
   </div>
 </div>
-
-<div class="mo" id="mo-notifs" onclick="if(event.target===this)closeMo('mo-notifs')">
-  <div class="mo-sh">
+<div class="mo" id="mo-cart">
+  <div class="mo-bg" onclick="closeMo('mo-cart')"></div>
+  <div class="mo-sheet">
     <div class="mo-handle"></div>
-    <div class="mo-title">🔔 Bildirim Tercihleri</div>
-    <p style="font-size:.74rem;color:var(--muted);margin-bottom:.85rem;line-height:1.55">Randevularınız için hatırlatma bildirimleri alın.</p>
-    <div class="notif-toggle"><div><span style="font-size:.84rem;font-weight:700;display:block">1 Gün Önce Hatırlatma</span><span style="font-size:.68rem;color:var(--muted)">Randevunuzdan 24 saat önce</span></div><div class="toggle-sw on" id="nt-day" onclick="toggleNotif('day')"></div></div>
-    <div class="notif-toggle"><div><span style="font-size:.84rem;font-weight:700;display:block">1 Saat Önce Hatırlatma</span><span style="font-size:.68rem;color:var(--muted)">Randevunuzdan 1 saat önce</span></div><div class="toggle-sw on" id="nt-hour" onclick="toggleNotif('hour')"></div></div>
-    <div class="notif-toggle" style="border:none"><div><span style="font-size:.84rem;font-weight:700;display:block">Kampanya Bildirimleri</span><span style="font-size:.68rem;color:var(--muted)">İndirim ve fırsatlardan haberdar ol</span></div><div class="toggle-sw" id="nt-promo" onclick="toggleNotif('promo')"></div></div>
-    <button class="btn-cnf" style="margin-top:1rem" onclick="saveNotifPrefs()">Kaydet</button>
+    <div class="mo-ttl" id="cart-ttl">Sepetim</div>
+    <button class="mo-close" onclick="closeMo('mo-cart')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    <div id="cart-body"></div>
   </div>
 </div>
-
-<!-- SP PROFILE MODAL -->
-<div class="mo" id="mo-sp-prof" onclick="if(event.target===this)closeMo('mo-sp-prof')">
-  <div class="mo-sh" id="mo-sp-prof-body"></div>
-</div>
-
-<!-- SUCCESS OVERLAY -->
-<div class="success-overlay" id="success-overlay">
-  <div class="success-card">
-    <div class="success-ic">🎉</div>
-    <div class="success-ttl">Randevunuz Alındı!</div>
-    <div class="success-sub" id="success-sub"></div>
-    <div class="success-pts" id="success-pts" style="display:none"></div>
-    <button class="btn-cnf" onclick="closeSuccess()">Harika!</button>
-  </div>
-</div>
-
-<div class="confetti-container" id="confetti-container"></div>
-<div class="toast" id="toast"></div>
 
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
@@ -552,147 +761,214 @@ const fapp=initializeApp(FB);
 const db=getFirestore(fapp);
 const auth=getAuth(fapp);
 const GP=new GoogleAuthProvider();
-
-// STATE
-let BR=[],SP=[],AP=[],REVIEWS={};
-let CU=null,curBranch=null;
-let selSp=null,selSvc=null,selSlot=null;
-let wkOff=0,activeCat='all',searchQ='';
-let otpConfirm=null,deferInstall=null,apptUnsub=null;
-let ratingAppt=null,ratingStar=0;
-let FAVS=new Set(JSON.parse(localStorage.getItem('onail_favs')||'[]'));
-let NOTIFS=JSON.parse(localStorage.getItem('onail_notifs')||'{"day":true,"hour":true,"promo":false}');
-let USER_PTS=0;
-
-// HELPERS
-const fd=d=>d.toISOString().split('T')[0];
-const t2m=t=>{const[h,m]=t.split(':').map(Number);return h*60+m;};
-const isToday=ds=>ds===fd(new Date());
-const isPastDay=ds=>{const n=new Date();n.setHours(0,0,0,0);return new Date(ds+'T12:00')<n;};
-const isPastSlot=(ds,t)=>new Date(ds+'T'+t)<=new Date();
-const canCancel=a=>new Date(a.date+'T'+a.time)>new Date(Date.now()+5*3600000);
-const distKm=(la1,ln1,la2,ln2)=>{const R=6371,dL=(la2-la1)*Math.PI/180,dl=(ln2-ln1)*Math.PI/180,a=Math.sin(dL/2)**2+Math.cos(la1*Math.PI/180)*Math.cos(la2*Math.PI/180)*Math.sin(dl/2)**2;return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));};
-const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 const PTS_PER_TL=1;
 
-function getPtsLevel(pts){
-  if(pts>=2000)return{name:'Gold 🥇',next:null,color:'#c9a84c'};
-  if(pts>=500)return{name:'Silver 🥈',next:2000,color:'#9a9a9a'};
-  return{name:'Bronze 🥉',next:500,color:'#c4725a'};
+let CU=null,USER_PTS=0,BR=[],SP=[],AP=[],curBranch=null;
+let selSp=null,selSvc=null,selSlot=null,wkOff=0,selDay=null;
+let otpConfirm=null,deferInstall=null;
+let NOTIFS=JSON.parse(localStorage.getItem('onail_notifs')||'{"day":true,"hr":true,"promo":false}');
+let curCat='all',curSearch='';
+let CART=JSON.parse(localStorage.getItem('onail_cart')||'[]');
+let MKT_ITEMS=[],MKT_CAT='all';
+let CUR_LANG=localStorage.getItem('onail_lang')||'tr';
+let revStar=0;
+
+// ── TRANSLATIONS ──
+const TRANS={
+  tr:{
+    appSub:"Randevu Sistemi",loginBtn:"Giriş Yap",regBtn:"Kayıt Ol",googleTxt:"Google ile Giriş",
+    noAcc:"Hesabın yok mu? Kayıt Ol",hasAcc:"Hesabın var mı? Giriş Yap",
+    heroBadge:"Online Randevu",heroH1:"Uzmanınızı seçin,",heroEm:"anında rezerve edin",heroP:"Dilediğiniz hizmeti kolayca rezerve edin.",
+    searchPh:"Uzman veya hizmet ara...",allCats:"Tümü",pickSp:"Uzman Seçin",pickSvc:"Hizmet Seçin",pickDt:"Tarih & Saat Seçin",
+    confTtl:"Randevuyu Onayla",confBtn:"✓ Randevuyu Onayla",
+    bookNav:"Randevu",apptsNav:"Randevularım",marketNav:"Market",favsNav:"Favoriler",profileNav:"Profil",
+    upBadge:"Yaklaşan",doneBadge:"Tamamlandı",cxBadge:"İptal",
+    cancelBtn:"İptal Et",rebookBtn:"Tekrar Al",rateBtn:"Değerlendir",
+    tlBooked:"Alındı",tlConfirmed:"Onaylandı",tlDone:"Tamamlandı",
+    ptsTtl:"Toplam Puan",couponLbl:"🎟️ Puan ile Kupon Al",
+    totalLbl:"Toplam",upLbl:"Yaklaşan",spentLbl:"Harcama",
+    pmiAppts:"Randevularım",pmiFavs:"Favorilerim",pmiNotifs:"Bildirim Tercihleri",pmiBranch:"Şube Değiştir",
+    logoutBtn:"Çıkış Yap",saveBtn:"Kaydet",
+    notifDayLbl:"1 gün önce hatırlatma",notifDaySub:"Randevunuzdan 1 gün önce bildirim",
+    notifHrLbl:"1 saat önce hatırlatma",notifHrSub:"Randevunuzdan 1 saat önce bildirim",notifPromoLbl:"Kampanya bildirimleri",
+    mktBadge:"Yeni Ürünler",mktH2:"O'Nail Market",mktSub:"Profesyonel tırnak bakım ürünleri",
+    addCart:"Sepete Ekle",cartTtl:"Sepetim",cartEmpty:"Sepetiniz boş",cartTotal:"Toplam",
+    branchMo:"Şube Seçin",selectBranch:"Şube Seçin",noBranch:"Henüz şube seçilmedi",changeBtn:"Değiştir",
+    sucTtl:"Randevunuz Alındı!",sucBtn:"Harika! 🎉",
+    emptyApptsTtl:"Henüz randevunuz yok",emptyApptsSub:"İlk randevunuzu hemen alın!",emptyApptsBtn:"Randevu Al",
+    emptyFavsTtl:"Henüz favori uzmanınız yok",emptyFavsSub:"Uzman kartlarındaki kalp ikonuna tıklayın.",
+    ptsEarnTxt:"Bu randevudan kazanacaksınız:",ptsNote:"(Randevu tamamlandığında yüklenecek)",
+    todayLbl:"Bugün",tomorrowLbl:"Yarın",
+    backSp:"Uzmana Dön",backSvc:"Hizmete Dön",backDt:"Saate Dön",
+    reviewTtl:"Değerlendirin",sendReview:"Değerlendirmeyi Gönder",
+    myCouponsTtl:"🎟️ Kuponlarım",notifsTtl:"Bildirim Tercihleri",
+    favsTtl:"Favorilerim",bookFav:"Randevu Al",
+    specialist:"Uzman",service:"Hizmet",date:"Tarih",time:"Saat",branch:"Şube",duration:"Süre",price:"Fiyat",
+  },
+  en:{
+    appSub:"Booking System",loginBtn:"Sign In",regBtn:"Sign Up",googleTxt:"Continue with Google",
+    noAcc:"Don't have an account? Sign Up",hasAcc:"Already have an account? Sign In",
+    heroBadge:"Online Booking",heroH1:"Choose your expert,",heroEm:"book instantly",heroP:"Easily reserve the service you want.",
+    searchPh:"Search expert or service...",allCats:"All",pickSp:"Select Expert",pickSvc:"Select Service",pickDt:"Date & Time",
+    confTtl:"Confirm Booking",confBtn:"✓ Confirm Booking",
+    bookNav:"Book",apptsNav:"My Bookings",marketNav:"Market",favsNav:"Favorites",profileNav:"Profile",
+    upBadge:"Upcoming",doneBadge:"Completed",cxBadge:"Cancelled",
+    cancelBtn:"Cancel",rebookBtn:"Book Again",rateBtn:"Review",
+    tlBooked:"Booked",tlConfirmed:"Confirmed",tlDone:"Completed",
+    ptsTtl:"Total Points",couponLbl:"🎟️ Redeem Coupon",
+    totalLbl:"Total",upLbl:"Upcoming",spentLbl:"Spent",
+    pmiAppts:"My Bookings",pmiFavs:"My Favorites",pmiNotifs:"Notifications",pmiBranch:"Change Branch",
+    logoutBtn:"Sign Out",saveBtn:"Save",
+    notifDayLbl:"1 day reminder",notifDaySub:"Notification 1 day before appointment",
+    notifHrLbl:"1 hour reminder",notifHrSub:"Notification 1 hour before appointment",notifPromoLbl:"Promotions",
+    mktBadge:"New Products",mktH2:"O'Nail Market",mktSub:"Professional nail care products",
+    addCart:"Add to Cart",cartTtl:"My Cart",cartEmpty:"Your cart is empty",cartTotal:"Total",
+    branchMo:"Select Branch",selectBranch:"Select Branch",noBranch:"No branch selected",changeBtn:"Change",
+    sucTtl:"Booking Confirmed!",sucBtn:"Great! 🎉",
+    emptyApptsTtl:"No bookings yet",emptyApptsSub:"Book your first appointment now!",emptyApptsBtn:"Book Now",
+    emptyFavsTtl:"No favorite experts yet",emptyFavsSub:"Tap the heart icon on expert cards.",
+    ptsEarnTxt:"You will earn:",ptsNote:"(Added when appointment is completed)",
+    todayLbl:"Today",tomorrowLbl:"Tomorrow",
+    backSp:"Back to Expert",backSvc:"Back to Service",backDt:"Back to Time",
+    reviewTtl:"Leave a Review",sendReview:"Submit Review",
+    myCouponsTtl:"🎟️ My Coupons",notifsTtl:"Notification Settings",
+    favsTtl:"Favorites",bookFav:"Book",
+    specialist:"Expert",service:"Service",date:"Date",time:"Time",branch:"Branch",duration:"Duration",price:"Price",
+  },
+  ru:{
+    appSub:"Система записи",loginBtn:"Войти",regBtn:"Регистрация",googleTxt:"Войти через Google",
+    noAcc:"Нет аккаунта? Зарегистрироваться",hasAcc:"Уже есть аккаунт? Войти",
+    heroBadge:"Онлайн запись",heroH1:"Выберите мастера,",heroEm:"запишитесь мгновенно",heroP:"Легко запишитесь на нужную услугу.",
+    searchPh:"Поиск мастера или услуги...",allCats:"Все",pickSp:"Выбор мастера",pickSvc:"Выбор услуги",pickDt:"Дата и время",
+    confTtl:"Подтвердить запись",confBtn:"✓ Подтвердить",
+    bookNav:"Запись",apptsNav:"Мои записи",marketNav:"Магазин",favsNav:"Избранное",profileNav:"Профиль",
+    upBadge:"Предстоящие",doneBadge:"Завершено",cxBadge:"Отменено",
+    cancelBtn:"Отмена",rebookBtn:"Записаться снова",rateBtn:"Отзыв",
+    tlBooked:"Записан",tlConfirmed:"Подтверждено",tlDone:"Завершено",
+    ptsTtl:"Баллы",couponLbl:"🎟️ Обменять баллы",
+    totalLbl:"Всего",upLbl:"Предстоящие",spentLbl:"Потрачено",
+    pmiAppts:"Мои записи",pmiFavs:"Избранное",pmiNotifs:"Уведомления",pmiBranch:"Сменить салон",
+    logoutBtn:"Выйти",saveBtn:"Сохранить",
+    notifDayLbl:"Напоминание за 1 день",notifDaySub:"Уведомление за 1 день до записи",
+    notifHrLbl:"Напоминание за 1 час",notifHrSub:"Уведомление за 1 час до записи",notifPromoLbl:"Акции и скидки",
+    mktBadge:"Новинки",mktH2:"O'Nail Магазин",mktSub:"Профессиональные средства для ногтей",
+    addCart:"В корзину",cartTtl:"Корзина",cartEmpty:"Корзина пуста",cartTotal:"Итого",
+    branchMo:"Выбор салона",selectBranch:"Выберите салон",noBranch:"Салон не выбран",changeBtn:"Изменить",
+    sucTtl:"Запись подтверждена!",sucBtn:"Отлично! 🎉",
+    emptyApptsTtl:"Записей пока нет",emptyApptsSub:"Запишитесь прямо сейчас!",emptyApptsBtn:"Записаться",
+    emptyFavsTtl:"Нет избранных мастеров",emptyFavsSub:"Нажмите на сердечко на карточке мастера.",
+    ptsEarnTxt:"Вы заработаете:",ptsNote:"(Начисляется после завершения записи)",
+    todayLbl:"Сегодня",tomorrowLbl:"Завтра",
+    backSp:"К мастеру",backSvc:"К услуге",backDt:"Ко времени",
+    reviewTtl:"Оставить отзыв",sendReview:"Отправить отзыв",
+    myCouponsTtl:"🎟️ Мои купоны",notifsTtl:"Настройки уведомлений",
+    favsTtl:"Избранное",bookFav:"Записаться",
+    specialist:"Мастер",service:"Услуга",date:"Дата",time:"Время",branch:"Салон",duration:"Длительность",price:"Цена",
+  }
+};
+function tx(k){const d=TRANS[CUR_LANG]||TRANS.tr;return d[k]||TRANS.tr[k]||k;}
+
+window.changeLang=function(l){CUR_LANG=l;localStorage.setItem('onail_lang',l);applyLang();};
+function applyLang(){
+  const s=document.getElementById('lang-sel');if(s)s.value=CUR_LANG;
+  const ids={
+    'a-sub-txt':'appSub','btn-login':'loginBtn','btn-register':'regBtn','google-txt':'googleTxt',
+    'no-acc-lnk':'noAcc','hero-badge':'heroBadge','hero-p':'heroP',
+    'pick-sp-ttl':'pickSp','pick-svc-ttl':'pickSvc','pick-dt-ttl':'pickDt','conf-ttl':'confTtl',
+    'nb-book-lbl':'bookNav','nb-appts-lbl':'apptsNav','nb-market-lbl':'marketNav','nb-favs-lbl':'favsNav','nb-profile-lbl':'profileNav',
+    'pts-lbl-txt':'ptsTtl','coupon-lbl-txt':'couponLbl','btn-out':'logoutBtn','save-notifs-btn':'saveBtn',
+    'ps-tot-lbl':'totalLbl','ps-up-lbl':'upLbl','ps-spent-lbl':'spentLbl',
+    'pmi-appts':'pmiAppts','pmi-favs':'pmiFavs','pmi-notifs':'pmiNotifs','pmi-branch':'pmiBranch',
+    'notif-day-lbl':'notifDayLbl','notif-day-sub':'notifDaySub','notif-hr-lbl':'notifHrLbl','notif-hr-sub':'notifHrSub','notif-promo-lbl':'notifPromoLbl',
+    'mkt-badge-txt':'mktBadge','mkt-h2-txt':'mktH2','mkt-sub-txt':'mktSub',
+    'cart-ttl':'cartTtl','branch-mo-ttl':'branchMo','btn-chg-br':'changeBtn',
+    'suc-ttl':'sucTtl','suc-btn':'sucBtn','back-sp-lbl':'backSp','back-svc-lbl':'backSvc','back-dt-lbl':'backDt',
+    'review-ttl':'reviewTtl','send-review-btn':'sendReview','my-coupons-ttl':'myCouponsTtl',
+    'notifs-ttl':'notifsTtl','favs-ttl':'favsTtl',
+  };
+  Object.entries(ids).forEach(([id,key])=>{const e=document.getElementById(id);if(e)e.textContent=tx(key);});
+  const si=document.getElementById('search-in');if(si)si.placeholder=tx('searchPh');
+  const h1=document.getElementById('hero-h1');if(h1)h1.innerHTML=`${tx('heroH1')}<br><em>${tx('heroEm')}</em>`;
+  const brNm=document.getElementById('br-nm');if(brNm&&!curBranch)brNm.textContent=tx('selectBranch');
+  const brCt=document.getElementById('br-ct');if(brCt&&!curBranch)brCt.textContent=tx('noBranch');
+  const btn=document.getElementById('btn-cnf');if(btn&&!btn.disabled)btn.textContent=tx('confBtn');
 }
 
-function isBkd(spFid,ds,t){return AP.some(a=>!a.cancelled&&a.specialistFid===spFid&&a.date===ds&&a.time===t);}
-function isBlk(spFid,ds,t){
-  const sm=t2m(t);
-  for(const a of AP){if(a.cancelled||a.specialistFid!==spFid||a.date!==ds)continue;const s=t2m(a.time),e=s+(a.serviceDuration||30);if(sm>s&&sm<e)return true;}
-  return false;
-}
-function getWkDates(off){
-  const t=new Date();t.setHours(0,0,0,0);
-  const d=t.getDay(),df=d===0?-6:1-d,m=new Date(t);
-  m.setDate(t.getDate()+df+off*7);
-  return Array.from({length:7},(_,i)=>{const x=new Date(m);x.setDate(m.getDate()+i);return x;});
-}
-function genSlots(sp){
-  const s=[];
-  for(let h=sp.hours?.start||9;h<(sp.hours?.end||18);h++){s.push(`${String(h).padStart(2,'0')}:00`);s.push(`${String(h).padStart(2,'0')}:30`);}
-  return s;
-}
-function spAvgRating(spFid){
-  const rvs=Object.values(REVIEWS).filter(r=>r.specialistFid===spFid&&r.rating);
-  if(!rvs.length)return 0;
-  return rvs.reduce((s,r)=>s+r.rating,0)/rvs.length;
-}
-function renderStars(rating,total=5){
-  let h='';
-  for(let i=1;i<=total;i++)h+=`<span class="spc-star ${i<=Math.round(rating)?'on':''}">★</span>`;
-  return h;
-}
-
-function toast(msg,type=''){
+// ── HELPERS ──
+function showScr(id){document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));document.getElementById(id)?.classList.add('on');}
+function showErr(id,msg){const e=document.getElementById(id);if(!e)return;e.textContent=msg;e.style.display='block';}
+function clearErr(id){const e=document.getElementById(id);if(!e)return;e.textContent='';e.style.display='none';}
+let toastTmr;
+window.toast=function(msg,type=''){
   const el=document.getElementById('toast');
-  el.textContent=msg;el.className=`toast on ${type}`;
-  clearTimeout(el._t);el._t=setTimeout(()=>el.className='toast',2900);
-}
-function showErr(id,msg){
-  const el=document.getElementById(id);
-  el.textContent=msg;el.style.display='block';
-  clearTimeout(el._t);el._t=setTimeout(()=>el.style.display='none',4200);
-}
-
-function showScr(id){document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));document.getElementById('s-'+id).classList.add('on');}
-window.goPage=function(name){
-  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
-  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
-  document.getElementById('pg-'+name)?.classList.add('on');
-  document.getElementById('nb-'+name)?.classList.add('on');
-  if(name==='appts')renderAppts();
-  if(name==='profile'){updateStats();renderCoupons();}
-  if(name==='favs')renderFavs();
-  if(name==='market')renderMarket();
+  el.textContent=msg;el.className='toast'+(type?' '+type:'');
+  requestAnimationFrame(()=>el.classList.add('on'));
+  clearTimeout(toastTmr);toastTmr=setTimeout(()=>el.classList.remove('on'),3000);
 };
-window.aTab=function(t){
-  const labels=['login','register','phone'];
-  document.querySelectorAll('.a-tab').forEach((x,i)=>x.classList.toggle('on',labels[i]===t));
-  document.querySelectorAll('.a-sec').forEach(x=>x.classList.remove('on'));
-  document.getElementById('as-'+t)?.classList.add('on');
-};
-window.openMo=id=>document.getElementById(id).classList.add('on');
-window.closeMo=id=>document.getElementById(id).classList.remove('on');
+function t2m(ts){const[h,m]=ts.split(':').map(Number);return h*60+m;}
+function fmtDate(ds){
+  const d=new Date(ds+'T12:00:00');
+  const loc=CUR_LANG==='ru'?'ru-RU':CUR_LANG==='en'?'en-GB':'tr-TR';
+  return d.toLocaleDateString(loc,{weekday:'long',day:'numeric',month:'long'});
+}
+function isPast(ds,ts){return new Date(ds+'T'+ts)<new Date();}
+function canCancel(a){return(new Date(a.date+'T'+a.time)-new Date())>5*3600*1000;}
+window.openMo=function(id){document.getElementById(id)?.classList.add('on');};
+window.closeMo=function(id){document.getElementById(id)?.classList.remove('on');};
 
-// AUTH
+// ── AUTH ──
+window.aTab=function(tab){
+  const tabs=['login','register','phone'];
+  document.querySelectorAll('.a-tab').forEach((el,i)=>el.classList.toggle('on',tabs[i]===tab));
+  document.querySelectorAll('.a-sec').forEach(el=>el.classList.remove('on'));
+  document.getElementById('as-'+tab)?.classList.add('on');
+};
 window.doLogin=async function(){
-  const em=document.getElementById('l-em').value.trim(),ps=document.getElementById('l-ps').value;
-  if(!em||!ps)return showErr('l-err','E-posta ve şifre girin.');
-  const btn=document.querySelector('#as-login .a-btn');if(btn){btn.disabled=true;btn.textContent='Giriş yapılıyor...';}
-  try{
-    await signInWithEmailAndPassword(auth,em,ps);
-  }catch(e){
+  clearErr('l-err');
+  const em=document.getElementById('l-em').value.trim();
+  const ps=document.getElementById('l-ps').value;
+  if(!em||!ps)return showErr('l-err','E-posta ve şifre gerekli.');
+  const btn=document.getElementById('btn-login');btn.disabled=true;btn.textContent='...';
+  try{await signInWithEmailAndPassword(auth,em,ps);}
+  catch(e){
     const M={'auth/invalid-credential':'E-posta veya şifre hatalı.','auth/user-not-found':'Bu e-posta kayıtlı değil.','auth/wrong-password':'Şifre hatalı.','auth/too-many-requests':'Çok fazla deneme. Lütfen bekleyin.','auth/network-request-failed':'İnternet bağlantısını kontrol edin.'};
-    showErr('l-err',M[e.code]||('Hata: '+e.message));
-  }finally{if(btn){btn.disabled=false;btn.textContent='Giriş Yap';}}
+    showErr('l-err',M[e.code]||e.message);
+  }finally{btn.disabled=false;btn.textContent=tx('loginBtn');}
 };
 window.doRegister=async function(){
-  const nm=document.getElementById('r-nm').value.trim(),em=document.getElementById('r-em').value.trim();
-  const p1=document.getElementById('r-p1').value,p2=document.getElementById('r-p2').value;
+  clearErr('r-err');
+  const nm=document.getElementById('r-nm').value.trim();
+  const em=document.getElementById('r-em').value.trim();
   const phCode=(document.getElementById('r-ph-code').value||'+90').trim();
   const phNum=document.getElementById('r-ph-num').value.trim().replace(/\s/g,'');
+  const p1=document.getElementById('r-p1').value;
+  const p2=document.getElementById('r-p2').value;
   if(!nm)return showErr('r-err','Adınızı girin.');
   if(!em)return showErr('r-err','E-posta adresinizi girin.');
   if(!phNum||phNum.length<10)return showErr('r-err','Geçerli bir telefon numarası girin.');
-  if(!p1)return showErr('r-err','Şifre girin.');
-  if(p1.length<6)return showErr('r-err','Şifre en az 6 karakter olmalı.');
+  if(!p1||p1.length<6)return showErr('r-err','Şifre en az 6 karakter olmalı.');
   if(p1!==p2)return showErr('r-err','Şifreler eşleşmiyor.');
   let phone=phNum.startsWith('0')?phNum.slice(1):phNum;
   if(!phone.startsWith('+'))phone=phCode+phone;
-  const btn=document.querySelector('#as-register .a-btn');if(btn){btn.disabled=true;btn.textContent='Kayıt olunuyor...';}
+  const btn=document.getElementById('btn-register');btn.disabled=true;btn.textContent='...';
   try{
     const uc=await createUserWithEmailAndPassword(auth,em,p1);
     await updateProfile(uc.user,{displayName:nm});
-    await setDoc(doc(db,'users',uc.user.uid),{displayName:nm,email:em,phone:phone,points:0,createdAt:new Date().toISOString()},{merge:true});
+    await setDoc(doc(db,'users',uc.user.uid),{displayName:nm,email:em,phone,points:0,createdAt:new Date().toISOString()},{merge:true});
   }catch(e){
-    const M={'auth/email-already-in-use':'Bu e-posta zaten kayıtlı. Giriş yapmayı deneyin.','auth/invalid-email':'Geçersiz e-posta formatı.','auth/weak-password':'Şifre çok zayıf.','auth/network-request-failed':'İnternet bağlantısını kontrol edin.'};
-    showErr('r-err',M[e.code]||('Hata: '+e.message));
-  }finally{if(btn){btn.disabled=false;btn.textContent='Kayıt Ol';}}
+    const M={'auth/email-already-in-use':'Bu e-posta zaten kayıtlı.','auth/invalid-email':'Geçersiz e-posta.','auth/weak-password':'Şifre çok zayıf.'};
+    showErr('r-err',M[e.code]||e.message);
+  }finally{btn.disabled=false;btn.textContent=tx('regBtn');}
 };
 window.doGoogle=async function(){
   try{
-    // Mobile: use redirect; Desktop: try popup first
-    const isMobile=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-    if(isMobile){
-      await signInWithRedirect(auth,GP);
-    }else{
+    const isMob=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    if(isMob){await signInWithRedirect(auth,GP);}
+    else{
       try{await signInWithPopup(auth,GP);}
-      catch(pe){
-        if(pe.code==='auth/popup-blocked'||pe.code==='auth/popup-closed-by-user'){
-          await signInWithRedirect(auth,GP);
-        }else throw pe;
-      }
+      catch(pe){if(pe.code==='auth/popup-blocked'||pe.code==='auth/popup-closed-by-user')await signInWithRedirect(auth,GP);else throw pe;}
     }
-  }catch(e){
-    if(e.code==='auth/popup-closed-by-user')return;
-    showErr('l-err','Google girişi başarısız: '+e.message);
-  }
+  }catch(e){if(e.code!=='auth/popup-closed-by-user')showErr('l-err','Google girişi başarısız: '+e.message);}
 };
 window.doLogout=async function(){await signOut(auth);};
 window.resetOTPForm=function(){
@@ -700,657 +976,669 @@ window.resetOTPForm=function(){
   document.getElementById('ph-s1').style.display='block';
   document.querySelectorAll('.otp-i').forEach(x=>x.value='');
   otpConfirm=null;
-  // Reset recaptcha
   if(window._rcv){try{window._rcv.clear();}catch(_){}window._rcv=null;}
 };
 window.sendOTP=async function(){
-  const codeEl=document.getElementById('ph-code'),numEl=document.getElementById('ph-num');
-  const code=codeEl.value.trim().replace(/\s/g,'');
-  let num=numEl.value.trim().replace(/[\s\-\(\)]/g,'');
-  if(!num)return showErr('ph-err','Telefon numaranızı girin.');
-  // Normalize: remove leading 0, add country code
-  if(num.startsWith('+')){}
-  else if(num.startsWith('00'))num='+'+num.slice(2);
-  else if(num.startsWith('0'))num=code+num.slice(1);
-  else num=code+num;
-  // Validate format
-  if(!/^\+\d{10,15}$/.test(num))return showErr('ph-err','Geçersiz numara. Örnek: 5321234567');
-  const btn=document.getElementById('btn-otp-send');btn.disabled=true;btn.textContent='Gönderiliyor...';
+  const code=document.getElementById('ph-code').value.trim();
+  const num=document.getElementById('ph-num').value.trim().replace(/\s/g,'');
+  if(!num||num.length<10)return showErr('ph-err','Geçerli numara girin.');
+  let phone=num.startsWith('0')?num.slice(1):num;
+  if(!phone.startsWith('+'))phone=code+phone;
+  const btn=document.getElementById('btn-otp-send');btn.disabled=true;btn.textContent='...';
   try{
-    // Always create fresh recaptcha
     if(window._rcv){try{window._rcv.clear();}catch(_){}window._rcv=null;}
-    const rcWrap=document.getElementById('recap-wrap');
-    rcWrap.innerHTML=''; // clear old widget
-    window._rcv=new RecaptchaVerifier(auth,'recap-wrap',{
-      size:'normal',
-      callback:()=>{},
-      'expired-callback':()=>{}
-    });
+    document.getElementById('recap-wrap').innerHTML='';
+    window._rcv=new RecaptchaVerifier(auth,'recap-wrap',{size:'normal',callback:()=>{}});
     await window._rcv.render();
-    otpConfirm=await signInWithPhoneNumber(auth,num,window._rcv);
+    otpConfirm=await signInWithPhoneNumber(auth,phone,window._rcv);
     document.getElementById('ph-s1').style.display='none';
     document.getElementById('ph-s2').style.display='block';
-    document.querySelectorAll('.otp-i')[0]?.focus();
-    toast('Doğrulama kodu gönderildi ✓','ok');
+    clearErr('ph-err');
   }catch(e){
-    const M={'auth/invalid-phone-number':'Geçersiz telefon numarası.','auth/too-many-requests':'Çok fazla deneme. Lütfen bekleyin.','auth/quota-exceeded':'SMS kotası doldu. Daha sonra deneyin.','auth/captcha-check-failed':'Captcha doğrulaması başarısız.','auth/network-request-failed':'İnternet bağlantısını kontrol edin.'};
-    showErr('ph-err',M[e.code]||('Hata: '+e.code));
-    if(window._rcv){try{window._rcv.clear();}catch(_){}window._rcv=null;}
-  }
-  btn.disabled=false;btn.textContent='Kod Gönder';
-};
-window.otpNext=function(el,idx){
-  const v=el.value.replace(/\D/g,'');el.value=v.slice(-1);
-  const inp=document.querySelectorAll('.otp-i');
-  if(v&&idx<5)inp[idx+1]?.focus();
-};
-window.otpBack=function(e,idx){
-  if(e.key==='Backspace'){
-    const inp=document.querySelectorAll('.otp-i');
-    if(!inp[idx].value&&idx>0)inp[idx-1]?.focus();
-  }
+    const M={'auth/invalid-phone-number':'Geçersiz telefon numarası.','auth/too-many-requests':'Çok fazla deneme.','auth/captcha-check-failed':'Captcha hatası.'};
+    showErr('ph-err',M[e.code]||e.message);
+  }finally{btn.disabled=false;btn.textContent='Kod Gönder';}
 };
 window.verifyOTP=async function(){
+  const code=[...document.querySelectorAll('.otp-i')].map(i=>i.value).join('');
+  if(code.length!==6)return showErr('ph-err','6 haneli kodu girin.');
   if(!otpConfirm)return showErr('ph-err','Önce kod gönderin.');
-  const code=[...document.querySelectorAll('.otp-i')].map(x=>x.value).join('');
-  if(code.length<6)return showErr('ph-err','6 haneli kodu eksiksiz girin.');
-  const btn=document.querySelector('#ph-s2 .a-btn');if(btn){btn.disabled=true;btn.textContent='Doğrulanıyor...';}
-  try{
-    await otpConfirm.confirm(code);
-  }catch(e){
-    showErr('ph-err',e.code==='auth/invalid-verification-code'?'Hatalı kod. Tekrar deneyin.':'Doğrulama başarısız.');
-  }finally{if(btn){btn.disabled=false;btn.textContent='Doğrula ve Giriş Yap';}}
+  const btn=document.getElementById('btn-otp-verify');btn.disabled=true;btn.textContent='...';
+  try{await otpConfirm.confirm(code);}
+  catch(e){showErr('ph-err','Kod hatalı veya süresi dolmuş.');}
+  finally{btn.disabled=false;btn.textContent='Doğrula';}
 };
+window.otpNext=function(el,i){
+  el.value=el.value.replace(/\D/g,'');
+  if(el.value&&i<5)document.querySelectorAll('.otp-i')[i+1]?.focus();
+  if([...document.querySelectorAll('.otp-i')].map(x=>x.value).join('').length===6)verifyOTP();
+};
+window.otpBack=function(e,i){if(e.key==='Backspace'&&!e.target.value&&i>0)document.querySelectorAll('.otp-i')[i-1]?.focus();};
 
+// ── AUTH STATE ──
 onAuthStateChanged(auth,async user=>{
+  try{await getRedirectResult(auth);}catch(_){}
   CU=user;
   if(user){
-    updateUserUI();showScr('app');
-    await loadAll();restoreBranch();listenAP();loadUserProfile();
-    if(deferInstall)showInstBanner();
+    showScr('s-app');
+    document.getElementById('uav').textContent=(user.displayName||user.email||'?')[0].toUpperCase();
+    try{const snap=await getDoc(doc(db,'users',user.uid));if(snap.exists())USER_PTS=snap.data().points||0;}catch(_){}
+    updatePtsBadge();
+    if(user.displayName){const n=document.getElementById('inp-nm');if(n&&!n.value)n.value=user.displayName;}
+    const saved=localStorage.getItem('onail_ph');
+    if(saved){const p=document.getElementById('inp-ph');if(p&&!p.value)p.value=saved;}
   }else{
-    // Check if returning from Google redirect
-    try{
-      const result=await getRedirectResult(auth);
-      if(result?.user){return;} // onAuthStateChanged will fire again
-    }catch(e){}
-    showScr('auth');
+    showScr('s-auth');
   }
 });
 
-function updateUserUI(){
-  if(!CU)return;
-  const name=CU.displayName||CU.email||CU.phoneNumber||'K';
-  const ini=name.trim().split(/\s+/).map(n=>n[0]).join('').toUpperCase().slice(0,2);
-  document.getElementById('uav').textContent=ini;
-  document.getElementById('p-av').textContent=ini;
-  document.getElementById('p-nm').textContent=name;
-  document.getElementById('p-em').textContent=CU.email||CU.phoneNumber||'';
-}
+// ── FIRESTORE ──
+onSnapshot(collection(db,'branches'),s=>{
+  BR=s.docs.map(d=>({fid:d.id,...d.data()}));
+  loadBranch();
+});
+onSnapshot(collection(db,'specialists'),s=>{
+  SP=s.docs.map(d=>({fid:d.id,...d.data()}));
+  renderSpList();
+});
+onSnapshot(collection(db,'appointments'),s=>{
+  AP=s.docs.map(d=>({fid:d.id,...d.data()}));
+  updateNavDot();
+  if(document.getElementById('pg-appts').classList.contains('on'))renderAppts();
+});
 
-async function loadAll(){
-  const[bs,ss,rvs]=await Promise.all([
-    getDocs(collection(db,'branches')),
-    getDocs(collection(db,'specialists')),
-    getDocs(collection(db,'reviews'))
-  ]);
-  BR=bs.docs.map(d=>({fid:d.id,...d.data()})).filter(b=>b.active!==false);
-  SP=ss.docs.map(d=>({fid:d.id,...d.data()}));
-  REVIEWS={};rvs.docs.forEach(d=>{REVIEWS[d.id]={fid:d.id,...d.data()};});
-  renderCampaign();
-}
+// ── MARKET ITEMS ──
+const DEFAULT_MKT=[
+  {id:'m1',name:'Tırnak Güçlendirici Serum',nameEn:'Nail Strengthening Serum',nameRu:'Укрепляющая сыворотка',price:249,oldPrice:320,cat:'Bakım',emoji:'💅',desc:'Kırılgan tırnakları güçlendirir, 30ml',badge:'%22 İndirim'},
+  {id:'m2',name:'Nail Art Fırça Seti 10lu',nameEn:'Nail Art Brush Set 10pcs',nameRu:'Набор кистей 10шт',price:189,oldPrice:null,cat:'Araçlar',emoji:'🖌️',desc:'10 farklı fırça, profesyonel kalite'},
+  {id:'m3',name:'Jel Oje Seti 12 Renk',nameEn:'Gel Polish Set 12 Colors',nameRu:'Гель-лак набор 12 цветов',price:420,oldPrice:580,cat:'Oje',emoji:'🎨',desc:'UV/LED uyumlu, uzun kalıcı formül',badge:'%28 İndirim'},
+  {id:'m4',name:'36W LED/UV Kürür Lambası',nameEn:'36W LED/UV Cure Lamp',nameRu:'Лампа LED/UV 36W',price:350,oldPrice:null,cat:'Araçlar',emoji:'💡',desc:'Tüm jel ojelerle uyumlu, hızlı kürür'},
+  {id:'m5',name:'Tırnak Dolgu Kiti',nameEn:'Nail Repair Kit',nameRu:'Набор для восстановления',price:280,oldPrice:350,cat:'Bakım',emoji:'✨',desc:'Çatlak ve kırıklar için profesyonel kit',badge:'%20 İndirim'},
+  {id:'m6',name:'Nemlendirici El Kremi 3lü Set',nameEn:'Moisturizing Hand Cream Set 3pcs',nameRu:'Крем для рук набор 3шт',price:165,oldPrice:null,cat:'Bakım',emoji:'🧴',desc:'Nemlendirici, besleyici, onarıcı'},
+  {id:'m7',name:'Nail Art Sticker Seti',nameEn:'Nail Art Sticker Set',nameRu:'Стикеры для ногтей',price:89,oldPrice:null,cat:'Oje',emoji:'🌸',desc:'300+ tasarım, kolay uygulama'},
+  {id:'m8',name:'Elektrikli Tırnak Törpüsü',nameEn:'Electric Nail File',nameRu:'Электрическая пилка',price:520,oldPrice:650,cat:'Araçlar',emoji:'⚡',desc:'5 hız ayarı, şarj edilebilir',badge:'%20 İndirim'},
+];
+const MKT_CATS_DATA=[
+  {key:'all',emoji:'🏪',labelTr:'Tümü',labelEn:'All',labelRu:'Все'},
+  {key:'Bakım',emoji:'💆',labelTr:'Bakım',labelEn:'Care',labelRu:'Уход'},
+  {key:'Oje',emoji:'💅',labelTr:'Oje',labelEn:'Polish',labelRu:'Лак'},
+  {key:'Araçlar',emoji:'🔧',labelTr:'Araçlar',labelEn:'Tools',labelRu:'Инструменты'},
+];
 
-async function loadUserProfile(){
-  if(!CU)return;
+async function loadMktItems(){
   try{
-    const snap=await getDoc(doc(db,'users',CU.uid));
-    if(snap.exists()){USER_PTS=snap.data().points||0;}
-    updatePtsBadge();
-  }catch(e){}
+    const snap=await getDocs(collection(db,'products'));
+    MKT_ITEMS=snap.empty?DEFAULT_MKT:snap.docs.map(d=>({id:d.id,...d.data()}));
+  }catch(_){MKT_ITEMS=DEFAULT_MKT;}
+  if(document.getElementById('pg-market').classList.contains('on'))renderMarket();
 }
 
-function updatePtsBadge(){
-  const badge=document.getElementById('hdr-pts'),val=document.getElementById('hdr-pts-val');
-  if(badge&&CU){badge.style.display='flex';val.textContent=USER_PTS;}
-}
+// ── PAGES ──
+window.goPage=function(name){
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
+  document.getElementById('pg-'+name)?.classList.add('on');
+  document.getElementById('nb-'+name)?.classList.add('on');
+  if(name==='appts')renderAppts();
+  if(name==='profile'){updateProfile_();renderCoupons();}
+  if(name==='favs')renderFavs();
+  if(name==='market')renderMarket();
+};
 
-function listenAP(){
-  if(apptUnsub)apptUnsub();
-  apptUnsub=onSnapshot(collection(db,'appointments'),snap=>{
-    AP=snap.docs.map(d=>{
-      const a={fid:d.id,...d.data()};
-      if(!a.specialistFid)a.specialistFid=a.spFid||a.specialistId||'';
-      if(!a.customerUid)a.customerUid=a.userId||null;
-      return a;
-    });
-    if(selSp&&selSvc)renderWeek();
-    const cur=document.querySelector('.pg.on')?.id;
-    if(cur==='pg-appts')renderAppts();
-    updateStats();
-    updateApptDot();
-  });
+// ── BRANCH ──
+function loadBranch(){
+  const saved=localStorage.getItem('onail_br');
+  if(saved&&!curBranch){const b=BR.find(x=>x.fid===saved);if(b)setCurBranch(b);}
+  if(!curBranch&&BR.length===1)setCurBranch(BR[0]);
+  renderBrList();
+  renderSpList();
 }
-
-function updateApptDot(){
-  if(!CU)return;
-  const upcoming=AP.filter(a=>a.customerUid===CU.uid&&!a.cancelled&&new Date(a.date+'T'+a.time)>new Date());
-  document.getElementById('dot-appts').classList.toggle('on',upcoming.length>0);
+function setCurBranch(b){
+  curBranch=b;
+  localStorage.setItem('onail_br',b.fid);
+  document.getElementById('br-nm').textContent=b.name;
+  document.getElementById('br-ct').textContent=(b.city||'')+(b.district?' · '+b.district:'');
+  renderSpList();
+  renderCampBanner();
 }
+window.openBranchModal=function(){renderBrList();openMo('mo-branch');};
+function renderBrList(){
+  const el=document.getElementById('br-list');if(!el)return;
+  if(!BR.length){el.innerHTML='<p style="color:var(--muted);text-align:center;padding:1rem">Şube bulunamadı</p>';return;}
+  el.innerHTML=BR.map(b=>`
+    <div class="br-item ${curBranch?.fid===b.fid?'on':''}" onclick="pickBranch('${b.fid}')">
+      <div class="br-item-l">
+        <div class="br-item-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <div><div class="br-item-nm">${b.name}</div><div class="br-item-ct">${b.city||''}${b.district?' · '+b.district:''}</div></div>
+      </div>
+      <div class="br-item-chk"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+    </div>`).join('');
+}
+window.pickBranch=function(fid){const b=BR.find(x=>x.fid===fid);if(b){setCurBranch(b);closeMo('mo-branch');}};
 
-// CAMPAIGN BANNER
-function renderCampaign(){
-  if(localStorage.getItem('onail_camp_dis'))return;
-  const camp=document.getElementById('camp-area');
-  if(!camp)return;
-  // Only show if we have specialists (app has data)
-  if(!SP.length)return;
-  const now=new Date();
-  const isWeekend=now.getDay()===0||now.getDay()===6;
-  if(!isWeekend)return; // only show on weekends
-  camp.innerHTML=`<div class="camp-ban">
-    <div class="camp-ic">🎊</div>
-    <div style="flex:1">
-      <div class="camp-ttl">Hafta Sonu Fırsatı!</div>
-      <div class="camp-txt">Bu hafta sonu randevu alın, bir sonraki ziyaretinizde özel fırsat kazanın.</div>
-    </div>
-    <button class="camp-x" onclick="this.closest('.camp-ban').remove();localStorage.setItem('onail_camp_dis','1')">✕</button>
+// ── CAMPAIGN BANNER ──
+function renderCampBanner(){
+  const el=document.getElementById('camp-wrap');if(!el||!curBranch?.campaign)return;
+  if(localStorage.getItem('onail_camp_'+curBranch.fid))return;
+  el.innerHTML=`<div class="camp-ban">
+    <div class="camp-ic">${curBranch.campaign.emoji||'🎉'}</div>
+    <div><div class="camp-ttl">${curBranch.campaign.title||''}</div><div class="camp-txt">${curBranch.campaign.text||''}</div></div>
+    <button class="camp-x" onclick="this.closest('.camp-ban').parentElement.innerHTML='';localStorage.setItem('onail_camp_${curBranch.fid}','1')">✕</button>
   </div>`;
 }
 
-// BRANCH
-function restoreBranch(){
-  const saved=localStorage.getItem('onail_br');
-  if(saved){const b=BR.find(x=>x.fid===saved);if(b){curBranch=b;activateBranch();return;}}
-  openBranchModal();
-}
-window.openBranchModal=function(){
-  renderBranchList(null,null);
-  if(navigator.geolocation)navigator.geolocation.getCurrentPosition(p=>renderBranchList(p.coords.latitude,p.coords.longitude),()=>{},{timeout:5000});
-  document.getElementById('mo-branch').classList.add('on');
-};
-function renderBranchList(uLat,uLng){
-  let list=[...BR];
-  const hint=document.getElementById('br-hint');
-  if(uLat!=null){list=list.map(b=>({...b,_d:distKm(uLat,uLng,b.lat||0,b.lng||0)})).sort((a,b)=>a._d-b._d);hint.textContent='📡 Konumunuza göre sıralandı';}
-  else hint.textContent='';
-  if(!list.length){document.getElementById('br-list').innerHTML='<div class="empty"><div class="empty-ic">🏪</div><p>Henüz şube eklenmemiş.</p></div>';return;}
-  document.getElementById('br-list').innerHTML=list.map((b,i)=>{
-    const dist=b._d!=null?(b._d<1?(b._d*1000).toFixed(0)+'m':b._d.toFixed(1)+'km')+' · ':'';
-    return`<div class="br-opt ${curBranch?.fid===b.fid?'on':''}" onclick="pickBranch('${b.fid}')">
-      <div class="br-opt-l"><span style="font-size:1.3rem">${b.icon||'🏪'}</span>
-        <div><div class="br-opt-nm">${b.name}</div><div class="br-opt-ct">${dist}${b.city||''}${b.district?' · '+b.district:''}</div>
-        <div class="br-tags">${(b.categories||[]).map(c=>`<span class="br-tag">${c}</span>`).join('')}</div></div>
-      </div>${uLat!=null&&i===0?'<span class="near-bdg">En Yakın</span>':''}
-    </div>`;
-  }).join('');
-}
-window.pickBranch=function(fid){
-  curBranch=BR.find(b=>b.fid===fid)||null;if(!curBranch)return;
-  localStorage.setItem('onail_br',fid);document.getElementById('mo-branch').classList.remove('on');
-  clearFlow();activateBranch();
-};
-function activateBranch(){
-  if(!curBranch)return;
-  document.getElementById('no-br-page').style.display='none';document.getElementById('book-page').style.display='block';
-  document.getElementById('bb-ic').textContent=curBranch.icon||'🏪';
-  document.getElementById('bb-nm').textContent=curBranch.name;
-  document.getElementById('bb-ct').textContent=(curBranch.city||'')+(curBranch.district?' · '+curBranch.district:'');
-  activeCat='all';searchQ='';document.getElementById('sp-search').value='';
-  renderCats();renderSPs();
-}
-
-// SEARCH
-window.filterSearch=function(q){
-  searchQ=q.toLowerCase();
-  document.getElementById('search-clear').style.display=q?'block':'none';
-  renderSPs();
-};
-window.clearSearch=function(){
-  searchQ='';document.getElementById('sp-search').value='';
-  document.getElementById('search-clear').style.display='none';
-  renderSPs();
-};
-
-// CATEGORIES
-function renderCats(){
-  const cats=['all',...new Set(SP.filter(s=>s.branchId===curBranch?.fid).map(s=>s.category).filter(Boolean))];
-  document.getElementById('cat-row').innerHTML=cats.map(c=>`<div class="cat-chip ${activeCat===c?'on':''}" onclick="filterCat('${c}')">${c==='all'?'Tümü':c}</div>`).join('');
-}
-window.filterCat=function(c){activeCat=c;clearFlow();renderCats();renderSPs();};
-
-// SPECIALISTS
-function renderSPs(){
-  if(!curBranch){document.getElementById('sp-grid').innerHTML='';return;}
-  let list=SP.filter(s=>s.branchId===curBranch.fid&&(activeCat==='all'||s.category===activeCat));
-  if(searchQ){
-    list=list.filter(s=>
-      s.name.toLowerCase().includes(searchQ)||
-      (s.title||'').toLowerCase().includes(searchQ)||
-      (s.services||[]).some(sv=>sv.name.toLowerCase().includes(searchQ))
-    );
+// ── SPECIALISTS ──
+function renderSpList(){
+  const el=document.getElementById('sp-list');if(!el)return;
+  const filtered=SP.filter(s=>{
+    if(curBranch&&s.branchId&&s.branchId!==curBranch.fid)return false;
+    if(curCat!=='all'&&!s.services?.some(sv=>sv.category===curCat))return false;
+    if(curSearch){
+      const q=curSearch.toLowerCase();
+      const inName=(s.name||'').toLowerCase().includes(q);
+      const inTitle=(s.title||'').toLowerCase().includes(q);
+      const inSvc=s.services?.some(sv=>(sv.name||'').toLowerCase().includes(q));
+      if(!inName&&!inTitle&&!inSvc)return false;
+    }
+    return true;
+  });
+  // Build category chips
+  const cats=[...new Set(SP.flatMap(s=>s.services?.map(sv=>sv.category)||[]).filter(Boolean))];
+  const chipEl=document.getElementById('cat-chips');
+  if(chipEl){
+    chipEl.innerHTML=[{k:'all',l:tx('allCats')},...cats.map(c=>({k:c,l:c}))].map(c=>
+      `<div class="chip ${curCat===c.k?'on':''}" onclick="setCat('${c.k}')">${c.l}</div>`
+    ).join('');
   }
-  if(!list.length){
-    document.getElementById('sp-grid').innerHTML=`<div style="grid-column:1/-1;color:var(--muted);font-size:.78rem;padding:.5rem;text-align:center">
-      ${searchQ?`"${searchQ}" için sonuç bulunamadı.`:'Bu kategoride uzman bulunamadı.'}
-    </div>`;return;
+  if(!filtered.length){
+    el.innerHTML=`<div class="empty-state"><div class="empty-ic">🔍</div><div class="empty-ttl">${tx('emptyApptsTtl')}</div><div class="empty-sub">${tx('emptyApptsSub')}</div></div>`;
+    return;
   }
-  document.getElementById('sp-grid').innerHTML=list.map(s=>{
-    const avg=spAvgRating(s.fid);
-    const isFav=FAVS.has(s.fid);
-    const rvCount=Object.values(REVIEWS).filter(r=>r.specialistFid===s.fid).length;
-    return`<div class="spc ${selSp?.fid===s.fid?'on':''}" onclick="pickSp('${s.fid}')">
-      <div class="spc-chk">✓</div>
-      <button class="fav-btn" onclick="event.stopPropagation();toggleFav('${s.fid}')">${isFav?'❤️':'🤍'}</button>
-      <div class="spc-av" style="background:${s.color||'#fde8d8'}">${s.photoUrl?`<img src="${s.photoUrl}" alt="${esc(s.name)}">`:(s.avatar||'💅')}</div>
-      <div class="spc-nm">${esc(s.name)}</div>
-      <div class="spc-tl">${esc(s.title||'')}</div>
-      ${avg>0?`<div class="spc-stars">${renderStars(avg)}<span style="font-size:.56rem;color:var(--muted);margin-left:.2rem">${avg.toFixed(1)}${rvCount>0?` (${rvCount})`:''}></span></div>`:''}
-      <div class="spc-tags">${(s.services||[]).slice(0,3).map(sv=>`<span class="spc-tag">${esc(sv.name)}</span>`).join('')}</div>
-      <button class="spc-info-btn" onclick="event.stopPropagation();showSpProfile('${s.fid}')">Profil & Yorumlar</button>
+  const FAVS=getFavs();
+  el.innerHTML='<div class="sp-grid">'+filtered.map(s=>{
+    const avg=getSpRating(s.fid);
+    const isFav=FAVS.includes(s.fid);
+    const imgHtml=s.photoUrl?`<img src="${s.photoUrl}" onerror="this.style.display='none'">`:`<div class="sp-img-ph">${s.emoji||'💅'}</div>`;
+    const tags=(s.services||[]).slice(0,3).map(sv=>`<div class="sp-tag">${sv.name}</div>`).join('');
+    const avail=s.available?`<div class="sp-avail">Bugün müsait</div>`:'';
+    return `<div class="sp-card">
+      <div class="sp-img">${avail}${imgHtml}
+        <button class="sp-fav ${isFav?'on':''}" onclick="toggleFav(event,'${s.fid}')">
+          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+        </button>
+      </div>
+      <div class="sp-body">
+        <div class="sp-name">${s.name}</div>
+        <div class="sp-title">${s.title||''}</div>
+        <div class="sp-tags">${tags}</div>
+        <div class="sp-row">
+          <div class="sp-rating"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>${avg>0?avg.toFixed(1):'—'}</div>
+          <button class="sp-btn" onclick="pickSp('${s.fid}')">${tx('confBtn').replace('✓ ','').split(' ')[0]}</button>
+        </div>
+      </div>
     </div>`;
-  }).join('');
+  }).join('')+'</div>';
 }
-
-// SP PROFILE MODAL
-window.showSpProfile=function(fid){
-  const s=SP.find(x=>x.fid===fid);if(!s)return;
-  const avg=spAvgRating(fid);
-  const rvs=Object.values(REVIEWS).filter(r=>r.specialistFid===fid).sort((a,b)=>(b.createdAt||'').localeCompare(a.createdAt||'')).slice(0,10);
-  const totalAppts=AP.filter(a=>a.specialistFid===fid&&!a.cancelled).length;
-  const body=document.getElementById('mo-sp-prof-body');
-  body.innerHTML=`
-    <div class="mo-handle"></div>
-    <div class="sp-prof-hdr">
-      <div class="sp-prof-av" style="background:${s.color||'#fde8d8'}">${s.photoUrl?`<img src="${esc(s.photoUrl)}" alt="${esc(s.name)}">`:(s.avatar||'💅')}</div>
-      <div>
-        <div class="sp-prof-nm">${esc(s.name)}</div>
-        <div class="sp-prof-tl">${esc(s.title||'')}</div>
-        ${avg>0?`<div style="display:flex;align-items:center;gap:.4rem">${renderStars(avg)}<span style="font-size:.7rem;color:var(--muted)">${avg.toFixed(1)} · ${rvs.length} yorum</span></div>`:'<span style="font-size:.7rem;color:var(--muted)">Henüz değerlendirme yok</span>'}
-        ${totalAppts>0?`<div style="font-size:.68rem;color:var(--muted);margin-top:.18rem">✓ ${totalAppts} tamamlanmış randevu</div>`:''}
-      </div>
-    </div>
-    <div class="mo-title" style="margin-bottom:.55rem">Hizmetler</div>
-    ${(s.services||[]).map(sv=>`<div class="sp-prof-svc">
-      <div><div>${esc(sv.name)}</div><div class="sp-prof-svc-dur">${sv.duration} dakika</div></div>
-      <div class="sp-prof-svc-price">${sv.price}₺</div>
-    </div>`).join('')}
-    <button style="width:100%;background:var(--rose);color:white;border:none;border-radius:12px;padding:.78rem;font-size:.9rem;font-weight:700;font-family:'Nunito',sans-serif;cursor:pointer;margin-top:.8rem;margin-bottom:1.2rem" onclick="closeMo('mo-sp-prof');pickSp('${s.fid}')">Randevu Al →</button>
-    ${rvs.length?`<div class="mo-title" style="margin-bottom:.55rem">Değerlendirmeler</div>
-    ${rvs.map(r=>`<div class="rv-item">
-      <div style="display:flex;align-items:center;justify-content:space-between">
-        <span class="rv-stars-sm">${'★'.repeat(r.rating||0)}${'☆'.repeat(5-(r.rating||0))}</span>
-        <span style="font-size:.62rem;color:var(--muted)">${(r.createdAt||'').substring(0,10)}</span>
-      </div>
-      <div class="rv-cust">${esc(r.customerName||'Anonim')}</div>
-      ${r.comment?`<div class="rv-comment">${esc(r.comment)}</div>`:''}
-    </div>`).join('')}`:''}
-  `;
-  openMo('mo-sp-prof');
+window.setCat=function(k){curCat=k;renderSpList();};
+window.filterSp=function(v){curSearch=v;renderSpList();};
+function getFavs(){return JSON.parse(localStorage.getItem('onail_favs')||'[]');}
+function getSpRating(fid){
+  const reviews=AP.filter(a=>a.specialistFid===fid&&a.rating>0);
+  if(!reviews.length)return 0;
+  return reviews.reduce((s,a)=>s+(a.rating||0),0)/reviews.length;
+}
+window.toggleFav=function(e,fid){
+  e.stopPropagation();
+  const favs=getFavs();
+  const idx=favs.indexOf(fid);
+  if(idx>=0)favs.splice(idx,1);else favs.push(fid);
+  localStorage.setItem('onail_favs',JSON.stringify(favs));
+  const btn=e.currentTarget;btn.classList.toggle('on',favs.includes(fid));
+  const dot=document.getElementById('dot-favs');if(dot)dot.classList.toggle('on',favs.length>0);
 };
 
+// ── BOOKING FLOW ──
+function showStep(id){['step-sp','step-svc','step-dt','step-conf'].forEach(s=>document.getElementById(s).style.display=s===id?'block':'none');}
+window.backTo=function(step){
+  if(step==='sp'){selSp=null;selSvc=null;selSlot=null;showStep('step-sp');}
+  if(step==='svc'){selSvc=null;selSlot=null;showStep('step-svc');}
+  if(step==='dt'){selSlot=null;showStep('step-dt');}
+};
 window.pickSp=function(fid){
-  selSp=SP.find(s=>s.fid===fid)||null;if(!selSp)return;
-  selSvc=null;selSlot=null;wkOff=0;renderSPs();renderFlow();
-  setTimeout(()=>document.getElementById('bk-flow')?.scrollIntoView({behavior:'smooth',block:'nearest'}),80);
+  selSp=SP.find(s=>s.fid===fid);if(!selSp)return;
+  selSvc=null;selSlot=null;
+  const bar=document.getElementById('sp-info-bar');
+  const imgHtml=selSp.photoUrl?`<img src="${selSp.photoUrl}" style="width:100%;height:100%;object-fit:cover">`:`<span style="font-size:1.4rem">${selSp.emoji||'💅'}</span>`;
+  bar.innerHTML=`<div class="sp-info-img">${imgHtml}</div><div><div class="sp-info-name">${selSp.name}</div><div class="sp-info-title">${selSp.title||''}</div></div>`;
+  renderSvcList();showStep('step-svc');
 };
-function clearFlow(){selSp=null;selSvc=null;selSlot=null;wkOff=0;document.getElementById('bk-flow').innerHTML='';renderSPs();}
-window.clearFlow=clearFlow;
-
-// BOOKING FLOW
-function renderFlow(){
-  if(!selSp){document.getElementById('bk-flow').innerHTML='';return;}
-  const earnPts=selSvc?Math.floor((selSvc.price||0)*PTS_PER_TL):0;
-  document.getElementById('bk-flow').innerHTML=`
-    <div class="bk-box">
-      <div class="bk-hd">
-        <div class="bk-hd-nm">${selSp.avatar||''} ${esc(selSp.name)}</div>
-        <button class="bk-x" onclick="clearFlow()">✕</button>
-      </div>
-      <div class="bk-bd">
-        <span class="fl">Hizmet Seçin</span>
-        <div class="svc-opts">${(selSp.services||[]).map(s=>`<div class="svc-opt ${selSvc?.id===s.id?'on':''}" onclick="pickSvc('${s.id}')">
-          <span>${esc(s.name)}</span>
-          <span class="svc-dur">${s.duration}dk · <strong>${s.price}₺</strong></span>
-        </div>`).join('')}</div>
-        <div id="wk-area" style="display:none">
-          <span class="fl">Tarih & Saat</span>
-          <div class="wk-nav">
-            <button class="wk-arr" onclick="chgWk(-1)">‹</button>
-            <span class="wk-lbl" id="wk-lbl"></span>
-            <button class="wk-arr" onclick="chgWk(1)">›</button>
-          </div>
-          <div class="days-scroll"><div class="days-row" id="days-row"></div></div>
-        </div>
-        <div class="cf" id="cf">
-          ${CU?`<div class="u-hint">✓ ${esc(CU.displayName||CU.email||'Giriş yapıldı')}</div>`:''}
-          ${earnPts>0?`<div class="pts-earn">⭐ Bu randevudan <strong>${earnPts} puan</strong> kazanacaksınız!</div>`:''}
-          <span class="fl">İletişim Bilgileri</span>
-          <input type="text" class="fi" id="inp-nm" placeholder="Ad Soyad" value="${esc(CU?.displayName||'')}">
-          <input type="tel" class="fi" id="inp-ph" placeholder="Telefon Numarası" value="${esc(CU?.phoneNumber||localStorage.getItem('onail_ph')||'')}">
-          <button class="btn-cnf" id="btn-cnf" onclick="confirmBk()">✓ Randevuyu Onayla</button>
-        </div>
-      </div>
+function renderSvcList(){
+  const el=document.getElementById('svc-list');if(!el)return;
+  const svcs=selSp?.services||[];
+  if(!svcs.length){el.innerHTML='<p style="color:var(--muted);text-align:center;padding:1rem">Hizmet bulunamadı</p>';return;}
+  el.innerHTML=svcs.map(s=>{
+    const pts=Math.floor((s.price||0)*PTS_PER_TL);
+    return `<div class="svc-item ${selSvc?.id===s.id?'on':''}" onclick="pickSvc('${s.id}')">
+      <div class="svc-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div class="svc-left"><div class="svc-name">${s.name}</div><div class="svc-dur">${s.duration||30} dk</div></div>
+      <div style="text-align:right"><div class="svc-price">${s.price||0}₺</div>${pts>0?`<div class="svc-pts">+${pts} ⭐</div>`:''}</div>
     </div>`;
+  }).join('');
 }
 window.pickSvc=function(id){
-  selSvc=(selSp?.services||[]).find(s=>s.id===id)||null;if(!selSvc)return;
-  selSlot=null;renderFlow();
-  const wa=document.getElementById('wk-area');if(wa)wa.style.display='block';
-  renderWeek();
+  selSvc=selSp.services.find(s=>s.id===id);if(!selSvc)return;
+  selSlot=null;
+  renderSvcList();
+  buildDatePicker();
+  showStep('step-dt');
 };
-window.chgWk=function(dir){
-  const days=getWkDates(wkOff+dir);const today=new Date();today.setHours(0,0,0,0);
-  if(dir===-1&&days[6]<today)return;
-  wkOff+=dir;selSlot=null;const cf=document.getElementById('cf');if(cf)cf.classList.remove('on');renderWeek();
-};
-const DAY=['Pzt','Sal','Çar','Per','Cum','Cmt','Paz'];
-function renderWeek(){
-  if(!selSp||!selSvc)return;
-  const days=getWkDates(wkOff);
-  const lbl=`${days[0].toLocaleDateString('tr-TR',{day:'numeric',month:'short'})} – ${days[6].toLocaleDateString('tr-TR',{day:'numeric',month:'short'})}`;
-  const lblEl=document.getElementById('wk-lbl');if(lblEl)lblEl.textContent=lbl;
-  const slots=genSlots(selSp);const rowEl=document.getElementById('days-row');if(!rowEl)return;
-  rowEl.innerHTML=days.map((d,i)=>{
-    const ds=fd(d);
-    return`<div class="d-col">
-      <div class="d-nm">${DAY[i]}</div>
-      <div class="d-dt ${isToday(ds)?'today':''}">${d.getDate()}</div>
-      <div class="slots">${slots.map(t=>{
-        const pastDay=isPastDay(ds)||(isToday(ds)&&isPastSlot(ds,t));
-        const booked=isBkd(selSp.fid,ds,t);const blocked=!booked&&isBlk(selSp.fid,ds,t);
-        const isSel=selSlot?.date===ds&&selSlot?.time===t;
-        let cls='sl';
-        if(isSel)cls+=' sel';else if(booked)cls+=' bk';else if(blocked)cls+=' blk';else if(pastDay)cls+=' pst';
-        const ok=!booked&&!blocked&&!pastDay;
-        return`<div class="${cls}" ${ok?`onclick="pickSlot('${ds}','${t}')"`:''}>${booked?'✕':t}</div>`;
-      }).join('')}</div></div>`;
+
+// ── DATE/TIME ──
+function buildDatePicker(){
+  const now=new Date();
+  const start=new Date(now);start.setDate(start.getDate()+wkOff*7);
+  start.setDate(start.getDate()-start.getDay()+1);// Mon
+  const days=[];
+  for(let i=0;i<7;i++){const d=new Date(start);d.setDate(d.getDate()+i);days.push(d);}
+  const startFmt=days[0].toLocaleDateString('tr-TR',{day:'numeric',month:'short'});
+  const endFmt=days[6].toLocaleDateString('tr-TR',{day:'numeric',month:'short'});
+  document.getElementById('wk-lbl').textContent=`${startFmt} – ${endFmt}`;
+  if(!selDay||!days.some(d=>d.toISOString().slice(0,10)===selDay)){
+    selDay=days.find(d=>d>=now)?.toISOString().slice(0,10)||days[0].toISOString().slice(0,10);
+  }
+  const dayRow=document.getElementById('day-row');
+  const DAY_NAMES={tr:['Pzt','Sal','Çar','Per','Cum','Cmt','Paz'],en:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],ru:['Пн','Вт','Ср','Чт','Пт','Сб','Вс']};
+  const dnames=DAY_NAMES[CUR_LANG]||DAY_NAMES.tr;
+  dayRow.innerHTML=days.map((d,i)=>{
+    const ds=d.toISOString().slice(0,10);
+    const isToday=ds===now.toISOString().slice(0,10);
+    const isTomorrow=ds===new Date(now.getTime()+86400000).toISOString().slice(0,10);
+    const isPastDay=d<new Date(now.toDateString());
+    return `<div class="day-chip ${selDay===ds?'on':''} ${isToday?'today':''} ${isPastDay?'':'cursor-pointer'}" 
+      onclick="${isPastDay?'':'setDay(\"'+ds+'\")'}" style="${isPastDay?'opacity:.4;cursor:not-allowed':''}">
+      <div class="day-nm">${isToday?(tx('todayLbl').slice(0,3)):isTomorrow?(tx('tomorrowLbl').slice(0,3)):dnames[i]}</div>
+      <div class="day-num">${d.getDate()}</div>
+    </div>`;
+  }).join('');
+  renderTimeGrid();
+}
+window.setDay=function(ds){selDay=ds;selSlot=null;buildDatePicker();};
+window.shiftWk=function(d){wkOff+=d;buildDatePicker();};
+function renderTimeGrid(){
+  const el=document.getElementById('time-grid');const lbl=document.getElementById('time-lbl');
+  if(!el)return;
+  if(!selDay){el.innerHTML='';return;}
+  const d=new Date(selDay+'T12:00:00');
+  const loc=CUR_LANG==='ru'?'ru-RU':CUR_LANG==='en'?'en-GB':'tr-TR';
+  if(lbl)lbl.textContent=d.toLocaleDateString(loc,{weekday:'long',day:'numeric',month:'long'});
+  const sp=selSp;const svc=selSvc;
+  const WH=sp?.workHours||{start:'10:00',end:'19:30'};
+  const times=[];let cur=t2m(WH.start);const end=t2m(WH.end);
+  while(cur+( svc?.duration||30)<=end){const h=Math.floor(cur/60),m=cur%60;times.push(`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`);cur+=30;}
+  const now=new Date();
+  el.innerHTML=times.map(ts=>{
+    const isBusy=isBkd(sp.fid,selDay,ts)||isBlk(sp.fid,selDay,ts);
+    const isNow=new Date(selDay+'T'+ts)<now;
+    const busy=isBusy||isNow;
+    const on=selSlot?.time===ts&&selSlot?.date===selDay;
+    return `<div class="t-chip ${on?'on':''} ${busy?'busy':''}" onclick="${busy?'':'pickTime(\"'+ts+'\")'}">${ts}</div>`;
   }).join('');
 }
-window.pickSlot=function(date,time){
-  selSlot={date,time};renderWeek();
-  const cf=document.getElementById('cf');if(cf)cf.classList.add('on');
-  setTimeout(()=>cf?.scrollIntoView({behavior:'smooth',block:'nearest'}),50);
+function isBkd(fid,ds,t){return AP.some(a=>!a.cancelled&&a.specialistFid===fid&&a.date===ds&&a.time===t);}
+function isBlk(fid,ds,t){
+  const sm=t2m(t);
+  for(const a of AP){if(a.cancelled||a.specialistFid!==fid||a.date!==ds)continue;const s=t2m(a.time),e=s+(a.serviceDuration||30);if(sm>s&&sm<e)return true;}
+  return false;
+}
+window.pickTime=function(ts){
+  selSlot={date:selDay,time:ts};
+  renderTimeGrid();
+  buildConfirmSummary();
+  showStep('step-conf');
 };
+function buildConfirmSummary(){
+  const el=document.getElementById('conf-summary');if(!el)return;
+  const d=new Date(selSlot.date+'T'+selSlot.time);
+  const loc=CUR_LANG==='ru'?'ru-RU':CUR_LANG==='en'?'en-GB':'tr-TR';
+  const dateStr=d.toLocaleDateString(loc,{weekday:'long',day:'numeric',month:'long'});
+  const pts=Math.floor((selSvc.price||0)*PTS_PER_TL);
+  el.innerHTML=`
+    <div class="conf-row"><span class="conf-lbl">${tx('specialist')}</span><span class="conf-val">${selSp.name}</span></div>
+    <div class="conf-row"><span class="conf-lbl">${tx('service')}</span><span class="conf-val">${selSvc.name}</span></div>
+    <div class="conf-row"><span class="conf-lbl">${tx('date')}</span><span class="conf-val">${dateStr}</span></div>
+    <div class="conf-row"><span class="conf-lbl">${tx('time')}</span><span class="conf-val">${selSlot.time}</span></div>
+    <div class="conf-row"><span class="conf-lbl">${tx('duration')}</span><span class="conf-val">${selSvc.duration||30} dk</span></div>
+    <div class="conf-row"><span class="conf-lbl">${tx('price')}</span><span class="conf-val" style="color:var(--rose);font-family:'Playfair Display',serif">${selSvc.price||0}₺</span></div>`;
+  const banner=document.getElementById('pts-earn-banner');
+  const ptsTxt=document.getElementById('pts-earn-txt');
+  if(pts>0&&CU){banner.style.display='flex';ptsTxt.textContent=`${tx('ptsEarnTxt')} +${pts} ⭐ ${tx('ptsNote')}`;}
+  else{banner.style.display='none';}
+  document.getElementById('btn-cnf').textContent=tx('confBtn');
+}
+
+// ── CONFIRM BOOKING ──
 window.confirmBk=async function(){
   const name=(document.getElementById('inp-nm')?.value||'').trim();
   const phone=(document.getElementById('inp-ph')?.value||'').trim();
   if(!name)return toast('Adınızı girin.','err');
   if(!phone)return toast('Telefon numaranızı girin.','err');
-  if(!selSlot)return toast('Bir saat seçin.','err');
-  if(!curBranch)return toast('Şube seçilmedi.','err');
-  // Müşteri çakışma kontrolü
-  const custId=CU?.uid||phone;
-  const slotM=t2m(selSlot.time);
-  const slotEnd=slotM+(selSvc.duration||30);
+  if(!selSlot)return toast('Saat seçin.','err');
+  // Çakışma kontrolü
+  const slotM=t2m(selSlot.time);const slotEnd=slotM+(selSvc.duration||30);
   const conflict=AP.find(a=>{
     if(a.cancelled||a.date!==selSlot.date)return false;
-    const isOwn=CU?(a.customerUid===CU.uid):(a.customerPhone===phone);
-    if(!isOwn)return false;
+    const own=CU?(a.customerUid===CU.uid):(a.customerPhone===phone);
+    if(!own)return false;
     const aS=t2m(a.time),aE=aS+(a.serviceDuration||30);
     return slotM<aE&&slotEnd>aS;
   });
-  if(conflict)return toast(`⚠️ ${selSlot.time} saatinde zaten "${conflict.serviceName}" randevunuz var!`,'err');
-  const btn=document.getElementById('btn-cnf');btn.disabled=true;btn.textContent='Kaydediliyor...';
+  if(conflict)return toast(`⚠️ ${selSlot.time}'da "${conflict.serviceName}" randevunuz var!`,'err');
+  const btn=document.getElementById('btn-cnf');btn.disabled=true;btn.textContent='...';
   try{
     const earnPts=Math.floor((selSvc.price||0)*PTS_PER_TL);
     await addDoc(collection(db,'appointments'),{
-      branchId:curBranch.fid,branchName:curBranch.name,
+      branchId:curBranch?.fid||null,branchName:curBranch?.name||'',
       specialistFid:selSp.fid,specialistName:selSp.name,
-      serviceId:selSvc.id,serviceName:selSvc.name,servicePrice:selSvc.price,serviceDuration:selSvc.duration,
+      serviceId:selSvc.id,serviceName:selSvc.name,servicePrice:selSvc.price,serviceDuration:selSvc.duration||30,
       date:selSlot.date,time:selSlot.time,
       customerName:name,customerPhone:phone,customerUid:CU?.uid||null,
       bookedAt:new Date().toISOString(),cancelled:false,completed:false,
       pointsEarned:earnPts,pointsAwarded:false,rated:false
     });
-    // PUAN: Sadece randevu tamamlandığında admin onaylamasıyla verilir
-    // Şimdi sadece "kazanacaksınız" bilgisi gösteriliyor
     localStorage.setItem('onail_ph',phone);
     showSuccess(name,earnPts);
     clearFlow();
-  }catch(e){toast('Hata: '+e.message,'err');btn.disabled=false;btn.textContent='✓ Randevuyu Onayla';}
+  }catch(e){toast('Hata: '+e.message,'err');btn.disabled=false;btn.textContent=tx('confBtn');}
 };
+function clearFlow(){selSp=null;selSvc=null;selSlot=null;wkOff=0;showStep('step-sp');}
 
+// ── SUCCESS ──
 function showSuccess(name,pts){
   const d=new Date(selSlot.date+'T'+selSlot.time);
-  const dateStr=d.toLocaleDateString('tr-TR',{weekday:'long',day:'numeric',month:'long'});
-  document.getElementById('success-sub').textContent=`${selSp.name} · ${selSvc.name} · ${dateStr} saat ${selSlot.time}`;
-  const ptsEl=document.getElementById('success-pts');
-  if(pts>0){ptsEl.textContent=`+${pts} ⭐ puan kazandınız! Toplam: ${USER_PTS}`;ptsEl.style.display='block';}
+  const loc=CUR_LANG==='ru'?'ru-RU':CUR_LANG==='en'?'en-GB':'tr-TR';
+  const dateStr=d.toLocaleDateString(loc,{weekday:'long',day:'numeric',month:'long'});
+  document.getElementById('suc-sub').textContent=`${selSp.name} · ${selSvc.name} · ${dateStr} ${selSlot.time}`;
+  const ptsEl=document.getElementById('suc-pts');
+  if(pts>0){ptsEl.textContent=`+${pts} ⭐ ${tx('ptsEarnTxt')} ${tx('ptsNote')}`;ptsEl.style.display='block';}
   else ptsEl.style.display='none';
-  document.getElementById('success-overlay').classList.add('on');
-  launchConfetti();
+  document.getElementById('success-ov').classList.add('on');
+  spawnConfetti();
 }
-window.closeSuccess=function(){
-  document.getElementById('success-overlay').classList.remove('on');
-  goPage('appts');
-};
-
-function launchConfetti(){
-  const c=document.getElementById('confetti-container');c.innerHTML='';
-  const colors=['#c4725a','#c49a4a','#6a9e7a','#7a6e9a','#c9975a'];
-  for(let i=0;i<50;i++){
-    const p=document.createElement('div');p.className='confetti-piece';
-    p.style.cssText=`left:${Math.random()*100}%;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${.8+Math.random()*1.5}s;animation-delay:${Math.random()*.5}s;transform:rotate(${Math.random()*360}deg);width:${6+Math.random()*8}px;height:${6+Math.random()*8}px;`;
-    c.appendChild(p);
+window.closeSuccess=function(){document.getElementById('success-ov').classList.remove('on');goPage('appts');};
+function spawnConfetti(){
+  const wrap=document.getElementById('cf-wrap');wrap.innerHTML='';
+  const cols=['#c4725a','#c49a3a','#4a9e6a','#6ab8e8','#e87aa4','#f0c040'];
+  for(let i=0;i<60;i++){
+    const el=document.createElement('div');el.className='cf';
+    el.style.cssText=`left:${Math.random()*100}%;background:${cols[Math.floor(Math.random()*cols.length)]};animation-duration:${2+Math.random()*2}s;animation-delay:${Math.random()*.8}s;width:${6+Math.random()*6}px;height:${6+Math.random()*6}px;`;
+    wrap.appendChild(el);
   }
-  setTimeout(()=>c.innerHTML='',3000);
+  setTimeout(()=>wrap.innerHTML='',4000);
 }
 
-// REBOOK
-window.reBook=function(apptFid){
-  const a=AP.find(x=>x.fid===apptFid);if(!a)return;
-  const sp=SP.find(s=>s.fid===a.specialistFid);if(!sp)return toast('Uzman artık mevcut değil.','err');
-  const br=BR.find(b=>b.fid===a.branchId);
-  if(br&&curBranch?.fid!==br.fid){curBranch=br;activateBranch();}
-  goPage('book');
-  setTimeout(()=>pickSp(sp.fid),300);
-  toast('Uzman seçildi, saat seçin','ok');
-};
-
-// FAVORITES
-window.toggleFav=function(spFid){
-  const wasIn=FAVS.has(spFid);
-  if(wasIn)FAVS.delete(spFid);else FAVS.add(spFid);
-  localStorage.setItem('onail_favs',JSON.stringify([...FAVS]));
-  renderSPs();
-  toast(!wasIn?'Favorilere eklendi ❤️':'Favorilerden çıkarıldı','ok');
-};
-function renderFavs(){
-  const el=document.getElementById('favs-body');
-  if(!FAVS.size){el.innerHTML='<div class="empty"><div class="empty-ic">❤️</div><p>Henüz favori uzmanınız yok.<br>Uzman kartındaki ❤️ ile ekleyin.</p></div>';return;}
-  const favSPs=SP.filter(s=>FAVS.has(s.fid));
-  if(!favSPs.length){el.innerHTML='<div class="empty"><div class="empty-ic">❤️</div><p>Favori uzmanlarınız yüklenemiyor.</p></div>';return;}
-  el.innerHTML=favSPs.map(s=>{
-    const avg=spAvgRating(s.fid);
-    return`<div class="fav-card" onclick="goFavSp('${s.fid}')">
-      <div class="fav-av" style="background:${s.color||'#fde8d8'}">${s.photoUrl?`<img src="${esc(s.photoUrl)}" alt="${esc(s.name)}">`:(s.avatar||'💅')}</div>
-      <div class="fav-info">
-        <div class="fav-nm">${esc(s.name)}</div>
-        <div class="fav-tl">${esc(s.title||'')} · ${s.services?.length||0} hizmet</div>
-        ${avg>0?`<div class="spc-stars" style="margin-top:.15rem">${renderStars(avg)}<span style="font-size:.58rem;color:var(--muted);margin-left:.2rem">${avg.toFixed(1)}</span></div>`:''}
-      </div>
-      <span style="color:var(--muted)">›</span>
-    </div>`;
-  }).join('');
-}
-window.goFavSp=function(fid){
-  const sp=SP.find(s=>s.fid===fid);if(!sp)return;
-  const br=BR.find(b=>b.fid===sp.branchId);
-  if(br&&curBranch?.fid!==br.fid){curBranch=br;activateBranch();}
-  goPage('book');setTimeout(()=>pickSp(fid),300);
-};
-
-// RATINGS
-window.openRate=function(apptFid){
-  const a=AP.find(x=>x.fid===apptFid);if(!a)return;
-  ratingAppt=a;ratingStar=0;
-  document.getElementById('rate-desc').textContent=`${a.serviceName} · ${a.specialistName}`;
-  document.querySelectorAll('.big-star').forEach(s=>s.classList.remove('on'));
-  document.getElementById('rate-txt').value='';
-  openMo('mo-rate');
-};
-window.setStar=function(n){
-  ratingStar=n;
-  document.querySelectorAll('.big-star').forEach((s,i)=>s.classList.toggle('on',i<n));
-};
-window.submitRate=async function(){
-  if(!ratingStar)return toast('Lütfen bir puan seçin.','err');
-  const txt=document.getElementById('rate-txt').value.trim();
-  try{
-    await addDoc(collection(db,'reviews'),{
-      appointmentFid:ratingAppt.fid,specialistFid:ratingAppt.specialistFid,
-      specialistName:ratingAppt.specialistName,branchId:ratingAppt.branchId,
-      customerUid:CU?.uid||null,customerName:ratingAppt.customerName,
-      rating:ratingStar,comment:txt,createdAt:new Date().toISOString()
-    });
-    await updateDoc(doc(db,'appointments',ratingAppt.fid),{rated:true});
-    // Reload reviews
-    const rvs=await getDocs(collection(db,'reviews'));
-    REVIEWS={};rvs.docs.forEach(d=>{REVIEWS[d.id]={fid:d.id,...d.data()};});
-    renderSPs();
-    toast('Değerlendirmeniz için teşekkürler! ⭐','ok');
-    closeMo('mo-rate');
-  }catch(e){toast('Hata: '+e.message,'err');}
-};
-
-// NOTIFICATIONS
-window.toggleNotif=function(key){
-  NOTIFS[key]=!NOTIFS[key];
-  document.getElementById('nt-'+key).classList.toggle('on',NOTIFS[key]);
-};
-window.saveNotifPrefs=function(){
-  localStorage.setItem('onail_notifs',JSON.stringify(NOTIFS));
-  toast('Bildirim tercihleri kaydedildi ✓','ok');closeMo('mo-notifs');
-  if((NOTIFS.day||NOTIFS.hour)&&'Notification' in window&&Notification.permission==='default'){
-    Notification.requestPermission();
-  }
-};
-Object.entries(NOTIFS).forEach(([k,v])=>{document.getElementById('nt-'+k)?.classList.toggle('on',v);});
-
-// MY APPOINTMENTS
+// ── APPOINTMENTS ──
 function renderAppts(){
-  const el=document.getElementById('appts-body');
+  const el=document.getElementById('appts-body');if(!el)return;
   if(!CU){
     const saved=localStorage.getItem('onail_ph');
-    el.innerHTML=`<p style="font-size:.76rem;color:var(--muted);margin-bottom:.75rem">Telefon numaranızla randevularınızı görüntüleyin:</p>
-      <div class="ph-lookup">
-        <input type="tel" class="fi" id="lu-ph" placeholder="05xx xxx xx xx" style="flex:1;max-width:220px;margin-bottom:0" value="${saved||''}">
-        <button onclick="lookupPhone()" style="background:var(--deep);color:white;border:none;border-radius:10px;padding:.56rem .88rem;font-size:.8rem;font-family:'Nunito',sans-serif;cursor:pointer;flex-shrink:0">Göster</button>
-      </div><div id="guest-appts"></div>`;
-    if(saved)renderApptCards(AP.filter(a=>a.customerPhone===saved),'guest-appts');
+    el.innerHTML=`<div style="text-align:center;padding:2rem 1rem">
+      <p style="color:var(--muted);font-size:.82rem;margin-bottom:1rem">Randevularınızı görmek için giriş yapın veya telefon numaranızı girin.</p>
+      <input id="guest-ph" type="tel" class="inp-field" placeholder="Telefon numaranız" value="${saved||''}">
+      <button class="btn-confirm" onclick="loadGuestAppts()" style="margin-top:.5rem">Randevuları Göster</button>
+    </div><div id="guest-appts-body"></div>`;
+    if(saved)loadGuestAppts();
     return;
   }
   const mine=AP.filter(a=>a.customerUid===CU.uid);
-  if(!mine.length){el.innerHTML='<div class="empty"><div class="empty-ic">📅</div><p>Henüz randevunuz yok.<br>İlk randevunuzu alın!</p><button class="btn-pr" onclick="goPage(\'book\')" style="margin-top:.5rem;display:inline-block">Randevu Al</button></div>';return;}
-  el.innerHTML='<div id="my-appts-inner"></div>';
-  renderApptCards(mine,'my-appts-inner');
-}
-window.lookupPhone=function(){
-  const ph=(document.getElementById('lu-ph')?.value||'').trim();
-  if(!ph)return toast('Telefon numaranızı girin.','err');
-  localStorage.setItem('onail_ph',ph);
-  renderApptCards(AP.filter(a=>a.customerPhone===ph),'guest-appts');
-};
-function renderApptCards(list,containerId){
-  const el=document.getElementById(containerId);if(!el)return;
+  if(!mine.length){
+    el.innerHTML=`<div class="empty-state"><div class="empty-ic">📅</div><div class="empty-ttl">${tx('emptyApptsTtl')}</div><div class="empty-sub">${tx('emptyApptsSub')}</div><button class="empty-btn" onclick="goPage('book')">${tx('emptyApptsBtn')}</button></div>`;
+    return;
+  }
   const now=new Date();
-  const up=list.filter(a=>!a.cancelled&&new Date(a.date+'T'+a.time)>now).sort((a,b)=>new Date(a.date+'T'+a.time)-new Date(b.date+'T'+b.time));
-  const pa=list.filter(a=>!a.cancelled&&new Date(a.date+'T'+a.time)<=now).sort((a,b)=>new Date(b.date+'T'+b.time)-new Date(a.date+'T'+a.time)).slice(0,8);
-  const ca=list.filter(a=>a.cancelled).slice(0,3);
-  if(!up.length&&!pa.length&&!ca.length){el.innerHTML='<div class="empty"><div class="empty-ic">📅</div><p>Randevu bulunamadı.</p></div>';return;}
-  let h='';let isFirst=true;
-  const sec=(title,items,isPast,isCnl)=>{
-    h+=`<div class="stl" style="margin-top:${isFirst?'0':'1.1rem'}">${title}</div>`;isFirst=false;
-    items.forEach(a=>{
-      const d=new Date(a.date+'T'+a.time);
-      const disp=d.toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric'});
-      const ok=canCancel(a);
-      const canRate=isPast&&!isCnl&&!a.rated&&CU;
-      // Days until appointment
-      const daysUntil=!isPast&&!isCnl?Math.ceil((d-now)/86400000):null;
-      h+=`<div class="ac" style="${isCnl?'opacity:.5':''}">
-        <div class="ac-row">
-          <div style="display:flex;gap:.52rem;align-items:flex-start">
-            <div class="ac-dot ${isPast||isCnl?'past':''}"></div>
-            <div>
-              <div class="ac-nm">${esc(a.serviceName)}</div>
-              <div class="ac-dt">${esc(a.branchName||'')}${a.branchName?'<br>':''}${esc(a.specialistName||'')} · ${a.servicePrice||0}₺
-                ${a.pointsEarned?` · <span style="color:var(--gold)">+${a.pointsEarned}⭐</span>`:''}
-                ${isCnl?'<br><span style="color:var(--err)">İptal edildi</span>':''}
-                ${a.rated?'<br><span style="color:var(--gold);font-size:.65rem">✓ Değerlendirildi</span>':''}
-              </div>
-              ${daysUntil===0?'<span style="font-size:.65rem;color:var(--ok);font-weight:700">● Bugün!</span>':daysUntil===1?'<span style="font-size:.65rem;color:var(--rose);font-weight:700">● Yarın</span>':daysUntil>1?`<span style="font-size:.65rem;color:var(--muted)">${daysUntil} gün kaldı</span>`:''}
-            </div>
-          </div>
-          <div class="ac-tc"><div class="ac-tm">${a.time}</div><div class="ac-d">${disp}</div></div>
-        </div>
-        <div class="ac-actions">
-          ${!isPast&&!isCnl?`<button class="btn-cx" onclick="doCnl('${a.fid}')" ${!ok?'disabled':''}>${ok?'İptal Et':'İptal Edilemez'}</button>`:''}
-          ${isPast&&!isCnl?`<button class="btn-rebook" onclick="reBook('${a.fid}')">🔄 Tekrar Al</button>`:''}
-          ${canRate?`<button class="btn-rate" onclick="openRate('${a.fid}')">⭐ Değerlendir</button>`:''}
-        </div>
-        ${!isPast&&!isCnl&&!ok?'<span class="cx-note">⚠️ Randevuya 5 saatten az kaldığı için iptal edilemez</span>':''}
-      </div>`;
-    });
-  };
-  if(up.length)sec('Yaklaşan Randevular',up,false,false);
-  if(pa.length)sec('Geçmiş Randevular',pa,true,false);
-  if(ca.length)sec('İptal Edilenler',ca,false,true);
-  el.innerHTML=h;
+  const upcoming=mine.filter(a=>!a.cancelled&&new Date(a.date+'T'+a.time)>=now).sort((a,b)=>a.date+a.time<b.date+b.time?-1:1);
+  const past=mine.filter(a=>a.cancelled||new Date(a.date+'T'+a.time)<now).sort((a,b)=>a.date+a.time>b.date+b.time?-1:1);
+  let html='';
+  if(upcoming.length){html+=`<div class="sec-ttl">${tx('upBadge')}</div>`;html+=upcoming.map(a=>apptCard(a)).join('');}
+  if(past.length){html+=`<div class="sec-ttl" style="margin-top:.5rem">${tx('doneBadge')} / ${tx('cxBadge')}</div>`;html+=past.slice(0,10).map(a=>apptCard(a)).join('');}
+  el.innerHTML=html;
+}
+window.loadGuestAppts=function(){
+  const ph=(document.getElementById('guest-ph')?.value||'').trim();
+  if(!ph)return;
+  localStorage.setItem('onail_ph',ph);
+  const mine=AP.filter(a=>a.customerPhone===ph);
+  const el=document.getElementById('guest-appts-body');if(!el)return;
+  if(!mine.length){el.innerHTML='<p style="text-align:center;color:var(--muted);padding:1rem;font-size:.82rem">Bu numaraya ait randevu bulunamadı.</p>';return;}
+  el.innerHTML=mine.sort((a,b)=>a.date+a.time>b.date+b.time?-1:1).slice(0,10).map(a=>apptCard(a)).join('');
+};
+function apptCard(a){
+  const now=new Date();
+  const apptTime=new Date(a.date+'T'+a.time);
+  const isUp=!a.cancelled&&apptTime>=now;
+  const isDone=!a.cancelled&&apptTime<now;
+  const isCx=a.cancelled;
+  const loc=CUR_LANG==='ru'?'ru-RU':CUR_LANG==='en'?'en-GB':'tr-TR';
+  const dateStr=apptTime.toLocaleDateString(loc,{weekday:'long',day:'numeric',month:'long'});
+  const badge=isCx?`<div class="appt-badge badge-cx">${tx('cxBadge')}</div>`:isUp?`<div class="appt-badge badge-up">${tx('upBadge')}</div>`:`<div class="appt-badge badge-done">${tx('doneBadge')}</div>`;
+  // Timeline
+  const s1Done=true,s2Done=isDone||a.completed,s3Done=a.completed;
+  const tl=`<div class="tl">
+    <div class="tl-step"><div class="tl-dot ${s1Done?'done':''}">${s1Done?'<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>':''}</div><div class="tl-lbl">${tx('tlBooked')}</div></div>
+    <div class="tl-line ${s2Done?'done':''}"></div>
+    <div class="tl-step"><div class="tl-dot ${s2Done?'done':isUp?'on':''}">${s2Done?'<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>':''}</div><div class="tl-lbl">${tx('tlConfirmed')}</div></div>
+    <div class="tl-line ${s3Done?'done':''}"></div>
+    <div class="tl-step"><div class="tl-dot ${s3Done?'done':''}">${s3Done?'<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>':''}</div><div class="tl-lbl">${tx('tlDone')}</div></div>
+  </div>`;
+  const canCx=canCancel(a)&&!isCx&&isUp;
+  const actions=isCx?'':isUp?`
+    <div class="appt-actions">
+      <button class="btn-cx" onclick="doCnl('${a.fid}')" ${!canCx?'disabled':''} title="${!canCx?'5 saatten az kaldı':''}">${tx('cancelBtn')}</button>
+      <button class="btn-rebook" onclick="doRebook('${a.fid}')">${tx('rebookBtn')}</button>
+    </div>`:a.completed&&!a.rated?`
+    <div class="appt-actions">
+      <button class="btn-rate" onclick="openReview('${a.fid}','${a.specialistFid}')">${tx('rateBtn')}</button>
+      <button class="btn-rebook" onclick="doRebook('${a.fid}')">${tx('rebookBtn')}</button>
+    </div>`:!a.cancelled?`
+    <div class="appt-actions">
+      <button class="btn-rebook" onclick="doRebook('${a.fid}')" style="flex:unset">${tx('rebookBtn')}</button>
+    </div>`:'';
+  const ptsInfo=a.pointsEarned&&!a.pointsAwarded&&!isCx?`<div class="appt-pts">⭐ +${a.pointsEarned} puan randevu tamamlandığında yüklenecek</div>`:
+    a.pointsAwarded?`<div class="appt-pts">⭐ +${a.pointsEarned} puan kazanıldı!</div>`:'';
+  return `<div class="appt-card">
+    <div class="appt-head"><div><div class="appt-sp">${a.specialistName||''}</div><div class="appt-svc">${a.serviceName||''}</div></div>${badge}</div>
+    <div class="appt-meta">
+      <div class="appt-mi"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>${dateStr}</div>
+      <div class="appt-mi"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${a.time}</div>
+      <div class="appt-mi"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>${a.branchName||''}</div>
+    </div>
+    ${!isCx?tl:''}
+    ${ptsInfo}
+    ${actions}
+  </div>`;
 }
 window.doCnl=async function(fid){
-  const a=AP.find(x=>x.fid===fid);if(!a)return toast('Randevu bulunamadı.','err');
-  if(!canCancel(a))return toast('5 saatten az kaldığı için iptal edilemez.','err');
+  const a=AP.find(x=>x.fid===fid);
+  if(!a||!canCancel(a))return toast('İptal edilemez.','err');
   if(!confirm('Randevunuzu iptal etmek istiyor musunuz?'))return;
-  await updateDoc(doc(db,'appointments',fid),{cancelled:true});
-  toast('Randevunuz iptal edildi.','ok');
+  try{await updateDoc(doc(db,'appointments',fid),{cancelled:true,cancelledAt:new Date().toISOString()});toast('Randevunuz iptal edildi.','ok');}
+  catch(e){toast('Hata: '+e.message,'err');}
 };
+window.doRebook=function(fid){
+  const a=AP.find(x=>x.fid===fid);if(!a)return;
+  const sp=SP.find(s=>s.fid===a.specialistFid);
+  const svc=sp?.services?.find(s=>s.id===a.serviceId);
+  if(!sp||!svc){toast('Uzman veya hizmet artık mevcut değil.','err');return;}
+  selSp=sp;selSvc=svc;selSlot=null;wkOff=0;
+  buildDatePicker();showStep('step-dt');goPage('book');
+};
+window.openReview=function(apptId,spFid){
+  document.getElementById('rv-appt-id').value=apptId;
+  document.getElementById('rv-sp-fid').value=spFid;
+  revStar=0;renderStars();
+  document.getElementById('rv-text').value='';
+  openMo('mo-review');
+};
+function renderStars(){
+  document.getElementById('stars-row').innerHTML=[1,2,3,4,5].map(i=>`
+    <button class="star-btn ${revStar>=i?'on':''}" onclick="setStar(${i})">
+      <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+    </button>`).join('');
+}
+window.setStar=function(n){revStar=n;renderStars();};
+window.submitRate=async function(){
+  const apptId=document.getElementById('rv-appt-id').value;
+  const spFid=document.getElementById('rv-sp-fid').value;
+  const text=document.getElementById('rv-text').value.trim();
+  if(!revStar)return toast('Yıldız seçin.','err');
+  try{
+    await addDoc(collection(db,'reviews'),{appointmentId:apptId,specialistFid:spFid,customerUid:CU?.uid||null,rating:revStar,text,createdAt:new Date().toISOString()});
+    await updateDoc(doc(db,'appointments',apptId),{rated:true,rating:revStar});
+    closeMo('mo-review');toast('Değerlendirmeniz alındı, teşekkürler!','ok');
+  }catch(e){toast('Hata: '+e.message,'err');}
+};
+function updateNavDot(){
+  const now=new Date();
+  const upcoming=AP.filter(a=>!a.cancelled&&CU&&a.customerUid===CU.uid&&new Date(a.date+'T'+a.time)>=now);
+  document.getElementById('dot-appts').classList.toggle('on',upcoming.length>0);
+  const favs=getFavs();document.getElementById('dot-favs').classList.toggle('on',favs.length>0);
+}
 
-function updateStats(){
+// ── MARKET ──
+function renderMarket(){
+  const catEl=document.getElementById('mkt-cats');
+  const gridEl=document.getElementById('mkt-grid');
+  if(!catEl||!gridEl)return;
+  catEl.innerHTML=MKT_CATS_DATA.map(c=>`
+    <div class="mkt-cat ${MKT_CAT===c.key?'on':''}" onclick="setMktCat('${c.key}')">
+      <div class="mkt-cat-ic">${c.emoji}</div>
+      <div class="mkt-cat-nm">${CUR_LANG==='ru'?c.labelRu:CUR_LANG==='en'?c.labelEn:c.labelTr}</div>
+    </div>`).join('');
+  const filtered=MKT_CAT==='all'?MKT_ITEMS:MKT_ITEMS.filter(i=>i.cat===MKT_CAT);
+  if(!filtered.length){gridEl.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--muted)">Ürün bulunamadı</div>';return;}
+  gridEl.innerHTML=filtered.map(item=>{
+    const nm=CUR_LANG==='ru'?(item.nameRu||item.name):CUR_LANG==='en'?(item.nameEn||item.name):item.name;
+    const ptsOpt=Math.floor((item.price||0)/0.1);
+    return `<div class="mkt-card" onclick="openMktItem('${item.id}')">
+      <div class="mkt-img" style="background:linear-gradient(135deg,var(--blush),#f0d5c8)">
+        ${item.badge?`<div class="mkt-dis-badge">${item.badge}</div>`:''}
+        <span>${item.emoji||'🛍️'}</span>
+      </div>
+      <div class="mkt-body">
+        <div class="mkt-name">${nm}</div>
+        <div class="mkt-desc">${item.desc||''}</div>
+        <div class="mkt-foot">
+          <div>
+            <div class="mkt-prices"><span class="mkt-price">${item.price}₺</span>${item.oldPrice?`<span class="mkt-old">${item.oldPrice}₺</span>`:''}</div>
+            <div class="mkt-pts-opt">${ptsOpt} puan ile ücretsiz</div>
+          </div>
+          <button class="mkt-add" onclick="addToCart(event,'${item.id}')"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+window.setMktCat=function(k){MKT_CAT=k;renderMarket();};
+window.openMktItem=function(id){const item=MKT_ITEMS.find(i=>i.id===id);if(item)toast(`🛍️ ${item.name} — ${item.price}₺`);};
+window.addToCart=function(e,id){
+  e.stopPropagation();
+  const item=MKT_ITEMS.find(i=>i.id===id);if(!item)return;
+  const idx=CART.findIndex(c=>c.id===id);
+  if(idx>=0)CART[idx].qty++;else CART.push({...item,qty:1});
+  localStorage.setItem('onail_cart',JSON.stringify(CART));
+  updateCartBadge();
+  toast(`🛍️ "${item.name}" ${tx('addCart').toLowerCase()}!`,'ok');
+};
+function updateCartBadge(){
+  const total=CART.reduce((s,c)=>s+c.qty,0);
+  const dot=document.getElementById('cart-dot');
+  if(dot){dot.textContent=total;dot.classList.toggle('on',total>0);}
+}
+function renderCart(){
+  const el=document.getElementById('cart-body');if(!el)return;
+  if(!CART.length){el.innerHTML=`<div class="empty-state" style="padding:2rem"><div class="empty-ic">🛒</div><div class="empty-ttl">${tx('cartEmpty')}</div></div>`;return;}
+  const total=CART.reduce((s,c)=>s+(c.price*c.qty),0);
+  el.innerHTML=CART.map(c=>`
+    <div class="cart-item">
+      <div class="cart-item-ic">${c.emoji||'🛍️'}</div>
+      <div class="cart-item-nm">${c.name}${c.qty>1?` ×${c.qty}`:''}</div>
+      <div class="cart-item-pr">${c.price*c.qty}₺</div>
+      <button class="cart-item-rm" onclick="removeFromCart('${c.id}')">✕</button>
+    </div>`).join('')+
+    `<div class="cart-total"><span class="cart-total-lbl">${tx('cartTotal')}</span><span class="cart-total-val">${total}₺</span></div>
+    <button class="btn-confirm" onclick="checkoutCart()">Siparişi Onayla (Yakında)</button>`;
+}
+window.removeFromCart=function(id){CART=CART.filter(c=>c.id!==id);localStorage.setItem('onail_cart',JSON.stringify(CART));updateCartBadge();renderCart();};
+window.checkoutCart=function(){toast('Ödeme sistemi yakında aktif olacak!','ok');};
+window.openCart=function(){renderCart();openMo('mo-cart');};
+
+// ── FAVORITES ──
+function renderFavs(){
+  const el=document.getElementById('favs-body');if(!el)return;
+  const favs=getFavs();
+  if(!favs.length){el.innerHTML=`<div class="empty-state"><div class="empty-ic">❤️</div><div class="empty-ttl">${tx('emptyFavsTtl')}</div><div class="empty-sub">${tx('emptyFavsSub')}</div></div>`;return;}
+  const favSps=favs.map(fid=>SP.find(s=>s.fid===fid)).filter(Boolean);
+  el.innerHTML=favSps.map(s=>{
+    const imgHtml=s.photoUrl?`<img src="${s.photoUrl}">`:`<span>${s.emoji||'💅'}</span>`;
+    return `<div class="fav-card">
+      <div class="fav-img">${imgHtml}</div>
+      <div style="flex:1"><div class="fav-nm">${s.name}</div><div class="fav-title">${s.title||''}</div></div>
+      <button class="fav-book" onclick="pickSp('${s.fid}');goPage('book')">${tx('bookFav')}</button>
+    </div>`;
+  }).join('');
+}
+
+// ── PROFILE ──
+function updateProfile_(){
   if(!CU)return;
   const mine=AP.filter(a=>a.customerUid===CU.uid&&!a.cancelled);
   document.getElementById('ps-tot').textContent=mine.length;
   document.getElementById('ps-up').textContent=mine.filter(a=>new Date(a.date+'T'+a.time)>new Date()).length;
-  const spent=mine.reduce((s,a)=>s+(a.servicePrice||0),0);
-  document.getElementById('ps-spent').textContent=spent+'₺';
+  document.getElementById('ps-spent').textContent=mine.reduce((s,a)=>s+(a.servicePrice||0),0)+'₺';
   const lvl=getPtsLevel(USER_PTS);
-  const ptsCard=document.getElementById('pts-card');
-  if(ptsCard&&USER_PTS>=0){
-    ptsCard.style.display='block';
+  const card=document.getElementById('pts-card');
+  if(card){
+    card.style.display='block';
     document.getElementById('p-pts').textContent=USER_PTS;
     document.getElementById('p-lvl').textContent=lvl.name;
-    document.getElementById('p-pts-next').textContent=lvl.next?`${lvl.next-USER_PTS} puan daha → ${lvl.name.includes('Bronze')?'Silver 🥈':'Gold 🥇'}`:'Maksimum seviye! 🎉';
-    // Kupon dönüştür butonları
+    const barPct=lvl.next?Math.min(100,Math.round((USER_PTS-(lvl.prev||0))/(lvl.next-(lvl.prev||0))*100)):100;
+    document.getElementById('pts-bar').style.width=barPct+'%';
+    document.getElementById('p-pts-next').textContent=lvl.next?`${lvl.next-USER_PTS} puan daha → ${lvl.nextName}`:'Maksimum seviye! 🎉';
+    // Coupon buttons
     const opts=document.getElementById('coupon-opts');
     if(opts){
       const available=[];
-      if(USER_PTS>=4000)available.push({pts:4000,tl:400,label:'4000 puan → 400₺ kupon'});
-      if(USER_PTS>=1000)available.push({pts:1000,tl:100,label:'1000 puan → 100₺ kupon'});
+      if(USER_PTS>=4000)available.push({pts:4000,tl:400});
+      if(USER_PTS>=1000)available.push({pts:1000,tl:100});
       if(available.length){
-        opts.innerHTML=available.map(o=>`<button onclick="redeemCoupon(${o.pts},${o.tl})" style="background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:.4rem .75rem;color:white;font-size:.66rem;font-family:'Nunito',sans-serif;cursor:pointer;margin:.2rem .2rem 0 0">${o.label}</button>`).join('');
+        opts.innerHTML=available.map(o=>`<button class="coupon-opt-btn" onclick="redeemCoupon(${o.pts},${o.tl})">${o.pts} puan → ${o.tl}₺ kupon</button>`).join('');
       }else{
-        opts.innerHTML=`<div style="font-size:.65rem;opacity:.6">1000 puanda 100₺ kupon kazanırsınız. Şu an: ${USER_PTS} puan</div>`;
+        opts.innerHTML=`<div style="font-size:.64rem;color:rgba(255,255,255,.4)">1000 puanda 100₺ kupon. Şu an: ${USER_PTS} puan</div>`;
       }
     }
   }
 }
-
-async function redeemCoupon(pts,tl){
-  if(USER_PTS<pts)return toast(`Yetersiz puan. ${pts} puan gerekli.`,'err');
+function getPtsLevel(pts){
+  if(pts>=2000)return{name:'Gold 🥇',prev:2000,next:null,nextName:null};
+  if(pts>=500)return{name:'Silver 🥈',prev:500,next:2000,nextName:'Gold 🥇'};
+  return{name:'Bronze 🥉',prev:0,next:500,nextName:'Silver 🥈'};
+}
+function updatePtsBadge(){
+  const badge=document.getElementById('hdr-pts');
+  const val=document.getElementById('hdr-pts-val');
+  if(badge&&CU){badge.style.display='flex';if(val)val.textContent=USER_PTS;}
+}
+window.redeemCoupon=async function(pts,tl){
+  if(USER_PTS<pts)return toast(`Yetersiz puan. ${pts} gerekli.`,'err');
   if(!confirm(`${pts} puanınız ${tl}₺ indirim kuponu olacak. Onaylıyor musunuz?`))return;
   try{
     const code='ONL'+Date.now().toString(36).toUpperCase();
     await addDoc(collection(db,'coupons'),{uid:CU.uid,code,value:tl,pts,used:false,createdAt:new Date().toISOString()});
     USER_PTS-=pts;
     await setDoc(doc(db,'users',CU.uid),{points:USER_PTS,updatedAt:new Date().toISOString()},{merge:true});
-    updatePtsBadge();
-    updateStats();
-    renderCoupons();
-    toast(`🎟️ ${tl}₺ kuponunuz oluşturuldu! Kod: ${code}`,'ok');
+    updatePtsBadge();updateProfile_();renderCoupons();
+    toast(`🎟️ ${tl}₺ kupon oluşturuldu! Kod: ${code}`,'ok');
   }catch(e){toast('Hata: '+e.message,'err');}
-}
-window.redeemCoupon=redeemCoupon;
-
+};
 async function renderCoupons(){
   if(!CU)return;
   const wrap=document.getElementById('my-coupons-wrap');
@@ -1362,51 +1650,21 @@ async function renderCoupons(){
     if(!coupons.length){wrap.style.display='none';return;}
     wrap.style.display='block';
     el.innerHTML=coupons.map(c=>`
-      <div style="background:var(--white);border:${c.used?'1.5px dashed var(--border)':'1.5px solid var(--gold)'};border-radius:12px;padding:.82rem 1rem;margin-bottom:.5rem;display:flex;align-items:center;justify-content:space-between;opacity:${c.used?'.5':'1'}">
-        <div>
-          <div style="font-family:'Tenor Sans',serif;font-size:1.1rem;color:var(--gold)">${c.value}₺ İndirim</div>
-          <div style="font-size:.65rem;color:var(--muted);margin-top:.15rem;letter-spacing:.05em">${c.code}</div>
-        </div>
-        <div style="font-size:.68rem;font-weight:700;color:${c.used?'var(--muted)':'var(--ok)'}">${c.used?'Kullanıldı':'Aktif ✓'}</div>
+      <div class="coupon-card ${c.used?'used':'active'}">
+        <div><div class="coupon-val">${c.value}₺ İndirim</div><div class="coupon-code">${c.code}</div></div>
+        <div class="coupon-st ${c.used?'used':'active'}">${c.used?'Kullanıldı':'Aktif ✓'}</div>
       </div>`).join('');
-  }catch(e){}
+  }catch(_){}
 }
 
-// MARKET
-const MARKET_ITEMS=[
-  {id:'m1',name:'Tırnak Güçlendirici Serum',price:249,cat:'Bakım',emoji:'💅',desc:'Kırılgan tırnakları güçlendirir, 30ml'},
-  {id:'m2',name:'Nail Art Fırça Seti',price:189,cat:'Araçlar',emoji:'🖌️',desc:'10 farklı fırça, profesyonel kalite'},
-  {id:'m3',name:'Jel Oje Seti (12 Renk)',price:420,cat:'Oje',emoji:'🎨',desc:'UV/LED uyumlu, uzun kalıcı formül'},
-  {id:'m4',name:'Kürür Lambası',price:350,cat:'Araçlar',emoji:'💡',desc:'36W LED/UV, tüm jel ojelerle uyumlu'},
-  {id:'m5',name:'Tırnak Dolgu Kiti',price:280,cat:'Bakım',emoji:'✨',desc:'Çatlak ve kırıklar için profesyonel kit'},
-  {id:'m6',name:'El Kremi Seti (3lü)',price:165,cat:'Bakım',emoji:'🧴',desc:'Nemlendirici, besleyici, onarıcı'},
-];
-function renderMarket(){
-  const el=document.getElementById('market-body');if(!el)return;
-  const cats=[...new Set(MARKET_ITEMS.map(i=>i.cat))];
-  el.innerHTML=cats.map(cat=>`
-    <div style="margin-bottom:1.1rem">
-      <div style="font-size:.72rem;font-weight:700;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.6rem">${cat}</div>
-      ${MARKET_ITEMS.filter(i=>i.cat===cat).map(i=>`
-        <div style="background:var(--white);border:1.5px solid var(--border);border-radius:13px;padding:.88rem 1rem;margin-bottom:.5rem;display:flex;align-items:center;gap:.9rem;box-shadow:var(--sh)">
-          <div style="font-size:2rem;flex-shrink:0">${i.emoji}</div>
-          <div style="flex:1">
-            <div style="font-weight:700;font-size:.84rem">${i.name}</div>
-            <div style="font-size:.68rem;color:var(--muted);margin-top:.1rem">${i.desc}</div>
-          </div>
-          <div style="text-align:right;flex-shrink:0">
-            <div style="font-family:'Tenor Sans',serif;font-size:1rem;color:var(--rose)">${i.price}₺</div>
-            <button onclick="addToCart('${i.id}')" style="margin-top:.3rem;background:var(--rose);color:white;border:none;border-radius:7px;padding:.28rem .65rem;font-size:.65rem;font-weight:700;font-family:'Nunito',sans-serif;cursor:pointer">Sepete Ekle</button>
-          </div>
-        </div>`).join('')}
-    </div>`).join('');
-}
-window.addToCart=function(id){
-  const item=MARKET_ITEMS.find(i=>i.id===id);
-  if(item)toast(`🛍️ "${item.name}" sepete eklendi! (Ödeme yakında aktif olacak)`,'ok');
+// ── NOTIFICATIONS ──
+window.saveNotifPrefs=function(){
+  NOTIFS={day:document.getElementById('notif-day').checked,hr:document.getElementById('notif-hr').checked,promo:document.getElementById('notif-promo').checked};
+  localStorage.setItem('onail_notifs',JSON.stringify(NOTIFS));
+  closeMo('mo-notifs');toast('Bildirim tercihleri kaydedildi ✓','ok');
 };
 
-// PWA
+// ── PWA ──
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferInstall=e;if(CU)showInstBanner();});
 function showInstBanner(){
   if(localStorage.getItem('onail_no_inst'))return;
@@ -1415,94 +1673,21 @@ function showInstBanner(){
 }
 window.instApp=async function(){if(!deferInstall)return;deferInstall.prompt();await deferInstall.userChoice;deferInstall=null;document.getElementById('inst-area').innerHTML='';};
 window.disInst=function(){localStorage.setItem('onail_no_inst','1');document.getElementById('inst-area').innerHTML='';};
-window.addEventListener('appinstalled',()=>{document.getElementById('inst-area').innerHTML='';});
 
-// ======== DİL DESTEĞİ ========
-const TRANSLATIONS={
-  tr:{
-    book:'Randevu',appts:'Randevularım',market:'Market',favs:'Favoriler',profile:'Profil',
-    selectExpert:'Uzmaninizi seçin,',bookInstant:'anında rezerve edin',
-    heroSub:'Dilediğiniz hizmeti kolayca rezerve edin.',
-    searchPh:'Uzman veya hizmet ara...',
-    allCats:'Tümü',selectExpertTitle:'Uzman Seçin',
-    confirm:'✓ Randevuyu Onayla',cancel:'İptal Et',close:'Kapat',
-    logout:'Çıkış Yap',totalPts:'Toplam Puan',
-    todayLabel:'Bugün',tomorrowLabel:'Yarın',
-  },
-  en:{
-    book:'Book',appts:'My Bookings',market:'Market',favs:'Favorites',profile:'Profile',
-    selectExpert:'Choose your expert,',bookInstant:'book instantly',
-    heroSub:'Easily reserve the service you want.',
-    searchPh:'Search expert or service...',
-    allCats:'All',selectExpertTitle:'Select Expert',
-    confirm:'✓ Confirm Booking',cancel:'Cancel',close:'Close',
-    logout:'Sign Out',totalPts:'Total Points',
-    todayLabel:'Today',tomorrowLabel:'Tomorrow',
-  },
-  ru:{
-    book:'Запись',appts:'Мои записи',market:'Магазин',favs:'Избранное',profile:'Профиль',
-    selectExpert:'Выберите мастера,',bookInstant:'мгновенная запись',
-    heroSub:'Легко запишитесь на нужную услугу.',
-    searchPh:'Поиск мастера или услуги...',
-    allCats:'Все',selectExpertTitle:'Выбор мастера',
-    confirm:'✓ Подтвердить запись',cancel:'Отмена',close:'Закрыть',
-    logout:'Выйти',totalPts:'Баллы',
-    todayLabel:'Сегодня',tomorrowLabel:'Завтра',
-  }
-};
-let CUR_LANG=localStorage.getItem('onail_lang')||'tr';
-window.changeLang=function(l){
-  CUR_LANG=l;localStorage.setItem('onail_lang',l);
-  applyLang();
-};
-function applyLang(){
-  const T=TRANSLATIONS[CUR_LANG]||TRANSLATIONS.tr;
-  const sel=document.getElementById('lang-sel');if(sel)sel.value=CUR_LANG;
-  // Nav labels
-  const nbBook=document.getElementById('nb-book');if(nbBook)nbBook.childNodes[0].after(document.createTextNode(''));
-  document.querySelectorAll('.nb').forEach(b=>{
-    const id=b.id?.replace('nb-','');if(id&&T[id]){
-      const ic=b.querySelector('.nb-ic');const dot=b.querySelector('.nb-dot');
-      b.innerHTML='';
-      const icEl=document.createElement('span');icEl.className='nb-ic';icEl.textContent=({book:'📅',appts:'🗂',market:'🛍️',favs:'❤️',profile:'👤'}[id]||'');
-      b.appendChild(icEl);b.appendChild(document.createTextNode(T[id]));
-      if(dot)b.appendChild(dot);
-    }
-  });
-  // Search placeholder
-  const si=document.querySelector('.search-in');if(si)si.placeholder=T.searchPh;
-  // Hero
-  const h1=document.querySelector('.hero h1');
-  if(h1)h1.innerHTML=`${T.selectExpert}<br><em>${T.bookInstant}</em>`;
-  const hp=document.querySelector('.hero p');if(hp)hp.textContent=T.heroSub;
-  // Confirm button
-  const cnf=document.getElementById('btn-cnf');if(cnf&&!cnf.disabled)cnf.textContent=T.confirm;
-}
-// Init lang on load
-setTimeout(applyLang,500);
-
-// SERVICE WORKER
-if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
-
-// PUSH NOTIFICATION SCHEDULER
-function scheduleReminders(appt){
-  if(!('Notification' in window)||Notification.permission!=='granted')return;
-  const apptTime=new Date(appt.date+'T'+appt.time);
-  const now=new Date();
-  if(NOTIFS.day){
-    const d1=new Date(apptTime-24*3600000);
-    if(d1>now)setTimeout(()=>new Notification("O'Nail Hatırlatma",{body:`Yarın ${appt.time}'da ${appt.serviceName} randevunuz var.`,icon:'icon-192.png'}),d1-now);
-  }
-  if(NOTIFS.hour){
-    const h1=new Date(apptTime-3600000);
-    if(h1>now)setTimeout(()=>new Notification("O'Nail Hatırlatma",{body:`1 saat sonra ${appt.time}'da ${appt.serviceName} randevunuz var.`,icon:'icon-192.png'}),h1-now);
-  }
-}
+// ── SPLASH → AUTH ──
 setTimeout(()=>{
-  if(!CU)return;
-  AP.filter(a=>a.customerUid===CU.uid&&!a.cancelled&&new Date(a.date+'T'+a.time)>new Date())
-    .forEach(a=>scheduleReminders(a));
-},3000);
+  document.getElementById('s-splash').classList.remove('on');
+  document.getElementById('s-auth').classList.add('on');
+  document.getElementById('notif-day').checked=NOTIFS.day;
+  document.getElementById('notif-hr').checked=NOTIFS.hr;
+  document.getElementById('notif-promo').checked=NOTIFS.promo;
+  loadMktItems();
+  updateCartBadge();
+  applyLang();
+  setTimeout(applyLang,1000);
+},1400);
+
+if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
 </script>
 </body>
 </html>
