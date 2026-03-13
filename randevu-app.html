@@ -138,17 +138,17 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--deep);}
 .sp-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;}
 .sp-card{background:var(--white);border:1.5px solid var(--border);border-radius:18px;overflow:hidden;cursor:pointer;transition:all .2s;box-shadow:var(--sh);position:relative;}
 .sp-card:active{transform:scale(.98);}
-.sp-img{width:100%;aspect-ratio:1;background:linear-gradient(135deg,var(--blush),#f0d5c8);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.sp-img{width:100%;height:140px;max-height:160px;background:linear-gradient(135deg,var(--blush),#f0d5c8);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
 .sp-img img{width:100%;height:100%;object-fit:cover;}
 .sp-img-ph{font-size:2.8rem;}
 .sp-fav{position:absolute;top:.5rem;right:.5rem;background:rgba(255,255,255,.92);border:none;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2;}
 .sp-fav svg{width:14px;height:14px;stroke:var(--muted);fill:none;transition:all .18s;stroke-width:2;}
 .sp-fav.on svg{stroke:var(--err);fill:var(--err);}
 .sp-avail{position:absolute;top:.5rem;left:.5rem;background:rgba(74,158,106,.9);color:#fff;font-size:.55rem;font-weight:700;padding:.18rem .5rem;border-radius:6px;}
-.sp-body{padding:.75rem .75rem .8rem;}
-.sp-name{font-weight:700;font-size:.85rem;margin-bottom:.12rem;}
-.sp-title{font-size:.64rem;color:var(--muted);margin-bottom:.45rem;}
-.sp-tags{display:flex;flex-wrap:wrap;gap:.25rem;margin-bottom:.5rem;}
+.sp-body{padding:.55rem .65rem .65rem;}
+.sp-name{font-weight:700;font-size:.82rem;margin-bottom:.08rem;}
+.sp-title{font-size:.62rem;color:var(--muted);margin-bottom:.3rem;}
+.sp-tags{display:flex;flex-wrap:wrap;gap:.22rem;margin-bottom:.38rem;}
 .sp-tag{font-size:.57rem;background:var(--blush);color:var(--rose);padding:.17rem .45rem;border-radius:6px;font-weight:600;}
 .sp-row{display:flex;align-items:center;justify-content:space-between;}
 .sp-rating{display:flex;align-items:center;gap:.25rem;font-size:.68rem;font-weight:700;}
@@ -159,7 +159,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--deep);}
 .skel{background:linear-gradient(90deg,#ede4df 25%,#f8f1ee 50%,#ede4df 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:10px;}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 .skel-card{background:var(--white);border:1.5px solid var(--border);border-radius:18px;overflow:hidden;box-shadow:var(--sh);}
-.skel-img{width:100%;aspect-ratio:1;}
+.skel-img{width:100%;height:140px;}
 .skel-line{height:12px;margin:.4rem .75rem;}
 .skel-line.short{width:60%;}
 
@@ -288,7 +288,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--deep);}
 .mkt-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;}
 .mkt-card{background:var(--white);border:1.5px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:var(--sh);cursor:pointer;transition:all .2s;position:relative;}
 .mkt-card:active{transform:scale(.98);}
-.mkt-img{width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:3.8rem;position:relative;}
+.mkt-img{width:100%;height:120px;display:flex;align-items:center;justify-content:center;font-size:3.2rem;position:relative;}
 .mkt-dis-badge{position:absolute;top:.5rem;left:.5rem;background:var(--err);color:#fff;font-size:.54rem;font-weight:700;padding:.15rem .42rem;border-radius:6px;}
 .mkt-body{padding:.65rem .72rem .8rem;}
 .mkt-name{font-weight:700;font-size:.78rem;line-height:1.3;margin-bottom:.22rem;}
@@ -1173,7 +1173,7 @@ function renderSpList(){
         <div class="sp-tags">${tags}</div>
         <div class="sp-row">
           <div class="sp-rating"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>${avg>0?avg.toFixed(1):'—'}</div>
-          <button class="sp-btn" onclick="pickSp('${s.fid}')">${tx('confBtn').replace('✓ ','').split(' ')[0]}</button>
+          <button class="sp-btn" onclick="pickSp('${s.fid}')">Randevu Al</button>
         </div>
       </div>
     </div>`;

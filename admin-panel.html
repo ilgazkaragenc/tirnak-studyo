@@ -514,18 +514,21 @@ window.admGoogle=async function(){
 };
 window.admLogout=async function(){await signOut(auth);};
 
+// Auth ekranı devre dışı - herkese açık
+document.getElementById('auth-screen').style.display='none';
+document.getElementById('app').style.display='flex';
+
 onAuthStateChanged(auth,async user=>{
   try{await getRedirectResult(auth);}catch(_){}
   CU=user;
   if(user){
-    document.getElementById('auth-screen').style.display='none';
-    document.getElementById('app').style.display='flex';
     document.getElementById('sb-av').textContent=(user.displayName||user.email||'A')[0].toUpperCase();
     document.getElementById('sb-uname').textContent=user.displayName||'Admin';
     document.getElementById('sb-uem').textContent=user.email||'';
   }else{
-    document.getElementById('auth-screen').style.display='flex';
-    document.getElementById('app').style.display='none';
+    document.getElementById('sb-av').textContent='👤';
+    document.getElementById('sb-uname').textContent='Misafir';
+    document.getElementById('sb-uem').textContent='Giriş yapılmadı';
   }
 });
 
