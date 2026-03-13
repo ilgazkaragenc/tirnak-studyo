@@ -37,7 +37,21 @@ a{text-decoration:none;}
 
 /* LAYOUT */
 #app{display:none;width:100%;min-height:100vh;}
-.sidebar{width:var(--sidebar);background:var(--card);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100;overflow-y:auto;}
+.sidebar{width:var(--sidebar);background:var(--card);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100;overflow-y:auto;transition:transform .28s cubic-bezier(.4,0,.2,1);}
+.sb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:99;}
+.sb-overlay.on{display:block;}
+.hamburger{display:none;background:none;border:none;cursor:pointer;padding:.4rem;color:var(--text2);}
+.hamburger svg{width:22px;height:22px;stroke:currentColor;stroke-width:2;fill:none;}
+@media(max-width:700px){
+  .sidebar{transform:translateX(-100%);}
+  .sidebar.open{transform:translateX(0);}
+  .main{margin-left:0!important;}
+  .hamburger{display:flex;align-items:center;justify-content:center;}
+  .topbar{padding:.65rem 1rem;}
+  .content{padding:1rem .85rem;}
+  .stats-grid{grid-template-columns:1fr 1fr;}
+  .stat-val{font-size:1.4rem;}
+}
 .sb-logo{padding:1.5rem 1.2rem 1rem;border-bottom:1px solid var(--border);}
 .sb-logo-txt{font-size:1.3rem;font-weight:800;color:var(--gold);letter-spacing:.06em;}
 .sb-logo-sub{font-size:.6rem;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;margin-top:.15rem;}
@@ -209,7 +223,8 @@ input:checked+.tog-sl::before{transform:translateX(16px);}
 <!-- APP -->
 <div id="app">
   <!-- SIDEBAR -->
-  <div class="sidebar">
+  <div class="sb-overlay" id="sb-overlay" onclick="toggleSidebar()"></div>
+  <div class="sidebar" id="sidebar">
     <div class="sb-logo">
       <div class="sb-logo-txt">O'Nail</div>
       <div class="sb-logo-sub">Admin Panel</div>
@@ -262,7 +277,10 @@ input:checked+.tog-sl::before{transform:translateX(16px);}
   <!-- MAIN -->
   <div class="main">
     <div class="topbar">
-      <div class="topbar-title" id="page-ttl">Dashboard</div>
+      <div style="display:flex;align-items:center;gap:.6rem;">
+        <button class="hamburger" onclick="toggleSidebar()" aria-label="Menü"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+        <div class="topbar-title" id="page-ttl">Dashboard</div>
+      </div>
       <div class="topbar-right">
         <select class="topbar-branch" id="branch-sel" onchange="setBranch(this.value)" style="cursor:pointer;outline:none;"></select>
       </div>
@@ -557,6 +575,12 @@ onSnapshot(collection(db,'reviews'),s=>{
 
 // ── PAGES ──
 const PAGE_TITLES={dashboard:'Dashboard',appointments:'Randevular',specialists:'Uzmanlar',branches:'Şubeler',products:'Ürünler',coupons:'Kuponlar',reviews:'Değerlendirmeler'};
+window.toggleSidebar=function(){
+  const sb=document.getElementById('sidebar');
+  const ov=document.getElementById('sb-overlay');
+  sb.classList.toggle('open');
+  ov.classList.toggle('on');
+};
 window.goAdmPage=function(name){
   document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
   document.querySelectorAll('.ni').forEach(b=>b.classList.remove('on'));
@@ -567,6 +591,11 @@ window.goAdmPage=function(name){
   if(name==='coupons')renderCouponTbl();
   if(name==='reviews')renderRevTbl();
   if(name==='appointments'){renderApptTbl();updateSpFilter();}
+  // Mobilde sayfa değişince menü kapansın
+  if(window.innerWidth<=700){
+    document.getElementById('sidebar')?.classList.remove('open');
+    document.getElementById('sb-overlay')?.classList.remove('on');
+  }
 };
 
 // ── BRANCH FILTER ──
