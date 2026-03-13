@@ -153,7 +153,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--deep);}
 .sp-row{display:flex;align-items:center;justify-content:space-between;}
 .sp-rating{display:flex;align-items:center;gap:.25rem;font-size:.68rem;font-weight:700;}
 .sp-rating svg{width:11px;height:11px;fill:var(--gold);stroke:none;}
-.sp-btn{background:var(--rose);color:#fff;border:none;border-radius:9px;padding:.3rem .7rem;font-size:.67rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;}
+.sp-btn{background:linear-gradient(135deg,var(--rose),var(--rose2));color:#fff;border:none;border-radius:12px;padding:.55rem 1rem;font-size:.78rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;box-shadow:0 3px 10px rgba(196,114,90,.35);width:100%;margin-top:.3rem;}
 
 /* SKELETON */
 .skel{background:linear-gradient(90deg,#ede4df 25%,#f8f1ee 50%,#ede4df 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:10px;}
@@ -518,7 +518,7 @@ input:checked+.tog-sl::before{transform:translateX(20px);}
           <option value="en">🇬🇧 EN</option>
           <option value="ru">🇷🇺 RU</option>
         </select>
-        <button class="hdr-cart" onclick="openMo('mo-cart')">
+        <button class="hdr-cart" onclick="openCart()">
           <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
           <div class="cart-dot" id="cart-dot">0</div>
         </button>
@@ -1325,8 +1325,7 @@ window.confirmBk=async function(){
   const phone=(document.getElementById('inp-ph')?.value||'').trim();
   if(!name)return toast('Adınızı girin.','err');
   if(!phone)return toast('Telefon numaranızı girin.','err');
-  if(!selSlot)return toast('Saat seçin.','err');
-  // Çakışma kontrolü
+  if(!selSlot||!selSp||!selSvc)return toast('Lütfen uzman, hizmet ve saat seçin.','err');
   const slotM=t2m(selSlot.time);const slotEnd=slotM+(selSvc.duration||30);
   const conflict=AP.find(a=>{
     if(a.cancelled||a.date!==selSlot.date)return false;
@@ -1335,34 +1334,36 @@ window.confirmBk=async function(){
     const aS=t2m(a.time),aE=aS+(a.serviceDuration||30);
     return slotM<aE&&slotEnd>aS;
   });
-  if(conflict)return toast(`⚠️ ${selSlot.time}'da "${conflict.serviceName}" randevunuz var!`,'err');
-  const btn=document.getElementById('btn-cnf');btn.disabled=true;btn.textContent='...';
+  if(conflict)return toast('⚠️ Bu saatte zaten randevunuz var!','err');
+  const btn=document.getElementById('btn-cnf');btn.disabled=true;btn.textContent='Kaydediliyor...';
+  // Göndermeden önce verileri sakla (clearFlow sıfırlamadan önce)
+  const snapSp={...selSp},snapSvc={...selSvc},snapSlot={...selSlot};
+  const earnPts=Math.floor((selSvc.price||0)*PTS_PER_TL);
   try{
-    const earnPts=Math.floor((selSvc.price||0)*PTS_PER_TL);
     await addDoc(collection(db,'appointments'),{
       branchId:curBranch?.fid||null,branchName:curBranch?.name||'',
-      specialistFid:selSp.fid,specialistName:selSp.name,
-      serviceId:selSvc.id,serviceName:selSvc.name,servicePrice:selSvc.price,serviceDuration:selSvc.duration||30,
-      date:selSlot.date,time:selSlot.time,
+      specialistFid:snapSp.fid,specialistName:snapSp.name,
+      serviceId:snapSvc.id,serviceName:snapSvc.name,servicePrice:snapSvc.price,serviceDuration:snapSvc.duration||30,
+      date:snapSlot.date,time:snapSlot.time,
       customerName:name,customerPhone:phone,customerUid:CU?.uid||null,
       bookedAt:new Date().toISOString(),cancelled:false,completed:false,
       pointsEarned:earnPts,pointsAwarded:false,rated:false
     });
     localStorage.setItem('onail_ph',phone);
-    showSuccess(name,earnPts);
     clearFlow();
-  }catch(e){toast('Hata: '+e.message,'err');btn.disabled=false;btn.textContent=tx('confBtn');}
+    showSuccess(name,earnPts,snapSp,snapSvc,snapSlot);
+  }catch(e){toast('Hata: '+e.message,'err');btn.disabled=false;btn.textContent='✓ Randevuyu Onayla';}
 };
 function clearFlow(){selSp=null;selSvc=null;selSlot=null;wkOff=0;showStep('step-sp');}
 
 // ── SUCCESS ──
-function showSuccess(name,pts){
-  const d=new Date(selSlot.date+'T'+selSlot.time);
+function showSuccess(name,pts,sp,svc,slot){
+  const d=new Date(slot.date+'T'+slot.time);
   const loc=CUR_LANG==='ru'?'ru-RU':CUR_LANG==='en'?'en-GB':'tr-TR';
   const dateStr=d.toLocaleDateString(loc,{weekday:'long',day:'numeric',month:'long'});
-  document.getElementById('suc-sub').textContent=`${selSp.name} · ${selSvc.name} · ${dateStr} ${selSlot.time}`;
+  document.getElementById('suc-sub').textContent=`${sp.name} · ${svc.name} · ${dateStr} saat ${slot.time}`;
   const ptsEl=document.getElementById('suc-pts');
-  if(pts>0){ptsEl.textContent=`+${pts} ⭐ ${tx('ptsEarnTxt')} ${tx('ptsNote')}`;ptsEl.style.display='block';}
+  if(pts>0){ptsEl.textContent=`+${pts} ⭐ puan randevu tamamlandığında eklenecek`;ptsEl.style.display='block';}
   else ptsEl.style.display='none';
   document.getElementById('success-ov').classList.add('on');
   spawnConfetti();
