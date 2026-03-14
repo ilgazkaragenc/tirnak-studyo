@@ -428,6 +428,25 @@ input:checked+.tog-sl::before{transform:translateX(20px);}
 ::-webkit-scrollbar{width:3px;height:3px;}
 ::-webkit-scrollbar-track{background:transparent;}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+
+/* MOBİL OPTİMİZASYON */
+@media(max-width:480px){
+  .hdr{padding:.65rem .9rem;}
+  .hdr-logo{font-size:1.3rem;}
+  .pg{padding:.85rem .85rem 1.5rem;}
+  .sp-grid{gap:.55rem;}
+  .sp-img{height:120px;}
+  .sp-body{padding:.5rem .55rem .6rem;}
+  .sp-btn{padding:.5rem .85rem;font-size:.75rem;}
+  .mkt-grid{grid-template-columns:1fr 1fr;gap:.55rem;}
+  .mkt-img{height:100px;}
+  .time-grid{grid-template-columns:repeat(3,1fr);}
+  .conf-card{padding:.85rem;}
+  .stats-grid{grid-template-columns:1fr 1fr;}
+  .success-ov{padding:1.5rem 1rem;}
+  .success-ttl{font-size:1.5rem;}
+  .mo-sheet{padding:1rem 1rem calc(1rem + var(--safe-bot));}
+}
 </style>
 </head>
 <body>
