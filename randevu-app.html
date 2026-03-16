@@ -937,13 +937,29 @@ window.toast=function(msg,type=''){
   clearTimeout(toastTmr);toastTmr=setTimeout(()=>el.classList.remove('on'),3000);
 };
 function t2m(ts){const[h,m]=ts.split(':').map(Number);return h*60+m;}
+// Timezone-safe: tarih stringini local olarak döndür (UTC kaymadan)
+function localDateStr(d){
+  const y=d.getFullYear(),mo=String(d.getMonth()+1).padStart(2,'0'),dy=String(d.getDate()).padStart(2,'0');
+  return `${y}-${mo}-${dy}`;
+}
 function fmtDate(ds){
   const d=new Date(ds+'T12:00:00');
   const loc=CUR_LANG==='ru'?'ru-RU':CUR_LANG==='en'?'en-GB':'tr-TR';
   return d.toLocaleDateString(loc,{weekday:'long',day:'numeric',month:'long'});
 }
-function isPast(ds,ts){return new Date(ds+'T'+ts)<new Date();}
-function canCancel(a){return(new Date(a.date+'T'+a.time)-new Date())>5*3600*1000;}
+function isPast(ds,ts){
+  const now=new Date();
+  const [h,m]=ts.split(':').map(Number);
+  const d=new Date(ds+'T12:00:00');
+  d.setHours(h,m,0,0);
+  return d<now;
+}
+function canCancel(a){
+  const d=new Date(a.date+'T12:00:00');
+  const [h,m]=a.time.split(':').map(Number);
+  d.setHours(h,m,0,0);
+  return(d-new Date())>5*3600*1000;
+}
 window.openMo=function(id){document.getElementById(id)?.classList.add('on');};
 window.closeMo=function(id){document.getElementById(id)?.classList.remove('on');};
 
@@ -1312,24 +1328,27 @@ window.pickSvc=function(id){
 // ── DATE/TIME ──
 function buildDatePicker(){
   const now=new Date();
+  const todayStr=localDateStr(now);
+  const tomorrowStr=localDateStr(new Date(now.getTime()+86400000));
   const start=new Date(now);start.setDate(start.getDate()+wkOff*7);
-  start.setDate(start.getDate()-start.getDay()+1);// Mon
+  start.setDate(start.getDate()-start.getDay()+1);
   const days=[];
   for(let i=0;i<7;i++){const d=new Date(start);d.setDate(d.getDate()+i);days.push(d);}
   const startFmt=days[0].toLocaleDateString('tr-TR',{day:'numeric',month:'short'});
   const endFmt=days[6].toLocaleDateString('tr-TR',{day:'numeric',month:'short'});
   document.getElementById('wk-lbl').textContent=`${startFmt} – ${endFmt}`;
-  if(!selDay||!days.some(d=>d.toISOString().slice(0,10)===selDay)){
-    selDay=days.find(d=>d>=now)?.toISOString().slice(0,10)||days[0].toISOString().slice(0,10);
+  const dayStrs=days.map(d=>localDateStr(d));
+  if(!selDay||!dayStrs.includes(selDay)){
+    selDay=dayStrs.find(ds=>ds>=todayStr)||dayStrs[0];
   }
   const dayRow=document.getElementById('day-row');
   const DAY_NAMES={tr:['Pzt','Sal','Çar','Per','Cum','Cmt','Paz'],en:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],ru:['Пн','Вт','Ср','Чт','Пт','Сб','Вс']};
   const dnames=DAY_NAMES[CUR_LANG]||DAY_NAMES.tr;
   dayRow.innerHTML=days.map((d,i)=>{
-    const ds=d.toISOString().slice(0,10);
-    const isToday=ds===now.toISOString().slice(0,10);
-    const isTomorrow=ds===new Date(now.getTime()+86400000).toISOString().slice(0,10);
-    const isPastDay=d<new Date(now.toDateString());
+    const ds=localDateStr(d);
+    const isToday=ds===todayStr;
+    const isTomorrow=ds===tomorrowStr;
+    const isPastDay=ds<todayStr;
     return `<div class="day-chip ${selDay===ds?'on':''} ${isToday?'today':''}" data-ds="${ds}"
       onclick="${isPastDay?'':'window._pickD(this)'}" style="${isPastDay?'opacity:.4;cursor:not-allowed':'cursor:pointer'}">
       <div class="day-nm">${isToday?(tx('todayLbl').slice(0,3)):isTomorrow?(tx('tomorrowLbl').slice(0,3)):dnames[i]}</div>
@@ -1353,9 +1372,16 @@ function renderTimeGrid(){
   const times=[];let cur=t2m(WH.start);const end=t2m(WH.end);
   while(cur+( svc?.duration||30)<=end){const h=Math.floor(cur/60),m=cur%60;times.push(`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`);cur+=30;}
   const now=new Date();
+  const todayStr=localDateStr(now);
   el.innerHTML=times.map(ts=>{
     const isBusy=isBkd(sp.fid,selDay,ts)||isBlk(sp.fid,selDay,ts);
-    const isNow=new Date(selDay+'T'+ts)<now;
+    // Sadece bugün için geçmiş saatleri kapat
+    let isNow=false;
+    if(selDay===todayStr){
+      const [hh,mm]=ts.split(':').map(Number);
+      const slotDate=new Date();slotDate.setHours(hh,mm,0,0);
+      isNow=slotDate<now;
+    }
     const busy=isBusy||isNow;
     const on=selSlot?.time===ts&&selSlot?.date===selDay;
     return `<div class="t-chip ${on?'on':''} ${busy?'busy':''}" data-ts="${ts}" onclick="${busy?'':'window._pickT(this)'}">${ts}</div>`;
