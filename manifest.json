@@ -2,13 +2,29 @@
   "name": "O'Nail Randevu",
   "short_name": "O'Nail",
   "description": "O'Nail Beauty Studio randevu sistemi",
-  "start_url": "./randevu-app.html",
+  "start_url": "/tirnak-studyo/randevu-app.html",
+  "scope": "/tirnak-studyo/",
   "display": "standalone",
   "background_color": "#faf8f6",
   "theme_color": "#c4725a",
-  "orientation": "portrait",
+  "orientation": "portrait-primary",
+  "lang": "tr",
+  "categories": ["lifestyle", "beauty"],
   "icons": [
-    {"src": "https://via.placeholder.com/192/c4725a/ffffff?text=ON", "sizes": "192x192", "type": "image/png"},
-    {"src": "https://via.placeholder.com/512/c4725a/ffffff?text=ON", "sizes": "512x512", "type": "image/png"}
+    {"src": "https://via.placeholder.com/72/c4725a/ffffff?text=ON",  "sizes": "72x72",   "type": "image/png"},
+    {"src": "https://via.placeholder.com/96/c4725a/ffffff?text=ON",  "sizes": "96x96",   "type": "image/png"},
+    {"src": "https://via.placeholder.com/128/c4725a/ffffff?text=ON", "sizes": "128x128", "type": "image/png"},
+    {"src": "https://via.placeholder.com/144/c4725a/ffffff?text=ON", "sizes": "144x144", "type": "image/png"},
+    {"src": "https://via.placeholder.com/152/c4725a/ffffff?text=ON", "sizes": "152x152", "type": "image/png"},
+    {"src": "https://via.placeholder.com/192/c4725a/ffffff?text=ON", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"},
+    {"src": "https://via.placeholder.com/384/c4725a/ffffff?text=ON", "sizes": "384x384", "type": "image/png"},
+    {"src": "https://via.placeholder.com/512/c4725a/ffffff?text=ON", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
+  ],
+  "shortcuts": [
+    {
+      "name": "Randevu Al",
+      "url": "/tirnak-studyo/randevu-app.html",
+      "icons": [{"src": "https://via.placeholder.com/96/c4725a/ffffff?text=R", "sizes": "96x96"}]
+    }
   ]
 }

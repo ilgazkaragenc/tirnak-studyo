@@ -397,10 +397,18 @@ input:checked+.tog-sl::before{transform:translateX(16px);}
     <input type="text" class="fi" id="sp-title" placeholder="Tırnak Tasarımcısı">
     <label class="fi-label">Şube</label>
     <select class="fi" id="sp-branch"></select>
-    <label class="fi-label">Emoji / Fotoğraf URL</label>
-    <div style="display:flex;gap:.5rem;margin-bottom:.9rem">
+    <label class="fi-label">Emoji / Fotoğraf</label>
+    <div style="display:flex;gap:.5rem;margin-bottom:.5rem">
       <input type="text" class="fi" id="sp-emoji" placeholder="💅" style="width:80px;margin-bottom:0;text-align:center">
-      <input type="text" class="fi" id="sp-photo" placeholder="https://... (opsiyonel)" style="margin-bottom:0;flex:1">
+      <input type="text" class="fi" id="sp-photo" placeholder="Fotoğraf URL (otomatik dolar)" style="margin-bottom:0;flex:1;font-size:.72rem">
+    </div>
+    <div style="display:flex;gap:.5rem;align-items:center;margin-bottom:.9rem">
+      <div id="sp-photo-prev" style="width:52px;height:52px;border-radius:10px;background:var(--card2);border:1px solid var(--border);overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.4rem">💅</div>
+      <label style="flex:1;background:rgba(196,114,90,.12);border:1.5px dashed var(--rose);border-radius:10px;padding:.55rem 1rem;font-size:.75rem;color:var(--rose);cursor:pointer;text-align:center;display:flex;align-items:center;justify-content:center;gap:.4rem">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        Fotoğraf Yükle
+        <input type="file" id="sp-photo-file" accept="image/*" style="display:none" onchange="previewSpPhoto(this)">
+      </label>
     </div>
     <label class="fi-label">Çalışma Saatleri</label>
     <div class="fi-row">
@@ -466,7 +474,19 @@ input:checked+.tog-sl::before{transform:translateX(16px);}
     </div>
     <div class="fi-row">
       <div><label class="fi-label">Emoji</label><input type="text" class="fi" id="prod-emoji" placeholder="💅"></div>
-      <div><label class="fi-label">Kategori</label><select class="fi" id="prod-cat"><option value="Bakım">Bakım</option><option value="Oje">Oje</option><option value="Araçlar">Araçlar</option></select></div>
+      <div><label class="fi-label">Kategori</label><select class="fi" id="prod-cat"><option value="Bakım">Bakım</option><option value="Oje">Oje</option><option value="Araçlar">Araçlar</option><option value="Aksesuar">Aksesuar</option></select></div>
+    </div>
+    <label class="fi-label">Ürün Fotoğrafı</label>
+    <div style="display:flex;gap:.5rem;align-items:center;margin-bottom:.9rem">
+      <div id="prod-photo-prev" style="width:60px;height:60px;border-radius:10px;background:var(--card2);border:1px solid var(--border);overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.8rem">🛍️</div>
+      <div style="flex:1;display:flex;flex-direction:column;gap:.4rem">
+        <label style="background:rgba(196,114,90,.12);border:1.5px dashed var(--rose);border-radius:10px;padding:.5rem 1rem;font-size:.75rem;color:var(--rose);cursor:pointer;text-align:center;display:flex;align-items:center;justify-content:center;gap:.4rem">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          Fotoğraf Yükle
+          <input type="file" id="prod-photo-file" accept="image/*" style="display:none" onchange="previewProdPhoto(this)">
+        </label>
+        <input type="text" class="fi" id="prod-photo" placeholder="veya fotoğraf URL girin" style="margin-bottom:0;font-size:.72rem">
+      </div>
     </div>
     <label class="fi-label">İndirim Etiketi</label>
     <input type="text" class="fi" id="prod-badge" placeholder="%20 İndirim (opsiyonel)">
@@ -484,11 +504,14 @@ import{getFirestore,collection,doc,addDoc,getDocs,updateDoc,deleteDoc,onSnapshot
 import{getAuth,signInWithEmailAndPassword,signInWithPopup,signInWithRedirect,getRedirectResult,
   GoogleAuthProvider,signOut,onAuthStateChanged}
   from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import{getStorage,ref as sRef,uploadBytes,getDownloadURL,deleteObject}
+  from"https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
 const FB={apiKey:"AIzaSyBL4bH5VBu2bxuT4QzCLhy8pdUM-s9ZfQ0",authDomain:"tirnak-studyo.firebaseapp.com",projectId:"tirnak-studyo",storageBucket:"tirnak-studyo.firebasestorage.app",messagingSenderId:"241007669140",appId:"1:241007669140:web:a2d9f7b1249773c2a0e981"};
 const fapp=initializeApp(FB);
 const db=getFirestore(fapp);
 const auth=getAuth(fapp);
+const storage=getStorage(fapp);
 const GP=new GoogleAuthProvider();
 
 let CU=null,BR=[],SP=[],AP=[],COUPONS=[],REVIEWS=[];
@@ -818,6 +841,7 @@ window.toggleAvail=async function(fid,val){
 window.openSpModal=function(fid){
   clearErr('sp-err');
   svcRows=[];document.getElementById('svc-builder').innerHTML='';
+  document.getElementById('sp-photo-file').value='';
   if(fid){
     const s=SP.find(x=>x.fid===fid);if(!s)return;
     document.getElementById('sp-edit-id').value=fid;
@@ -826,6 +850,9 @@ window.openSpModal=function(fid){
     document.getElementById('sp-branch').value=s.branchId||'';
     document.getElementById('sp-emoji').value=s.emoji||'';
     document.getElementById('sp-photo').value=s.photoUrl||'';
+    const prev=document.getElementById('sp-photo-prev');
+    if(s.photoUrl){prev.innerHTML=`<img src="${s.photoUrl}" style="width:100%;height:100%;object-fit:cover">`;}
+    else{prev.textContent=s.emoji||'💅';}
     document.getElementById('sp-wh-start').value=(s.workHours?.start)||'10:00';
     document.getElementById('sp-wh-end').value=(s.workHours?.end)||'19:30';
     document.getElementById('sp-avail').checked=!!s.available;
@@ -837,12 +864,21 @@ window.openSpModal=function(fid){
     document.getElementById('sp-title').value='';
     document.getElementById('sp-emoji').value='💅';
     document.getElementById('sp-photo').value='';
+    document.getElementById('sp-photo-prev').textContent='💅';
     document.getElementById('sp-wh-start').value='10:00';
     document.getElementById('sp-wh-end').value='19:30';
     document.getElementById('sp-avail').checked=true;
     document.getElementById('mo-sp-ttl').textContent='Uzman Ekle';
   }
   openMo('mo-sp');
+};
+window.previewSpPhoto=function(input){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    document.getElementById('sp-photo-prev').innerHTML=`<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover">`;
+  };
+  reader.readAsDataURL(file);
 };
 window.addSvcRow=function(sv){
   const id='svc-'+Date.now()+Math.random();
@@ -870,18 +906,28 @@ window.saveSp=async function(){
     const duration=parseInt(el.querySelector('[data-field="duration"]')?.value)||30;
     if(svcNm)svcs.push({id:'s'+Date.now()+Math.random().toString(36).slice(2),name:svcNm,price,duration,category:'Genel'});
   }
-  const data={
-    name:nm,title:document.getElementById('sp-title').value.trim(),
-    branchId:document.getElementById('sp-branch').value||null,
-    emoji:document.getElementById('sp-emoji').value.trim()||'💅',
-    photoUrl:document.getElementById('sp-photo').value.trim()||null,
-    workHours:{start:document.getElementById('sp-wh-start').value,end:document.getElementById('sp-wh-end').value},
-    services:svcs,available:document.getElementById('sp-avail').checked,
-    updatedAt:new Date().toISOString()
-  };
-  const editId=document.getElementById('sp-edit-id').value;
   const btn=document.querySelector('#mo-sp .btn-save');if(btn){btn.disabled=true;btn.textContent='Kaydediliyor...';}
   try{
+    // Fotoğraf varsa Storage'a yükle
+    let photoUrl=document.getElementById('sp-photo').value.trim()||null;
+    const photoFile=document.getElementById('sp-photo-file').files[0];
+    if(photoFile){
+      btn&&(btn.textContent='Fotoğraf yükleniyor...');
+      const ext=photoFile.name.split('.').pop();
+      const path=`specialists/${Date.now()}.${ext}`;
+      const snap=await uploadBytes(sRef(storage,path),photoFile);
+      photoUrl=await getDownloadURL(snap.ref);
+    }
+    const data={
+      name:nm,title:document.getElementById('sp-title').value.trim(),
+      branchId:document.getElementById('sp-branch').value||null,
+      emoji:document.getElementById('sp-emoji').value.trim()||'💅',
+      photoUrl,
+      workHours:{start:document.getElementById('sp-wh-start').value,end:document.getElementById('sp-wh-end').value},
+      services:svcs,available:document.getElementById('sp-avail').checked,
+      updatedAt:new Date().toISOString()
+    };
+    const editId=document.getElementById('sp-edit-id').value;
     if(editId)await updateDoc(doc(db,'specialists',editId),data);
     else await addDoc(collection(db,'specialists'),{...data,createdAt:new Date().toISOString()});
     closeMo('mo-sp');toast('Uzman kaydedildi ✓','ok');
@@ -1006,13 +1052,27 @@ window.openProdModal=function(fid){
     document.getElementById('prod-emoji').value=p.emoji||'';
     document.getElementById('prod-cat').value=p.cat||'Bakım';
     document.getElementById('prod-badge').value=p.badge||'';
+    const pprev=document.getElementById('prod-photo-prev');
+    document.getElementById('prod-photo').value=p.photoUrl||'';
+    if(p.photoUrl){pprev.innerHTML=`<img src="${p.photoUrl}" style="width:100%;height:100%;object-fit:cover">`;}
+    else{pprev.textContent=p.emoji||'🛍️';}
     document.getElementById('mo-prod-ttl').textContent='Ürün Düzenle';
   }else{
-    ['prod-edit-id','prod-nm','prod-nm-en','prod-nm-ru','prod-desc','prod-price','prod-old-price','prod-badge'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
+    ['prod-edit-id','prod-nm','prod-nm-en','prod-nm-ru','prod-desc','prod-price','prod-old-price','prod-badge','prod-photo'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
     document.getElementById('prod-emoji').value='🛍️';
+    document.getElementById('prod-photo-prev').textContent='🛍️';
+    document.getElementById('prod-photo-file').value='';
     document.getElementById('mo-prod-ttl').textContent='Ürün Ekle';
   }
   openMo('mo-prod');
+};
+window.previewProdPhoto=function(input){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    document.getElementById('prod-photo-prev').innerHTML=`<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover">`;
+  };
+  reader.readAsDataURL(file);
 };
 window.saveProd=async function(){
   clearErr('prod-err');
@@ -1020,18 +1080,29 @@ window.saveProd=async function(){
   const price=parseFloat(document.getElementById('prod-price').value)||0;
   if(!nm)return showErr('prod-err','Ürün adı gerekli.');
   if(!price)return showErr('prod-err','Fiyat gerekli.');
-  const oldPriceVal=parseFloat(document.getElementById('prod-old-price').value)||null;
-  const data={
-    name:nm,nameEn:document.getElementById('prod-nm-en').value.trim(),nameRu:document.getElementById('prod-nm-ru').value.trim(),
-    desc:document.getElementById('prod-desc').value.trim(),price,oldPrice:oldPriceVal,
-    emoji:document.getElementById('prod-emoji').value.trim()||'🛍️',
-    cat:document.getElementById('prod-cat').value,
-    badge:document.getElementById('prod-badge').value.trim()||null,
-    updatedAt:new Date().toISOString()
-  };
-  const editId=document.getElementById('prod-edit-id').value;
   const btn=document.querySelector('#mo-prod .btn-save');if(btn){btn.disabled=true;btn.textContent='Kaydediliyor...';}
   try{
+    // Fotoğraf yükle
+    let photoUrl=document.getElementById('prod-photo').value.trim()||null;
+    const photoFile=document.getElementById('prod-photo-file').files[0];
+    if(photoFile){
+      btn&&(btn.textContent='Fotoğraf yükleniyor...');
+      const ext=photoFile.name.split('.').pop();
+      const path=`products/${Date.now()}.${ext}`;
+      const snap=await uploadBytes(sRef(storage,path),photoFile);
+      photoUrl=await getDownloadURL(snap.ref);
+    }
+    const oldPriceVal=parseFloat(document.getElementById('prod-old-price').value)||null;
+    const data={
+      name:nm,nameEn:document.getElementById('prod-nm-en').value.trim(),nameRu:document.getElementById('prod-nm-ru').value.trim(),
+      desc:document.getElementById('prod-desc').value.trim(),price,oldPrice:oldPriceVal,
+      emoji:document.getElementById('prod-emoji').value.trim()||'🛍️',
+      photoUrl,
+      cat:document.getElementById('prod-cat').value,
+      badge:document.getElementById('prod-badge').value.trim()||null,
+      updatedAt:new Date().toISOString()
+    };
+    const editId=document.getElementById('prod-edit-id').value;
     if(editId)await updateDoc(doc(db,'products',editId),data);
     else await addDoc(collection(db,'products'),{...data,createdAt:new Date().toISOString()});
     await loadAndRenderProds();

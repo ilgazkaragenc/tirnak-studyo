@@ -1624,10 +1624,13 @@ function renderMarket(){
   gridEl.innerHTML=filtered.map(item=>{
     const nm=CUR_LANG==='ru'?(item.nameRu||item.name):CUR_LANG==='en'?(item.nameEn||item.name):item.name;
     const ptsOpt=Math.floor((item.price||0)/0.1);
+    const imgContent=item.photoUrl
+      ?`<img src="${item.photoUrl}" style="width:100%;height:100%;object-fit:cover">`
+      :`<span>${item.emoji||'🛍️'}</span>`;
     return `<div class="mkt-card" onclick="openMktItem('${item.id}')">
-      <div class="mkt-img" style="background:linear-gradient(135deg,var(--blush),#f0d5c8)">
+      <div class="mkt-img" style="background:linear-gradient(135deg,var(--blush),#f0d5c8);overflow:hidden">
         ${item.badge?`<div class="mkt-dis-badge">${item.badge}</div>`:''}
-        <span>${item.emoji||'🛍️'}</span>
+        ${imgContent}
       </div>
       <div class="mkt-body">
         <div class="mkt-name">${nm}</div>
