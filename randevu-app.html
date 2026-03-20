@@ -778,6 +778,24 @@ input:checked+.tog-sl::before{transform:translateX(20px);}
   </div>
 </div>
 
+<!-- ÜRÜN DETAY MODAL -->
+<div class="mo" id="mo-mkt-item">
+  <div class="mo-bg" onclick="closeMo('mo-mkt-item')"></div>
+  <div class="mo-sheet" style="padding-bottom:calc(1.5rem + var(--safe-bot))">
+    <div class="mo-handle"></div>
+    <button class="mo-close" onclick="closeMo('mo-mkt-item')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    <div id="mkt-item-img" style="width:100%;height:200px;border-radius:16px;overflow:hidden;background:linear-gradient(135deg,var(--blush),#f0d5c8);display:flex;align-items:center;justify-content:center;font-size:4rem;margin-bottom:1rem;"></div>
+    <div id="mkt-item-badge" style="display:none;background:var(--rose);color:#fff;font-size:.7rem;font-weight:700;padding:.2rem .7rem;border-radius:20px;display:inline-block;margin-bottom:.5rem"></div>
+    <div id="mkt-item-name" style="font-family:'Playfair Display',serif;font-size:1.3rem;margin-bottom:.3rem"></div>
+    <div id="mkt-item-desc" style="font-size:.82rem;color:var(--muted);line-height:1.6;margin-bottom:.8rem"></div>
+    <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:1.2rem">
+      <span id="mkt-item-price" style="font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--rose)"></span>
+      <span id="mkt-item-old" style="font-size:.9rem;color:var(--muted);text-decoration:line-through"></span>
+    </div>
+    <button class="btn-confirm" id="mkt-item-add-btn" onclick="mktItemAddCart()">🛒 Sepete Ekle</button>
+  </div>
+</div>
+
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import{getFirestore,collection,doc,addDoc,getDocs,updateDoc,onSnapshot,getDoc,setDoc,query,where}
@@ -1501,8 +1519,13 @@ function renderAppts(){
     return;
   }
   const now=new Date();
-  const upcoming=mine.filter(a=>!a.cancelled&&new Date(a.date+'T'+a.time)>=now).sort((a,b)=>a.date+a.time<b.date+b.time?-1:1);
-  const past=mine.filter(a=>a.cancelled||new Date(a.date+'T'+a.time)<now).sort((a,b)=>a.date+a.time>b.date+b.time?-1:1);
+  function apptTime(a){
+    const d=new Date(a.date+'T12:00:00');
+    const [h,m]=(a.time||'00:00').split(':').map(Number);
+    d.setHours(h,m,0,0);return d;
+  }
+  const upcoming=mine.filter(a=>!a.cancelled&&apptTime(a)>=now).sort((a,b)=>a.date+a.time<b.date+b.time?-1:1);
+  const past=mine.filter(a=>a.cancelled||apptTime(a)<now).sort((a,b)=>a.date+a.time>b.date+b.time?-1:1);
   let html='';
   if(upcoming.length){html+=`<div class="sec-ttl">${tx('upBadge')}</div>`;html+=upcoming.map(a=>apptCard(a)).join('');}
   if(past.length){html+=`<div class="sec-ttl" style="margin-top:.5rem">${tx('doneBadge')} / ${tx('cxBadge')}</div>`;html+=past.slice(0,10).map(a=>apptCard(a)).join('');}
@@ -1519,12 +1542,15 @@ window.loadGuestAppts=function(){
 };
 function apptCard(a){
   const now=new Date();
-  const apptTime=new Date(a.date+'T'+a.time);
-  const isUp=!a.cancelled&&apptTime>=now;
-  const isDone=!a.cancelled&&apptTime<now;
+  // Timezone-safe saat karşılaştırması
+  const apptDate=new Date(a.date+'T12:00:00');
+  const [ah,am]=(a.time||'00:00').split(':').map(Number);
+  apptDate.setHours(ah,am,0,0);
+  const isUp=!a.cancelled&&apptDate>=now;
+  const isDone=!a.cancelled&&apptDate<now;
   const isCx=a.cancelled;
   const loc=CUR_LANG==='ru'?'ru-RU':CUR_LANG==='en'?'en-GB':'tr-TR';
-  const dateStr=apptTime.toLocaleDateString(loc,{weekday:'long',day:'numeric',month:'long'});
+  const dateStr=apptDate.toLocaleDateString(loc,{weekday:'long',day:'numeric',month:'long'});
   const badge=isCx?`<div class="appt-badge badge-cx">${tx('cxBadge')}</div>`:isUp?`<div class="appt-badge badge-up">${tx('upBadge')}</div>`:`<div class="appt-badge badge-done">${tx('doneBadge')}</div>`;
   // Timeline
   const s1Done=true,s2Done=isDone||a.completed,s3Done=a.completed;
@@ -1647,7 +1673,31 @@ function renderMarket(){
   }).join('');
 }
 window.setMktCat=function(k){MKT_CAT=k;renderMarket();};
-window.openMktItem=function(id){const item=MKT_ITEMS.find(i=>i.id===id);if(item)toast(`🛍️ ${item.name} — ${item.price}₺`);};
+let _curMktItem=null;
+window.openMktItem=function(id){
+  const item=MKT_ITEMS.find(i=>i.id===id);if(!item)return;
+  _curMktItem=item;
+  const nm=CUR_LANG==='ru'?(item.nameRu||item.name):CUR_LANG==='en'?(item.nameEn||item.name):item.name;
+  // Görsel
+  const imgEl=document.getElementById('mkt-item-img');
+  if(item.photoUrl){imgEl.innerHTML=`<img src="${item.photoUrl}" style="width:100%;height:100%;object-fit:cover">`;}
+  else{imgEl.textContent=item.emoji||'🛍️';}
+  // Badge
+  const badgeEl=document.getElementById('mkt-item-badge');
+  if(item.badge){badgeEl.textContent=item.badge;badgeEl.style.display='inline-block';}
+  else{badgeEl.style.display='none';}
+  document.getElementById('mkt-item-name').textContent=nm;
+  document.getElementById('mkt-item-desc').textContent=item.desc||'';
+  document.getElementById('mkt-item-price').textContent=item.price+'₺';
+  const oldEl=document.getElementById('mkt-item-old');
+  oldEl.textContent=item.oldPrice?item.oldPrice+'₺':'';
+  openMo('mo-mkt-item');
+};
+window.mktItemAddCart=function(){
+  if(!_curMktItem)return;
+  addToCart({stopPropagation:()=>{}},_curMktItem.id);
+  closeMo('mo-mkt-item');
+};
 window.addToCart=function(e,id){
   e.stopPropagation();
   const item=MKT_ITEMS.find(i=>i.id===id);if(!item)return;
