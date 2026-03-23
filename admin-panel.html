@@ -833,7 +833,6 @@ window.toggleAvail=async function(fid,val){
 window.openSpModal=function(fid){
   clearErr('sp-err');
   svcRows=[];document.getElementById('svc-builder').innerHTML='';
-  document.getElementById('sp-photo-file').value='';
   if(fid){
     const s=SP.find(x=>x.fid===fid);if(!s)return;
     document.getElementById('sp-edit-id').value=fid;
@@ -859,14 +858,6 @@ window.openSpModal=function(fid){
     document.getElementById('mo-sp-ttl').textContent='Uzman Ekle';
   }
   openMo('mo-sp');
-};
-window.previewSpPhoto=function(input){
-  const file=input.files[0];if(!file)return;
-  const reader=new FileReader();
-  reader.onload=e=>{
-    document.getElementById('sp-photo-prev').innerHTML=`<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover">`;
-  };
-  reader.readAsDataURL(file);
 };
 window.addSvcRow=function(sv){
   const id='svc-'+Date.now()+Math.random();
@@ -1047,14 +1038,6 @@ window.openProdModal=function(fid){
     document.getElementById('mo-prod-ttl').textContent='Ürün Ekle';
   }
   openMo('mo-prod');
-};
-window.previewProdPhoto=function(input){
-  const file=input.files[0];if(!file)return;
-  const reader=new FileReader();
-  reader.onload=e=>{
-    document.getElementById('prod-photo-prev').innerHTML=`<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover">`;
-  };
-  reader.readAsDataURL(file);
 };
 window.saveProd=async function(){
   clearErr('prod-err');

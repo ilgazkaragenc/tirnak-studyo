@@ -1,4 +1,4 @@
-const CACHE='onail-v5';
+const CACHE='onail-v6';
 const ASSETS=[
   '/tirnak-studyo/randevu-app.html',
   '/tirnak-studyo/manifest.json'

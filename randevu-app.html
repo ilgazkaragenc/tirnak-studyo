@@ -461,7 +461,10 @@ input:checked+.tog-sl::before{transform:translateX(20px);}
 <!-- AUTH -->
 <div class="scr" id="s-auth">
   <div class="a-card">
-    <div class="a-logo">O'Nail</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem">
+      <div class="a-logo" style="margin-bottom:0">O'Nail</div>
+      <button onclick="showScr('s-app')" style="background:rgba(255,255,255,.1);border:none;color:rgba(255,255,255,.6);font-size:1.2rem;width:32px;height:32px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center">×</button>
+    </div>
     <div class="a-sub" id="a-sub-txt">Randevu Sistemi</div>
     <div class="a-tabs">
       <button class="a-tab on" onclick="aTab('login')">Giriş</button>
@@ -644,6 +647,16 @@ input:checked+.tog-sl::before{transform:translateX(20px);}
 
   <!-- PROFILE PAGE -->
   <div class="pg" id="pg-profile">
+    <!-- Giriş yapılmamış -->
+    <div id="prof-guest" style="display:none;padding:2rem 1rem;text-align:center">
+      <div style="font-size:3rem;margin-bottom:1rem">👤</div>
+      <div style="font-family:'Playfair Display',serif;font-size:1.3rem;margin-bottom:.5rem">Giriş Yapın</div>
+      <div style="color:var(--muted);font-size:.82rem;margin-bottom:1.5rem;line-height:1.6">Randevularınızı takip etmek, puan kazanmak ve kupon almak için giriş yapın.</div>
+      <button class="btn-confirm" onclick="showScr('s-auth')" style="margin-bottom:.8rem">Giriş Yap / Kayıt Ol</button>
+      <div style="color:var(--muted);font-size:.75rem">Giriş yapmadan da randevu alabilirsiniz.</div>
+    </div>
+    <!-- Giriş yapılmış -->
+    <div id="prof-user" style="display:none">
     <div class="pc">
       <div class="pav" id="p-av">?</div>
       <div class="pnm" id="p-nm">Kullanıcı</div>
@@ -676,6 +689,7 @@ input:checked+.tog-sl::before{transform:translateX(20px);}
       <div class="pmi" onclick="goPage('favs')"><div class="pmi-l"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg><span id="pmi-favs">Favorilerim</span></div><span class="pmi-arr">›</span></div>
       <div class="pmi" onclick="openMo('mo-notifs')"><div class="pmi-l"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg><span id="pmi-notifs">Bildirim Tercihleri</span></div><span class="pmi-arr">›</span></div>
       <div class="pmi" onclick="openBranchModal()"><div class="pmi-l"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg><span id="pmi-branch">Şube Değiştir</span></div><span class="pmi-arr">›</span></div>
+    </div>
     </div>
   </div>
 
@@ -944,7 +958,8 @@ function applyLang(){
 }
 
 // ── HELPERS ──
-function showScr(id){document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));document.getElementById(id)?.classList.add('on');}
+window.showScr=function(id){document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));document.getElementById(id)?.classList.add('on');}
+function showScr(id){window.showScr(id);}
 function showErr(id,msg){const e=document.getElementById(id);if(!e)return;e.textContent=msg;e.style.display='block';}
 function clearErr(id){const e=document.getElementById(id);if(!e)return;e.textContent='';e.style.display='none';}
 let toastTmr;
@@ -1039,7 +1054,7 @@ window.doRegister=async function(){
   const p2=document.getElementById('r-p2').value;
   if(!nm)return showErr('r-err','Adınızı girin.');
   if(!em)return showErr('r-err','E-posta adresinizi girin.');
-  if(!phNum||phNum.length<10)return showErr('r-err','Geçerli bir telefon numarası girin.');
+  if(phNum&&phNum.length>0&&phNum.length<10)return showErr('r-err','Geçerli bir telefon numarası girin (veya boş bırakın).');
   if(!p1||p1.length<6)return showErr('r-err','Şifre en az 6 karakter olmalı.');
   if(p1!==p2)return showErr('r-err','Şifreler eşleşmiyor.');
   let phone=phNum.startsWith('0')?phNum.slice(1):phNum;
@@ -1129,16 +1144,19 @@ window.otpBack=function(e,i){if(e.key==='Backspace'&&!e.target.value&&i>0)docume
 onAuthStateChanged(auth,async user=>{
   try{await getRedirectResult(auth);}catch(_){}
   CU=user;
+  // Her durumda uygulamayı göster - giriş opsiyonel
+  showScr('s-app');
   if(user){
-    showScr('s-app');
     document.getElementById('uav').textContent=(user.displayName||user.email||'?')[0].toUpperCase();
+    document.getElementById('uav').style.background='var(--rose)';
     try{const snap=await getDoc(doc(db,'users',user.uid));if(snap.exists())USER_PTS=snap.data().points||0;}catch(_){}
     updatePtsBadge();
     if(user.displayName){const n=document.getElementById('inp-nm');if(n&&!n.value)n.value=user.displayName;}
     const saved=localStorage.getItem('onail_ph');
     if(saved){const p=document.getElementById('inp-ph');if(p&&!p.value)p.value=saved;}
   }else{
-    showScr('s-auth');
+    document.getElementById('uav').textContent='👤';
+    document.getElementById('uav').style.background='rgba(255,255,255,.1)';
   }
 });
 
@@ -1748,10 +1766,25 @@ function renderFavs(){
 
 // ── PROFILE ──
 function updateProfile_(){
-  if(!CU)return;
+  const guest=document.getElementById('prof-guest');
+  const user=document.getElementById('prof-user');
+  if(!CU){
+    if(guest)guest.style.display='block';
+    if(user)user.style.display='none';
+    return;
+  }
+  if(guest)guest.style.display='none';
+  if(user)user.style.display='block';
+  // Kullanıcı bilgileri
+  document.getElementById('p-av').textContent=(CU.displayName||CU.email||'?')[0].toUpperCase();
+  document.getElementById('p-nm').textContent=CU.displayName||'Kullanıcı';
+  document.getElementById('p-em').textContent=CU.email||'';
   const mine=AP.filter(a=>a.customerUid===CU.uid&&!a.cancelled);
   document.getElementById('ps-tot').textContent=mine.length;
-  document.getElementById('ps-up').textContent=mine.filter(a=>new Date(a.date+'T'+a.time)>new Date()).length;
+  const now=new Date();
+  document.getElementById('ps-up').textContent=mine.filter(a=>{
+    const d=new Date(a.date+'T12:00:00');const[h,m]=(a.time||'00:00').split(':').map(Number);d.setHours(h,m,0,0);return d>now;
+  }).length;
   document.getElementById('ps-spent').textContent=mine.reduce((s,a)=>s+(a.servicePrice||0),0)+'₺';
   const lvl=getPtsLevel(USER_PTS);
   const card=document.getElementById('pts-card');
@@ -1762,17 +1795,14 @@ function updateProfile_(){
     const barPct=lvl.next?Math.min(100,Math.round((USER_PTS-(lvl.prev||0))/(lvl.next-(lvl.prev||0))*100)):100;
     document.getElementById('pts-bar').style.width=barPct+'%';
     document.getElementById('p-pts-next').textContent=lvl.next?`${lvl.next-USER_PTS} puan daha → ${lvl.nextName}`:'Maksimum seviye! 🎉';
-    // Coupon buttons
     const opts=document.getElementById('coupon-opts');
     if(opts){
       const available=[];
       if(USER_PTS>=4000)available.push({pts:4000,tl:400});
       if(USER_PTS>=1000)available.push({pts:1000,tl:100});
-      if(available.length){
-        opts.innerHTML=available.map(o=>`<button class="coupon-opt-btn" onclick="redeemCoupon(${o.pts},${o.tl})">${o.pts} puan → ${o.tl}₺ kupon</button>`).join('');
-      }else{
-        opts.innerHTML=`<div style="font-size:.64rem;color:rgba(255,255,255,.4)">1000 puanda 100₺ kupon. Şu an: ${USER_PTS} puan</div>`;
-      }
+      opts.innerHTML=available.length
+        ?available.map(o=>`<button class="coupon-opt-btn" onclick="redeemCoupon(${o.pts},${o.tl})">${o.pts} puan → ${o.tl}₺ kupon</button>`).join('')
+        :`<div style="font-size:.64rem;color:rgba(255,255,255,.4)">1000 puanda 100₺ kupon. Şu an: ${USER_PTS} puan</div>`;
     }
   }
 }
@@ -1833,10 +1863,15 @@ function showInstBanner(){
 window.instApp=async function(){if(!deferInstall)return;deferInstall.prompt();await deferInstall.userChoice;deferInstall=null;document.getElementById('inst-area').innerHTML='';};
 window.disInst=function(){localStorage.setItem('onail_no_inst','1');document.getElementById('inst-area').innerHTML='';};
 
-// ── SPLASH → AUTH ──
+// ── SPLASH → APP ──
 setTimeout(()=>{
-  document.getElementById('s-splash').classList.remove('on');
-  document.getElementById('s-auth').classList.add('on');
+  // onAuthStateChanged zaten showScr('s-app') çağırıyor
+  // ama geç gelirse splash'i kaldır
+  const splash=document.getElementById('s-splash');
+  if(splash&&splash.classList.contains('on')){
+    splash.classList.remove('on');
+    document.getElementById('s-app').classList.add('on');
+  }
   document.getElementById('notif-day').checked=NOTIFS.day;
   document.getElementById('notif-hr').checked=NOTIFS.hr;
   document.getElementById('notif-promo').checked=NOTIFS.promo;
